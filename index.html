@@ -81,6 +81,8 @@
             <label for="goldStarChar">Gold Star Character:</label>
             <input type="text" id="goldStarChar" placeholder="Enter character name">
             <div id="charError" class="error"></div>
+            <button type="button" id="showListBtn" onclick="toggleCharacterList()" style="display:none; background-color:#2196F3; margin-top:10px;">View Available Characters</button>
+            <div id="characterList" style="display:none; margin-top:10px; padding:10px; background-color:#f5f5f5; border-radius:5px; max-height:200px; overflow-y:auto;"></div>
 
             <label for="goldStarPercent">Gold Star Percentage (%):</label>
             <input type="number" id="goldStarPercent" min="0" max="100" value="5">
@@ -110,7 +112,32 @@
         document.getElementById('goldStarToggle').addEventListener('change', function() {
             document.getElementById('goldStarOptions').style.display = 
                 this.checked ? 'block' : 'none';
+            document.getElementById('charError').textContent = '';
+            document.getElementById('showListBtn').style.display = 'none';
+            document.getElementById('characterList').style.display = 'none';
         });
+
+        function toggleCharacterList() {
+            const listDiv = document.getElementById('characterList');
+            const poolChoice = document.getElementById('poolSelect').value;
+            
+            if (listDiv.style.display === 'none') {
+                let pool;
+                if (poolChoice === 'wuxia') {
+                    pool = wuxiaCharacters;
+                } else if (poolChoice === 'keys') {
+                    pool = keysCharacters;
+                } else {
+                    pool = [...wuxiaCharacters, ...keysCharacters];
+                }
+                
+                listDiv.innerHTML = '<strong>Available Characters:</strong><br>' + 
+                    pool.map(char => `• ${char}`).join('<br>');
+                listDiv.style.display = 'block';
+            } else {
+                listDiv.style.display = 'none';
+            }
+        }
 
         function rollGacha() {
             const poolChoice = document.getElementById('poolSelect').value;
@@ -131,9 +158,12 @@
             if (goldStarEnabled && goldStarChar && !pool.includes(goldStarChar)) {
                 document.getElementById('charError').textContent = 
                     `'${goldStarChar}' not found in pool!`;
+                document.getElementById('showListBtn').style.display = 'block';
                 return;
             }
             document.getElementById('charError').textContent = '';
+            document.getElementById('showListBtn').style.display = 'none';
+            document.getElementById('characterList').style.display = 'none';
 
             // Set up weights
             let weights = new Array(pool.length).fill(1);
