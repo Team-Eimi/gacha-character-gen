@@ -92,17 +92,20 @@
     </div>
 
     <script>
-        const wuxiaCharacters = ["Lin Lanfei", "Yi Aoxin", "Wu Zhijian", "Lan Bingren", 
-            "Ming Yuzhai", "Da Deming", "Angjian", "Jie Hedian", "Jie Aibing", 
-            "Wu Xiongxin", "Lan Anying", "Qing Shi", "Yong Jie", "Baiye Yuyan", 
-            "Zhao Renshu", "Yin Ying"];
+        let wuxiaCharacters = [];
+        let keysCharacters = [];
 
-        const keysCharacters = ["Neris Dionte", "Beiei", "Edelweiss Van Aalsburg", 
-            "Kali Eir", "Leila Maurer", "Edwin Rhys", "Hari Layette", "Lerofey Attin", 
-            "Linyi", "Cian", "Headmistress", "Alice Van Aalsburg", "Alexi Van Aalsburg", 
-            "General Eleos", "Mika Dionte", "Thalos Korus", "the sunik", "Nestor Draco", 
-            "Ash Belrose", "Mio Robin", "Clio Amarette", "the fairy", "Dolly", 
-            "Elchik on Tov"];
+        // Load character data from JSON file
+        fetch('characters.json')
+            .then(response => response.json())
+            .then(data => {
+                wuxiaCharacters = data.wuxia;
+                keysCharacters = data.keys;
+            })
+            .catch(error => {
+                console.error('Error loading characters:', error);
+                alert('Failed to load character data. Please refresh the page.');
+            });
 
         document.getElementById('goldStarToggle').addEventListener('change', function() {
             document.getElementById('goldStarOptions').style.display = 
