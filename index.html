@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gacha Character Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        select, input, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #e8f5e9;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            display: none;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        #goldStarOptions {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎲 Gacha Character Generator</h1>
+        
+        <label for="poolSelect">Choose Character Pool:</label>
+        <select id="poolSelect">
+            <option value="wuxia">Wuxia</option>
+            <option value="keys">Keys</option>
+            <option value="both">Both</option>
+        </select>
+
+        <label for="goldStarToggle">
+            <input type="checkbox" id="goldStarToggle"> Include Gold Star Boost?
+        </label>
+
+        <div id="goldStarOptions">
+            <label for="goldStarChar">Gold Star Character:</label>
+            <input type="text" id="goldStarChar" placeholder="Enter character name">
+            <div id="charError" class="error"></div>
+
+            <label for="goldStarPercent">Gold Star Percentage (%):</label>
+            <input type="number" id="goldStarPercent" min="0" max="100" value="5">
+        </div>
+
+        <button onclick="rollGacha()">🎰 Roll!</button>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const wuxiaCharacters = ["Lin Lanfei", "Yi Aoxin", "Wu Zhijian", "Lan Bingren", 
+            "Ming Yuzhai", "Da Deming", "Angjian", "Jie Hedian", "Jie Aibing", 
+            "Wu Xiongxin", "Lan Anying", "Qing Shi", "Yong Jie", "Baiye Yuyan", 
+            "Zhao Renshu", "Yin Ying"];
+
+        const keysCharacters = ["Neris Dionte", "Beiei", "Edelweiss Van Aalsburg", 
+            "Kali Eir", "Leila Maurer", "Edwin Rhys", "Hari Layette", "Lerofey Attin", 
+            "Linyi", "Cian", "Headmistress", "Alice Van Aalsburg", "Alexi Van Aalsburg", 
+            "General Eleos", "Mika Dionte", "Thalos Korus", "the sunik", "Nestor Draco", 
+            "Ash Belrose", "Mio Robin", "Clio Amarette", "the fairy", "Dolly", 
+            "Elchik on Tov"];
+
+        document.getElementById('goldStarToggle').addEventListener('change', function() {
+            document.getElementById('goldStarOptions').style.display = 
+                this.checked ? 'block' : 'none';
+        });
+
+        function rollGacha() {
+            const poolChoice = document.getElementById('poolSelect').value;
+            const goldStarEnabled = document.getElementById('goldStarToggle').checked;
+            const goldStarChar = document.getElementById('goldStarChar').value.trim();
+            const goldStarPercent = parseFloat(document.getElementById('goldStarPercent').value) / 100;
+            
+            let pool;
+            if (poolChoice === 'wuxia') {
+                pool = [...wuxiaCharacters];
+            } else if (poolChoice === 'keys') {
+                pool = [...keysCharacters];
+            } else {
+                pool = [...wuxiaCharacters, ...keysCharacters];
+            }
+
+            // Validate gold star character
+            if (goldStarEnabled && goldStarChar && !pool.includes(goldStarChar)) {
+                document.getElementById('charError').textContent = 
+                    `'${goldStarChar}' not found in pool!`;
+                return;
+            }
+            document.getElementById('charError').textContent = '';
+
+            // Set up weights
+            let weights = new Array(pool.length).fill(1);
+            
+            if (goldStarEnabled && goldStarChar && pool.includes(goldStarChar)) {
+                const goldStarIndex = pool.indexOf(goldStarChar);
+                const baseProb = 1 / pool.length;
+                const boostedProb = baseProb + goldStarPercent;
+                weights[goldStarIndex] = boostedProb / baseProb;
+            }
+
+            // Weighted random selection
+            const result = weightedRandom(pool, weights);
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = `You got: ${result}`;
+            resultDiv.style.display = 'block';
+        }
+
+        function weightedRandom(items, weights) {
+            const totalWeight = weights.reduce((sum, w) => sum + w, 0);
+            let random = Math.random() * totalWeight;
+            
+            for (let i = 0; i < items.length; i++) {
+                random -= weights[i];
+                if (random <= 0) {
+                    return items[i];
+                }
+            }
+            return items[items.length - 1];
+        }
+    </script>
+</body>
+</html>
