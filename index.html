@@ -69,8 +69,8 @@
         <label for="poolSelect">Choose Character Pool:</label>
         <select id="poolSelect">
             <option value="wuxia">Wuxia</option>
-            <option value="keys">The Keys</option>
-            <option value="both">Both</option>
+            <option value="academy">Ael Academy</option>
+            <option value="key">The Keys</option>
         </select>
 
         <label for="goldStarToggle">
@@ -95,14 +95,16 @@
 
     <script>
         let wuxiaCharacters = [];
-        let keysCharacters = [];
+        let academyCharacters = [];
+        let keyCharacters = [];
 
         // Load character data from JSON file
         fetch('characters.json')
             .then(response => response.json())
             .then(data => {
                 wuxiaCharacters = data.wuxia;
-                keysCharacters = data.keys;
+                academyCharacters = data.academy;
+                keyCharacters = data.key;
             })
             .catch(error => {
                 console.error('Error loading characters:', error);
@@ -125,10 +127,10 @@
                 let pool;
                 if (poolChoice === 'wuxia') {
                     pool = wuxiaCharacters;
-                } else if (poolChoice === 'keys') {
-                    pool = keysCharacters;
-                } else {
-                    pool = [...wuxiaCharacters, ...keysCharacters];
+                } else if (poolChoice === 'academy') {
+                    pool = academyCharacters;
+                } else if (poolChoice === 'key') {
+                    pool = keyCharacters;
                 }
                 
                 listDiv.innerHTML = '<strong>Available Characters:</strong><br>' + 
@@ -148,10 +150,10 @@
             let pool;
             if (poolChoice === 'wuxia') {
                 pool = [...wuxiaCharacters];
-            } else if (poolChoice === 'keys') {
-                pool = [...keysCharacters];
-            } else {
-                pool = [...wuxiaCharacters, ...keysCharacters];
+            } else if (poolChoice === 'academy') {
+                pool = [...academyCharacters];
+            } else if (poolChoice === 'key') {
+                pool = [...keyCharacters];
             }
 
             // Validate gold star character
