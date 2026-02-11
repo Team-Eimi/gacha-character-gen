@@ -173,14 +173,35 @@
             document.getElementById('showListBtn').style.display = 'none';
             document.getElementById('characterList').style.display = 'none';
 
-            // Set up weights
+            // Set up weights (default: all characters have equal probability)
             let weights = new Array(pool.length).fill(1);
             
             if (goldStarEnabled && goldStarChar && pool.includes(goldStarChar)) {
                 const goldStarIndex = pool.indexOf(goldStarChar);
+                
+                // Calculate base probability (e.g., 1/10 = 10% for 10 characters)
                 const baseProb = 1 / pool.length;
+                
+                // Add the gold star percentage directly to base probability
+                // Example: 10% base + 25% boost = 35% total chance
                 const boostedProb = baseProb + goldStarPercent;
-                weights[goldStarIndex] = boostedProb / baseProb;
+                
+                // Calculate remaining probability for other characters
+                // Example: 100% - 35% = 65% remaining
+                const remainingProb = 1 - boostedProb;
+                
+                // Divide remaining probability equally among other characters
+                // Example: 65% / 9 characters = 7.22% each
+                const otherCharProb = remainingProb / (pool.length - 1);
+                
+                // Set weights: boosted character gets its probability, others get theirs
+                for (let i = 0; i < weights.length; i++) {
+                    if (i === goldStarIndex) {
+                        weights[i] = boostedProb;
+                    } else {
+                        weights[i] = otherCharProb;
+                    }
+                }
             }
 
             // Weighted random selection
