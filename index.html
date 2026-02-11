@@ -104,7 +104,7 @@
             .then(data => {
                 wuxiaCharacters = data.wuxia;
                 academyCharacters = data.academy;
-                keyCharacters = data.key;
+                keyCharacters = data.keys;
             })
             .catch(error => {
                 console.error('Error loading characters:', error);
@@ -129,7 +129,7 @@
                     pool = wuxiaCharacters;
                 } else if (poolChoice === 'academy') {
                     pool = academyCharacters;
-                } else if (poolChoice === 'key') {
+                } else if (poolChoice === 'keys') {
                     pool = keyCharacters;
                 }
                 
@@ -152,7 +152,7 @@
                 pool = [...wuxiaCharacters];
             } else if (poolChoice === 'academy') {
                 pool = [...academyCharacters];
-            } else if (poolChoice === 'key') {
+            } else if (poolChoice === 'keys') {
                 pool = [...keyCharacters];
             }
 
