@@ -1,0 +1,58 @@
+{
+    "banners": [
+        {
+            "name": "cutesy",
+            "active": true,
+            "img": "banner_art/bannercutesy.png",
+            "drops": [
+                {
+                    "item": "single chibi",
+                    "chance": 0.5,
+                    "rarity": "common"
+                },
+                {
+                    "item": "duo chibi",
+                    "chance": 0.5,
+                    "rarity": "common"
+                },
+                {                    
+                    "item": "squish",
+                    "chance": 0.2,
+                    "rarity": "rare"
+                },
+                {
+                    "item": "3+/squad chibi",
+                    "chance": 0.05,
+                    "rarity": "rare"
+                }
+            ]
+        },
+        {
+            "name": "whump",
+            "active": true,
+            "img": "banner_art/bannerwhump.png",
+            "drops": [
+                {
+                    "item": "single character grief",
+                    "chance": 0.25,
+                    "rarity": "common"
+                },
+                {
+                    "item": "single character injured",
+                    "chance": 0.25,
+                    "rarity": "common"
+                },
+                {
+                    "item": "duo character grief",
+                    "chance": 0.25,
+                    "rarity": "common"
+                },
+                {
+                    "item": "symbolic pain",
+                    "chance": 0.25,
+                    "rarity": "common"
+                }
+            ]
+        }
+    ]
+}

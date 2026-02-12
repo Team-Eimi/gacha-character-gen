@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Coin - Gacha Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        .coin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+        .coin-card {
+            border: 3px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        .coin-card:hover {
+            border-color: #4CAF50;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+            transform: translateY(-5px);
+        }
+        .coin-card img {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 10px;
+        }
+        .coin-card h2 {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        .coin-odds {
+            font-size: 12px;
+            color: #666;
+            margin-top: 10px;
+        }
+        .odds-item {
+            margin: 3px 0;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #2196F3;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .rarity-special { color: #ff00ff; font-weight: bold; }
+        .rarity-legendary { color: #ffa500; font-weight: bold; }
+        .rarity-rare { color: #0080ff; font-weight: bold; }
+        .rarity-common { color: #808080; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="character.html" class="back-link" id="backLink">← Back to Character Selection</a>
+        
+        <h1>🪙 Select Your Coin</h1>
+        <p class="subtitle">Different coins have different odds of getting rare drops!</p>
+        
+        <div class="coin-grid" id="coinGrid">
+            <!-- Coins will be loaded dynamically from coins.json -->
+        </div>
+    </div>
+
+    <script>
+        // Get parameters from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const selectedBanner = urlParams.get('banner');
+        const selectedPool = urlParams.get('pool');
+        const goldStar = urlParams.get('goldStar');
+        const goldStarPercent = urlParams.get('goldStarPercent');
+
+        // Update back link to preserve banner selection
+        document.getElementById('backLink').href = `character.html?banner=${selectedBanner}`;
+
+        // Load coins from JSON file
+        fetch('coins.json')
+            .then(response => response.json())
+            .then(data => {
+                const coinGrid = document.getElementById('coinGrid');
+                
+                data.coins.forEach(coin => {
+                    const coinCard = document.createElement('div');
+                    coinCard.className = 'coin-card';
+                    coinCard.onclick = () => selectCoin(coin.name);
+                    
+                    const odds = coin.rarityOdds;
+                    coinCard.innerHTML = `
+                        <h2>${coin.displayName}</h2>
+                        <div class="coin-odds">
+                            ${odds.special > 0 ? `<div class="odds-item rarity-special">Special: ${(odds.special * 100).toFixed(0)}%</div>` : ''}
+                            <div class="odds-item rarity-legendary">Legendary: ${(odds.legendary * 100).toFixed(0)}%</div>
+                            <div class="odds-item rarity-rare">Rare: ${(odds.rare * 100).toFixed(0)}%</div>
+                            <div class="odds-item rarity-common">Common: ${(odds.common * 100).toFixed(0)}%</div>
+                        </div>
+                    `;
+                    
+                    coinGrid.appendChild(coinCard);
+                });
+            })
+            .catch(error => {
+                console.error('Error loading coins:', error);
+                document.getElementById('coinGrid').innerHTML = 
+                    '<p style="text-align:center; color:red;">Failed to load coins. Please refresh the page.</p>';
+            });
+
+        function selectCoin(coinName) {
+            // Build URL with all parameters for results page
+            let url = `results.html?banner=${selectedBanner}&pool=${selectedPool}&coin=${coinName}`;
+            
+            if (goldStar && goldStarPercent) {
+                url += `&goldStar=${goldStar}&goldStarPercent=${goldStarPercent}`;
+            }
+            
+            window.location.href = url;
+        }
+    </script>
+</body>
+</html>

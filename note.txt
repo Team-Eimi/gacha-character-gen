@@ -1,5 +1,17 @@
-select your banner option
+select your banner option - use banner as button
 
 have it do the rolls
+-> character rolls
+-> what drop is it
 
-weight it so the chibi has a 50% for the chibis
+Gold star
+-> If not in list, ask if they want to append
+
+
+
+Choose banner
+Select Unviverse
+Select gold star if applicable
+Choose Coin
+Animation (based on Rarity)
+Results (Character + Drop)

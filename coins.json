@@ -1,0 +1,48 @@
+{
+    "coins": [
+        {
+            "name": "diamond",
+            "displayName": "Diamond Token",
+            "img": "coins/diamond.png",
+            "rarityOdds": {
+                "special": 0.10,
+                "legendary": 0.30,
+                "rare": 0.40,
+                "common": 0.20
+            }
+        },
+        {
+            "name": "gold",
+            "displayName": "Gold Token",
+            "img": "coins/gold.png",
+            "rarityOdds": {
+                "special": 0.05,
+                "legendary": 0.15,
+                "rare": 0.40,
+                "common": 0.40
+            }
+        },
+        {
+            "name": "silver",
+            "displayName": "Silver Token",
+            "img": "coins/silver.png",
+            "rarityOdds": {
+                "special": 0.01,
+                "legendary": 0.09,
+                "rare": 0.30,
+                "common": 0.60
+            }
+        },
+        {
+            "name": "copper",
+            "displayName": "Copper Token",
+            "img": "coins/copper.png",
+            "rarityOdds": {
+                "special": 0.00,
+                "legendary": 0.05,
+                "rare": 0.10,
+                "common": 0.85
+            }
+        }
+    ]
+}

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Character - Gacha Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        select, input, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        #goldStarOptions {
+            display: none;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #2196F3;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">← Back to Banner Selection</a>
+                
+        <label for="poolSelect">Choose Character Pool:</label>
+        <select id="poolSelect">
+            <option value="wuxia">Wuxia</option>
+            <option value="academy">Ael Academy</option>
+            <option value="keys">The Keys</option>
+        </select>
+
+        <label for="goldStarToggle">
+            <input type="checkbox" id="goldStarToggle"> Include Gold Star Boost?
+        </label>
+
+        <div id="goldStarOptions">
+            <label for="goldStarChar">Gold Star Character:</label>
+            <input type="text" id="goldStarChar" placeholder="Enter character name">
+            <div id="charError" class="error"></div>
+            <button type="button" id="showListBtn" onclick="toggleCharacterList()" style="display:none; background-color:#2196F3; margin-top:10px;">View Available Characters</button>
+            <div id="characterList" style="display:none; margin-top:10px; padding:10px; background-color:#f5f5f5; border-radius:5px; max-height:200px; overflow-y:auto;"></div>
+
+            <label for="goldStarPercent">Gold Star Percentage (%):</label>
+            <input type="number" id="goldStarPercent" min="0" max="100" value="5">
+        </div>
+
+        <button onclick="goToCoinSelection()">Continue to Coin Selection →</button>
+    </div>
+
+    <script>
+        let wuxiaCharacters = [];
+        let academyCharacters = [];
+        let keyCharacters = [];
+
+        // Get the banner from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const selectedBanner = urlParams.get('banner');
+
+        // Load character data from JSON file
+        fetch('characters.json')
+            .then(response => response.json())
+            .then(data => {
+                wuxiaCharacters = data.wuxia;
+                academyCharacters = data.academy;
+                keyCharacters = data.keys;
+            })
+            .catch(error => {
+                console.error('Error loading characters:', error);
+                alert('Failed to load character data. Please refresh the page.');
+            });
+
+        document.getElementById('goldStarToggle').addEventListener('change', function() {
+            document.getElementById('goldStarOptions').style.display = 
+                this.checked ? 'block' : 'none';
+            document.getElementById('charError').textContent = '';
+            document.getElementById('showListBtn').style.display = 'none';
+            document.getElementById('characterList').style.display = 'none';
+        });
+
+        function toggleCharacterList() {
+            const listDiv = document.getElementById('characterList');
+            const poolChoice = document.getElementById('poolSelect').value;
+            
+            if (listDiv.style.display === 'none') {
+                let pool;
+                if (poolChoice === 'wuxia') {
+                    pool = wuxiaCharacters;
+                } else if (poolChoice === 'academy') {
+                    pool = academyCharacters;
+                } else if (poolChoice === 'keys') {
+                    pool = keyCharacters;
+                }
+                
+                listDiv.innerHTML = '<strong>Available Characters:</strong><br>' + 
+                    pool.map(char => `• ${char}`).join('<br>');
+                listDiv.style.display = 'block';
+            } else {
+                listDiv.style.display = 'none';
+            }
+        }
+
+        function goToCoinSelection() {
+            const poolChoice = document.getElementById('poolSelect').value;
+            const goldStarEnabled = document.getElementById('goldStarToggle').checked;
+            const goldStarChar = document.getElementById('goldStarChar').value.trim();
+            const goldStarPercent = document.getElementById('goldStarPercent').value;
+            
+            let pool;
+            if (poolChoice === 'wuxia') {
+                pool = wuxiaCharacters;
+            } else if (poolChoice === 'academy') {
+                pool = academyCharacters;
+            } else if (poolChoice === 'keys') {
+                pool = keyCharacters;
+            }
+
+            // Check if characters are loaded
+            if (pool.length === 0) {
+                alert('Characters are still loading. Please wait a moment and try again.');
+                return;
+            }
+
+            // Validate gold star character
+            if (goldStarEnabled && goldStarChar && !pool.includes(goldStarChar)) {
+                document.getElementById('charError').textContent = 
+                    `'${goldStarChar}' not found in pool!`;
+                document.getElementById('showListBtn').style.display = 'block';
+                return;
+            }
+
+            // Build URL with all parameters
+            let url = `coin.html?banner=${selectedBanner}&pool=${poolChoice}`;
+            
+            if (goldStarEnabled && goldStarChar) {
+                url += `&goldStar=${encodeURIComponent(goldStarChar)}&goldStarPercent=${goldStarPercent}`;
+            }
+
+            window.location.href = url;
+        }
+    </script>
+</body>
+</html>
