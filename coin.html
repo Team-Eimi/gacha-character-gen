@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 800px;
+            max-width: 1000px;
             margin: 50px auto;
             padding: 20px;
             background-color: #f0f0f0;
@@ -31,13 +31,14 @@
         }
         .coin-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-columns: repeat(4, 1fr);
             gap: 20px;
+            justify-items: center;
         }
         .coin-card {
             border: 3px solid #ddd;
             border-radius: 10px;
-            padding: 20px;
+            padding: 15px;
             cursor: pointer;
             transition: all 0.3s ease;
             text-align: center;
@@ -48,21 +49,10 @@
             transform: translateY(-5px);
         }
         .coin-card img {
-            width: 80px;
-            height: 80px;
-            margin-bottom: 10px;
-        }
-        .coin-card h2 {
-            font-size: 18px;
-            margin: 10px 0;
-        }
-        .coin-odds {
-            font-size: 12px;
-            color: #666;
-            margin-top: 10px;
-        }
-        .odds-item {
-            margin: 3px 0;
+            width: 150px;
+            height: 150px;
+            display: block;
+            margin: 0 auto;
         }
         .back-link {
             display: inline-block;
@@ -73,10 +63,6 @@
         .back-link:hover {
             text-decoration: underline;
         }
-        .rarity-special { color: #ff00ff; font-weight: bold; }
-        .rarity-legendary { color: #ffa500; font-weight: bold; }
-        .rarity-rare { color: #0080ff; font-weight: bold; }
-        .rarity-common { color: #808080; }
     </style>
 </head>
 <body>
@@ -84,7 +70,6 @@
         <a href="character.html" class="back-link" id="backLink">← Back to Character Selection</a>
         
         <h1>🪙 Select Your Coin</h1>
-        <p class="subtitle">Different coins have different odds of getting rare drops!</p>
         
         <div class="coin-grid" id="coinGrid">
             <!-- Coins will be loaded dynamically from coins.json -->
@@ -113,15 +98,8 @@
                     coinCard.className = 'coin-card';
                     coinCard.onclick = () => selectCoin(coin.name);
                     
-                    const odds = coin.rarityOdds;
                     coinCard.innerHTML = `
-                        <h2>${coin.displayName}</h2>
-                        <div class="coin-odds">
-                            ${odds.special > 0 ? `<div class="odds-item rarity-special">Special: ${(odds.special * 100).toFixed(0)}%</div>` : ''}
-                            <div class="odds-item rarity-legendary">Legendary: ${(odds.legendary * 100).toFixed(0)}%</div>
-                            <div class="odds-item rarity-rare">Rare: ${(odds.rare * 100).toFixed(0)}%</div>
-                            <div class="odds-item rarity-common">Common: ${(odds.common * 100).toFixed(0)}%</div>
-                        </div>
+                        <img src="tokens/${coin.name}.png" alt="${coin.displayName}">
                     `;
                     
                     coinGrid.appendChild(coinCard);

@@ -23,12 +23,28 @@
             padding: 40px;
             margin: 30px 0;
             border-radius: 10px;
-            font-size: 48px;
-            animation: pulse 1s ease-in-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
         }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+        .animation img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+        .loading-spinner {
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .loading-text {
+            margin-top: 20px;
+            font-size: 24px;
+            color: #666;
+            font-weight: bold;
         }
         .rarity-special {
             background: linear-gradient(135deg, #ff00ff, #ff69b4);
@@ -99,7 +115,8 @@
         <h1>🎉 Your Results!</h1>
         
         <div class="animation" id="animation">
-            🎰
+            <img src="22.png" alt="Loading" class="loading-spinner" style="width: 150px; height: 150px;">
+            <div class="loading-text">Calculating...</div>
         </div>
         
         <div class="results" id="results" style="display: none;">
@@ -250,20 +267,16 @@
         }
 
         function displayResults(character, drop, rarity) {
-            // Update animation based on rarity
+            // Update animation based on rarity and coin
             const animationDiv = document.getElementById('animation');
-            animationDiv.className = `animation rarity-${rarity}`;
             
-            const rarityEmoji = {
-                'special': '✨',
-                'legendary': '🌟',
-                'rare': '💎',
-                'common': '⭐'
-            };
+            // Map rarity to animation file
+            // Add timestamp to force fresh load and prevent caching/replay
+            const animationPath = `animations/${selectedCoin}/${selectedCoin}-${rarity}.gif?t=${Date.now()}`;
             
-            animationDiv.textContent = rarityEmoji[rarity] || '🎰';
+            animationDiv.innerHTML = `<img src="${animationPath}" alt="${rarity} animation">`;
             
-            // Show results after animation
+            // Show results after animation plays fully (adjust time based on GIF duration)
             setTimeout(() => {
                 document.getElementById('characterResult').textContent = character;
                 document.getElementById('dropResult').textContent = drop;
@@ -280,7 +293,7 @@
                     `<span class="rarity-${rarity}">${rarityText}</span> - ${rarityDescriptions[rarity]}`;
                 
                 document.getElementById('results').style.display = 'block';
-            }, 1000);
+            }, 5000);
         }
 
         function rollAgain() {
