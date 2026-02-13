@@ -56,7 +56,7 @@
         },
         {
             "name": "vampire-banner",
-            "active": true,
+            "active": false,
             "img": "banner_art/bannervamp.png",
             "drops": [
                 {
