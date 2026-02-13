@@ -131,7 +131,6 @@
                 <div class="drop-rarity" id="dropRarity"></div>
             </div>
             
-            <button onclick="rollAgain()">Roll Again</button>
             <button class="button-secondary" onclick="goHome()">Back to Home</button>
         </div>
     </div>
@@ -299,7 +298,7 @@
         }
 
         function rollAgain() {
-            window.location.href = 'index.html';
+            window.location.href = `character.html?banner=${selectedBanner}`;
         }
 
         function goHome() {
