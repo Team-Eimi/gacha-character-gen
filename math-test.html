@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pity Math Verification</title>
+    <style>
+        body {
+            font-family: monospace;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: right;
+        }
+        th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+        .label {
+            text-align: left;
+        }
+        h2 {
+            margin-top: 30px;
+            border-bottom: 2px solid #333;
+        }
+        .total {
+            background-color: #e8f5e9;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Pity Math Verification Tool</h1>
+    <p>Test the pity bonus calculations to ensure they match your expected values.</p>
+
+    <h2>Base Coin Odds</h2>
+    <table id="baseOdds"></table>
+
+    <h2>With Legendary Pity (+50% legendary, +35% rare)</h2>
+    <table id="legendaryPity"></table>
+
+    <h2>With Rare Pity (+10% legendary, +25% rare)</h2>
+    <table id="rarePity"></table>
+
+    <h2>With Special Pity (+60% special, +35% legendary)</h2>
+    <table id="specialPity"></table>
+
+    <script>
+        const coins = {
+            diamond: { special: 0.10, legendary: 0.30, rare: 0.40, common: 0.20 },
+            gold: { special: 0.05, legendary: 0.15, rare: 0.40, common: 0.40 },
+            silver: { special: 0.01, legendary: 0.09, rare: 0.30, common: 0.60 },
+            copper: { special: 0.00, legendary: 0.05, rare: 0.10, common: 0.85 }
+        };
+
+        function applyPity(odds, pityType) {
+            let newOdds = { ...odds };
+            
+            if (pityType === 'special') {
+                // Special Pity: +60% special, +35% legendary, NO common, rare gets remainder
+                // Scale bonuses if they would exceed 100%
+                const specialBonus = 0.60;
+                const legendaryBonus = 0.35;
+                const totalBonus = specialBonus + legendaryBonus;
+                const availableSpace = 1 - newOdds.special - newOdds.legendary;
+                
+                const scaleFactor = availableSpace > 0 ? Math.min(1, availableSpace / totalBonus) : 0;
+                
+                newOdds.special = newOdds.special + (specialBonus * scaleFactor);
+                newOdds.legendary = newOdds.legendary + (legendaryBonus * scaleFactor);
+                newOdds.common = 0;
+                newOdds.rare = Math.max(0, 1 - newOdds.special - newOdds.legendary - newOdds.common);
+            } else if (pityType === 'legendary') {
+                // Legendary Pity: +50% legendary, NO common, rare gets remainder
+                // Scale bonuses if they would exceed 100%
+                const legendaryBonus = 0.50;
+                const availableSpace = 1 - newOdds.legendary - newOdds.special;
+                
+                const scaleFactor = availableSpace > 0 ? Math.min(1, availableSpace / legendaryBonus) : 0;
+                
+                newOdds.legendary = newOdds.legendary + (legendaryBonus * scaleFactor);
+                newOdds.common = 0;
+                newOdds.rare = Math.max(0, 1 - newOdds.special - newOdds.legendary - newOdds.common);
+            } else if (pityType === 'rare') {
+                // Rare Pity: +10% legendary, +25% rare, common stays based on coin
+                const legendaryBonus = 0.10;
+                const rareBonus = 0.25;
+                const totalBonus = legendaryBonus + rareBonus;
+                const availableSpace = 1 - newOdds.legendary - newOdds.rare - newOdds.common;
+                
+                const scaleFactor = availableSpace > 0 ? Math.min(1, availableSpace / totalBonus) : 0;
+                
+                newOdds.legendary = newOdds.legendary + (legendaryBonus * scaleFactor);
+                newOdds.rare = newOdds.rare + (rareBonus * scaleFactor);
+                newOdds.rare = Math.max(0, 1 - newOdds.special - newOdds.legendary - newOdds.common);
+            }
+            
+            return newOdds;
+        }
+
+        function createTable(tableId, odds, title) {
+            const table = document.getElementById(tableId);
+            let html = '<tr><th class="label">Coin</th><th>Special</th><th>Legendary</th><th>Rare</th><th>Common</th><th>Total</th></tr>';
+            
+            for (const [coinName, coinOdds] of Object.entries(coins)) {
+                const odds_result = odds(coinOdds);
+                const total = odds_result.special + odds_result.legendary + odds_result.rare + odds_result.common;
+                html += `
+                    <tr>
+                        <td class="label">${coinName}</td>
+                        <td>${(odds_result.special * 100).toFixed(1)}%</td>
+                        <td>${(odds_result.legendary * 100).toFixed(1)}%</td>
+                        <td>${(odds_result.rare * 100).toFixed(1)}%</td>
+                        <td>${(odds_result.common * 100).toFixed(1)}%</td>
+                        <td class="total">${(total * 100).toFixed(1)}%</td>
+                    </tr>
+                `;
+            }
+            
+            table.innerHTML = html;
+        }
+
+        // Display base odds
+        createTable('baseOdds', (odds) => odds);
+        
+        // Display pity odds
+        createTable('legendaryPity', (odds) => applyPity(odds, 'legendary'));
+        createTable('rarePity', (odds) => applyPity(odds, 'rare'));
+        createTable('specialPity', (odds) => applyPity(odds, 'special'));
+    </script>
+</body>
+</html>

@@ -148,6 +148,8 @@
         const selectedCoin = urlParams.get('coin');
         const goldStar = urlParams.get('goldStar');
         const goldStarPercent = urlParams.get('goldStarPercent');
+        const pity = urlParams.get('pity');
+        const pityRarity = urlParams.get('pityRarity');
 
         // Load all data and perform the roll
         Promise.all([
@@ -226,7 +228,46 @@
 
         function rollRarity() {
             const coin = coinsData.coins.find(c => c.name === selectedCoin);
-            const odds = coin.rarityOdds;
+            let odds = { ...coin.rarityOdds };
+            
+            // Apply pity bonuses with scaling if enabled
+            if (pity === 'true' && pityRarity) {
+                if (pityRarity === 'special') {
+                    // Special Pity: +60% special, +35% legendary, NO common, rare gets remainder
+                    const specialBonus = 0.60;
+                    const legendaryBonus = 0.35;
+                    const totalBonus = specialBonus + legendaryBonus;
+                    const availableSpace = 1 - odds.special - odds.legendary;
+                    
+                    const scaleFactor = availableSpace > 0 ? Math.min(1, availableSpace / totalBonus) : 0;
+                    
+                    odds.special = odds.special + (specialBonus * scaleFactor);
+                    odds.legendary = odds.legendary + (legendaryBonus * scaleFactor);
+                    odds.common = 0;
+                    odds.rare = Math.max(0, 1 - odds.special - odds.legendary - odds.common);
+                } else if (pityRarity === 'legendary') {
+                    // Legendary Pity: +50% legendary, NO common, rare gets remainder
+                    const legendaryBonus = 0.50;
+                    const availableSpace = 1 - odds.legendary - odds.special;
+                    
+                    const scaleFactor = availableSpace > 0 ? Math.min(1, availableSpace / legendaryBonus) : 0;
+                    
+                    odds.legendary = odds.legendary + (legendaryBonus * scaleFactor);
+                    odds.common = 0;
+                    odds.rare = Math.max(0, 1 - odds.special - odds.legendary - odds.common);
+                } else if (pityRarity === 'rare') {
+                    // Rare Pity: +10% legendary, +25% rare, common stays based on coin
+                    const legendaryBonus = 0.10;
+                    const rareBonus = 0.25;
+                    const totalBonus = legendaryBonus + rareBonus;
+                    const availableSpace = 1 - odds.legendary - odds.rare - odds.common;
+                    
+                    const scaleFactor = availableSpace > 0 ? Math.min(1, availableSpace / totalBonus) : 0;
+                    
+                    odds.legendary = odds.legendary + (legendaryBonus * scaleFactor);
+                    odds.rare = odds.rare + (rareBonus * scaleFactor);
+                }
+            }
             
             const random = Math.random();
             let cumulative = 0;

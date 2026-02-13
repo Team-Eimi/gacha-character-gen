@@ -74,6 +74,9 @@
         .button-secondary:hover {
             background-color: #0b7dda !important;
         }
+        #pityOptions {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -103,6 +106,19 @@
 
             <label for="goldStarPercent">Gold Star Percentage (%):</label>
             <input type="number" id="goldStarPercent" min="0" max="100" value="5">
+        </div>
+
+        <label for="pityToggle">
+            <input type="checkbox" id="pityToggle"> I Didn't Want to Pity?
+        </label>
+
+        <div id="pityOptions">
+            <label for="pityRarity">Art Piece Quality:</label>
+            <select id="pityRarity">
+                <option value="special">Special (+60% special, +35% legendary)</option>
+                <option value="legendary">Legendary (+50% legendary, +35% rare)</option>
+                <option value="rare">Rare (+10% legendary, +25% rare)</option>
+            </select>
         </div>
 
         <button onclick="goToCoinSelection()">Continue to Coin Selection →</button>
@@ -138,6 +154,11 @@
             document.getElementById('characterList').style.display = 'none';
         });
 
+        document.getElementById('pityToggle').addEventListener('change', function() {
+            document.getElementById('pityOptions').style.display = 
+                this.checked ? 'block' : 'none';
+        });
+
         function toggleCharacterList() {
             const listDiv = document.getElementById('characterList');
             const poolChoice = document.getElementById('poolSelect').value;
@@ -165,6 +186,8 @@
             const goldStarEnabled = document.getElementById('goldStarToggle').checked;
             const goldStarChar = document.getElementById('goldStarChar').value.trim();
             const goldStarPercent = document.getElementById('goldStarPercent').value;
+            const pityEnabled = document.getElementById('pityToggle').checked;
+            const pityRarity = document.getElementById('pityRarity').value;
             
             let pool;
             if (poolChoice === 'wuxia') {
@@ -195,6 +218,10 @@
             if (goldStarEnabled && goldStarChar) {
                 url += `&goldStar=${encodeURIComponent(goldStarChar)}&goldStarPercent=${goldStarPercent}`;
             }
+            
+            if (pityEnabled) {
+                url += `&pity=true&pityRarity=${pityRarity}`;
+            }
 
             window.location.href = url;
         }
@@ -203,10 +230,16 @@
             const poolChoice = document.getElementById('poolSelect').value;
             const goldStarChar = document.getElementById('goldStarChar').value.trim();
             const goldStarPercent = document.getElementById('goldStarPercent').value;
+            const pityEnabled = document.getElementById('pityToggle').checked;
+            const pityRarity = document.getElementById('pityRarity').value;
             
             // Build URL with all parameters, including the custom character
             let url = `coin.html?banner=${selectedBanner}&pool=${poolChoice}`;
             url += `&goldStar=${encodeURIComponent(goldStarChar)}&goldStarPercent=${goldStarPercent}`;
+            
+            if (pityEnabled) {
+                url += `&pity=true&pityRarity=${pityRarity}`;
+            }
             
             window.location.href = url;
         }

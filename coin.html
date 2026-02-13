@@ -83,6 +83,8 @@
         const selectedPool = urlParams.get('pool');
         const goldStar = urlParams.get('goldStar');
         const goldStarPercent = urlParams.get('goldStarPercent');
+        const pity = urlParams.get('pity');
+        const pityRarity = urlParams.get('pityRarity');
 
         // Update back link to preserve banner selection
         document.getElementById('backLink').href = `character.html?banner=${selectedBanner}`;
@@ -117,6 +119,10 @@
             
             if (goldStar && goldStarPercent) {
                 url += `&goldStar=${goldStar}&goldStarPercent=${goldStarPercent}`;
+            }
+            
+            if (pity) {
+                url += `&pity=${pity}&pityRarity=${pityRarity}`;
             }
             
             window.location.href = url;

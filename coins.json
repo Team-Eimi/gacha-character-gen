@@ -5,9 +5,9 @@
             "displayName": "Diamond Token",
             "img": "coins/diamond.png",
             "rarityOdds": {
-                "special": 0.10,
-                "legendary": 0.30,
-                "rare": 0.40,
+                "special": 0.20,
+                "legendary": 0.25,
+                "rare": 0.35,
                 "common": 0.20
             }
         },
