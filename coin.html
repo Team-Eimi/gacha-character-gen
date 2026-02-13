@@ -63,6 +63,28 @@
         .back-link:hover {
             text-decoration: underline;
         }
+        @media (max-width: 768px) {
+            body {
+                margin: 20px auto;
+                padding: 10px;
+            }
+            .container {
+                padding: 15px;
+            }
+            .coin-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            .coin-card img {
+                width: 100px;
+                height: 100px;
+            }
+        }
+        @media (max-width: 480px) {
+            .coin-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
