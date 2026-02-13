@@ -116,7 +116,7 @@
         
         <div class="animation" id="animation">
             <img src="22.png" alt="Loading" class="loading-spinner" style="width: 150px; height: 150px;">
-            <div class="loading-text">Calculating...</div>
+            <div class="loading-text">Start to pray!</div>
         </div>
         
         <div class="results" id="results" style="display: none;">
@@ -198,19 +198,25 @@
             let weights = new Array(pool.length).fill(1);
             
             if (goldStar && goldStarPercent) {
-                const goldStarIndex = pool.indexOf(goldStar);
-                if (goldStarIndex !== -1) {
-                    const baseProb = 1 / pool.length;
-                    const boostedProb = baseProb + (parseFloat(goldStarPercent) / 100);
-                    const remainingProb = 1 - boostedProb;
-                    const otherCharProb = remainingProb / (pool.length - 1);
-                    
-                    for (let i = 0; i < weights.length; i++) {
-                        if (i === goldStarIndex) {
-                            weights[i] = boostedProb;
-                        } else {
-                            weights[i] = otherCharProb;
-                        }
+                let goldStarIndex = pool.indexOf(goldStar);
+                
+                // If custom character not in pool, add it temporarily
+                if (goldStarIndex === -1) {
+                    pool.push(goldStar);
+                    goldStarIndex = pool.length - 1;
+                    weights.push(1);
+                }
+                
+                const baseProb = 1 / pool.length;
+                const boostedProb = baseProb + (parseFloat(goldStarPercent) / 100);
+                const remainingProb = 1 - boostedProb;
+                const otherCharProb = remainingProb / (pool.length - 1);
+                
+                for (let i = 0; i < weights.length; i++) {
+                    if (i === goldStarIndex) {
+                        weights[i] = boostedProb;
+                    } else {
+                        weights[i] = otherCharProb;
                     }
                 }
             }
