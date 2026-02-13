@@ -212,8 +212,11 @@
                 return;
             }
 
-            // Build URL with all parameters
-            let url = `coin.html?banner=${selectedBanner}&pool=${poolChoice}`;
+            // Roll for character now
+            const rolledCharacter = rollCharacter(pool, goldStarEnabled, goldStarChar, goldStarPercent);
+
+            // Build URL with rolled character and all parameters
+            let url = `results.html?banner=${selectedBanner}&pool=${poolChoice}&character=${encodeURIComponent(rolledCharacter)}`;
             
             if (goldStarEnabled && goldStarChar) {
                 url += `&goldStar=${encodeURIComponent(goldStarChar)}&goldStarPercent=${goldStarPercent}`;
@@ -226,6 +229,50 @@
             window.location.href = url;
         }
 
+        function rollCharacter(pool, goldStarEnabled, goldStarChar, goldStarPercent) {
+            let characters = [...pool];
+            let weights = new Array(characters.length).fill(1);
+            
+            if (goldStarEnabled && goldStarChar) {
+                let goldStarIndex = characters.indexOf(goldStarChar);
+                
+                // If custom character not in pool, add it temporarily
+                if (goldStarIndex === -1) {
+                    characters.push(goldStarChar);
+                    goldStarIndex = characters.length - 1;
+                    weights.push(1);
+                }
+                
+                const baseProb = 1 / characters.length;
+                const boostedProb = baseProb + (parseFloat(goldStarPercent) / 100);
+                const remainingProb = 1 - boostedProb;
+                const otherCharProb = remainingProb / (characters.length - 1);
+                
+                for (let i = 0; i < weights.length; i++) {
+                    if (i === goldStarIndex) {
+                        weights[i] = boostedProb;
+                    } else {
+                        weights[i] = otherCharProb;
+                    }
+                }
+            }
+
+            return weightedRandom(characters, weights);
+        }
+
+        function weightedRandom(items, weights) {
+            const totalWeight = weights.reduce((sum, w) => sum + w, 0);
+            let random = Math.random() * totalWeight;
+            
+            for (let i = 0; i < items.length; i++) {
+                random -= weights[i];
+                if (random <= 0) {
+                    return items[i];
+                }
+            }
+            return items[items.length - 1];
+        }
+
         function addAndContinue() {
             const poolChoice = document.getElementById('poolSelect').value;
             const goldStarChar = document.getElementById('goldStarChar').value.trim();
@@ -233,8 +280,21 @@
             const pityEnabled = document.getElementById('pityToggle').checked;
             const pityRarity = document.getElementById('pityRarity').value;
             
-            // Build URL with all parameters, including the custom character
-            let url = `coin.html?banner=${selectedBanner}&pool=${poolChoice}`;
+            // Get pool and roll character
+            let pool;
+            if (poolChoice === 'wuxia') {
+                pool = wuxiaCharacters;
+            } else if (poolChoice === 'academy') {
+                pool = academyCharacters;
+            } else if (poolChoice === 'keys') {
+                pool = keyCharacters;
+            }
+
+            // Roll for character with gold star boost for custom character
+            const rolledCharacter = rollCharacter(pool, true, goldStarChar, goldStarPercent);
+            
+            // Build URL with rolled character and all parameters, including the custom character
+            let url = `results.html?banner=${selectedBanner}&pool=${poolChoice}&character=${encodeURIComponent(rolledCharacter)}`;
             url += `&goldStar=${encodeURIComponent(goldStarChar)}&goldStarPercent=${goldStarPercent}`;
             
             if (pityEnabled) {

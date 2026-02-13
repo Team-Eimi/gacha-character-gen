@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Results - Gacha Generator</title>
+    <title>Character Result - Gacha Generator</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 600px;
+            max-width: 1000px;
             margin: 50px auto;
             padding: 20px;
             background-color: #f0f0f0;
@@ -19,336 +19,170 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             text-align: center;
         }
-        .animation {
-            padding: 40px;
-            margin: 30px 0;
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 200px;
-        }
-        .animation img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 10px;
-        }
-        .loading-spinner {
-            animation: spin 2s linear infinite;
-        }
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        .loading-text {
-            margin-top: 20px;
-            font-size: 24px;
-            color: #666;
-            font-weight: bold;
-        }
-        .rarity-special {
-            background: linear-gradient(135deg, #ff00ff, #ff69b4);
-            color: white;
-        }
-        .rarity-legendary {
-            background: linear-gradient(135deg, #ffa500, #ffff00);
+        h1 {
             color: #333;
+            margin-bottom: 30px;
         }
-        .rarity-rare {
-            background: linear-gradient(135deg, #0080ff, #87ceeb);
-            color: white;
-        }
-        .rarity-common {
-            background: linear-gradient(135deg, #808080, #c0c0c0);
-            color: white;
-        }
-        .results {
-            margin-top: 30px;
-        }
-        .result-item {
+        .character-result {
             background-color: #f9f9f9;
-            padding: 20px;
-            margin: 15px 0;
+            padding: 30px;
             border-radius: 10px;
-            border-left: 5px solid #4CAF50;
+            margin-bottom: 40px;
+            border: 3px solid #4CAF50;
         }
         .result-label {
             font-size: 14px;
             color: #666;
             text-transform: uppercase;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
         }
         .result-value {
-            font-size: 24px;
+            font-size: 32px;
             font-weight: bold;
             color: #333;
         }
-        .drop-rarity {
-            font-size: 16px;
-            margin-top: 5px;
-            font-weight: normal;
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
         }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 5px;
+        .coin-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            justify-items: center;
+        }
+        .coin-card {
+            border: 3px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
             cursor: pointer;
-            margin-top: 30px;
-            font-size: 16px;
+            transition: all 0.3s ease;
+            text-align: center;
         }
-        button:hover {
-            background-color: #45a049;
+        .coin-card:hover {
+            border-color: #4CAF50;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+            transform: translateY(-5px);
         }
-        .button-secondary {
-            background-color: #2196F3;
-            margin-left: 10px;
+        .coin-card img {
+            width: 150px;
+            height: 150px;
+            display: block;
+            margin: 0 auto;
         }
-        .button-secondary:hover {
-            background-color: #0b7dda;
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #2196F3;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 768px) {
+            body {
+                margin: 20px auto;
+                padding: 10px;
+            }
+            .container {
+                padding: 15px;
+            }
+            .coin-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            .coin-card img {
+                width: 100px;
+                height: 100px;
+            }
+        }
+        @media (max-width: 480px) {
+            .coin-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🎉 Your Results!</h1>
+        <a href="character.html" class="back-link" id="backLink">← Back to Character Selection</a>
         
-        <div class="animation" id="animation">
-            <img src="22.png" alt="Loading" class="loading-spinner" style="width: 150px; height: 150px;">
-            <div class="loading-text">Start to pray!</div>
+        <h1>🎉 Character Rolled!</h1>
+        
+        <div class="character-result">
+            <div class="result-label">Your Character</div>
+            <div class="result-value" id="characterResult"></div>
         </div>
         
-        <div class="results" id="results" style="display: none;">
-            <div class="result-item">
-                <div class="result-label">Character</div>
-                <div class="result-value" id="characterResult"></div>
+        <div>
+            <p class="subtitle">Now select your token to see what drop you get!</p>
+            <div class="coin-grid" id="coinGrid">
+                <!-- Coins will be loaded dynamically from coins.json -->
             </div>
-            
-            <div class="result-item">
-                <div class="result-label">Drop Type</div>
-                <div class="result-value" id="dropResult"></div>
-                <div class="drop-rarity" id="dropRarity"></div>
-            </div>
-            
-            <button onclick="rollAgain()">Roll Again</button>
-            <button class="button-secondary" onclick="goHome()">Back to Home</button>
         </div>
     </div>
 
     <script>
-        let bannersData = null;
         let coinsData = null;
-        let charactersData = null;
 
         // Get parameters from URL
         const urlParams = new URLSearchParams(window.location.search);
         const selectedBanner = urlParams.get('banner');
         const selectedPool = urlParams.get('pool');
-        const selectedCoin = urlParams.get('coin');
+        const rolledCharacter = urlParams.get('character');
         const goldStar = urlParams.get('goldStar');
         const goldStarPercent = urlParams.get('goldStarPercent');
         const pity = urlParams.get('pity');
         const pityRarity = urlParams.get('pityRarity');
 
-        // Load all data and perform the roll
-        Promise.all([
-            fetch('banners.json').then(r => r.json()),
-            fetch('coins.json').then(r => r.json()),
-            fetch('characters.json').then(r => r.json())
-        ])
-        .then(([banners, coins, characters]) => {
-            bannersData = banners;
-            coinsData = coins;
-            charactersData = characters;
-            
-            // Perform the roll after a short delay for animation
-            setTimeout(() => {
-                performRoll();
-            }, 1500);
-        })
-        .catch(error => {
-            console.error('Error loading data:', error);
-            document.getElementById('animation').innerHTML = '❌ Error loading data';
-        });
+        // Display the rolled character
+        document.getElementById('characterResult').textContent = rolledCharacter;
 
-        function performRoll() {
-            // 1. Roll for character
-            const character = rollCharacter();
-            
-            // 2. Roll for drop rarity based on coin
-            const rarity = rollRarity();
-            
-            // 3. Roll for specific drop from banner's drops of that rarity
-            const drop = rollDrop(rarity);
-            
-            // Display results
-            displayResults(character, drop, rarity);
-        }
+        // Update back link to preserve banner selection
+        document.getElementById('backLink').href = `character.html?banner=${selectedBanner}`;
 
-        function rollCharacter() {
-            let pool;
-            if (selectedPool === 'wuxia') {
-                pool = [...charactersData.wuxia];
-            } else if (selectedPool === 'academy') {
-                pool = [...charactersData.academy];
-            } else if (selectedPool === 'keys') {
-                pool = [...charactersData.keys];
-            }
-
-            // Set up weights (default: all characters have equal probability)
-            let weights = new Array(pool.length).fill(1);
-            
-            if (goldStar && goldStarPercent) {
-                let goldStarIndex = pool.indexOf(goldStar);
+        // Load coins from JSON file
+        fetch('coins.json')
+            .then(response => response.json())
+            .then(data => {
+                coinsData = data;
+                const coinGrid = document.getElementById('coinGrid');
                 
-                // If custom character not in pool, add it temporarily
-                if (goldStarIndex === -1) {
-                    pool.push(goldStar);
-                    goldStarIndex = pool.length - 1;
-                    weights.push(1);
-                }
-                
-                const baseProb = 1 / pool.length;
-                const boostedProb = baseProb + (parseFloat(goldStarPercent) / 100);
-                const remainingProb = 1 - boostedProb;
-                const otherCharProb = remainingProb / (pool.length - 1);
-                
-                for (let i = 0; i < weights.length; i++) {
-                    if (i === goldStarIndex) {
-                        weights[i] = boostedProb;
-                    } else {
-                        weights[i] = otherCharProb;
-                    }
-                }
-            }
-
-            return weightedRandom(pool, weights);
-        }
-
-        function rollRarity() {
-            const coin = coinsData.coins.find(c => c.name === selectedCoin);
-            let odds = { ...coin.rarityOdds };
-            
-            // Apply pity bonuses with scaling if enabled
-            if (pity === 'true' && pityRarity) {
-                if (pityRarity === 'special') {
-                    // Special Pity: +60% special, +35% legendary, NO common, rare gets remainder
-                    const specialBonus = 0.60;
-                    const legendaryBonus = 0.35;
-                    const totalBonus = specialBonus + legendaryBonus;
-                    const availableSpace = 1 - odds.special - odds.legendary;
+                data.coins.forEach(coin => {
+                    const coinCard = document.createElement('div');
+                    coinCard.className = 'coin-card';
                     
-                    const scaleFactor = availableSpace > 0 ? Math.min(1, availableSpace / totalBonus) : 0;
+                    const img = document.createElement('img');
+                    img.src = coin.img;
+                    img.alt = coin.displayName;
                     
-                    odds.special = odds.special + (specialBonus * scaleFactor);
-                    odds.legendary = odds.legendary + (legendaryBonus * scaleFactor);
-                    odds.common = 0;
-                    odds.rare = Math.max(0, 1 - odds.special - odds.legendary - odds.common);
-                } else if (pityRarity === 'legendary') {
-                    // Legendary Pity: +50% legendary, NO common, rare gets remainder
-                    const legendaryBonus = 0.50;
-                    const availableSpace = 1 - odds.legendary - odds.special;
+                    coinCard.appendChild(img);
                     
-                    const scaleFactor = availableSpace > 0 ? Math.min(1, availableSpace / legendaryBonus) : 0;
+                    coinCard.onclick = () => selectCoin(coin.name);
                     
-                    odds.legendary = odds.legendary + (legendaryBonus * scaleFactor);
-                    odds.common = 0;
-                    odds.rare = Math.max(0, 1 - odds.special - odds.legendary - odds.common);
-                } else if (pityRarity === 'rare') {
-                    // Rare Pity: +10% legendary, +25% rare, common stays based on coin
-                    const legendaryBonus = 0.10;
-                    const rareBonus = 0.25;
-                    const totalBonus = legendaryBonus + rareBonus;
-                    const availableSpace = 1 - odds.legendary - odds.rare - odds.common;
-                    
-                    const scaleFactor = availableSpace > 0 ? Math.min(1, availableSpace / totalBonus) : 0;
-                    
-                    odds.legendary = odds.legendary + (legendaryBonus * scaleFactor);
-                    odds.rare = odds.rare + (rareBonus * scaleFactor);
-                }
-            }
-            
-            const random = Math.random();
-            let cumulative = 0;
-            
-            for (const [rarity, chance] of Object.entries(odds)) {
-                cumulative += chance;
-                if (random <= cumulative) {
-                    return rarity;
-                }
-            }
-            
-            return 'common';
-        }
+                    coinGrid.appendChild(coinCard);
+                });
+            })
+            .catch(error => {
+                console.error('Error loading coins:', error);
+                document.getElementById('coinGrid').innerHTML = '<p>Error loading coins</p>';
+            });
 
-        function rollDrop(rarity) {
-            const banner = bannersData.banners.find(b => b.name === selectedBanner);
-            const availableDrops = banner.drops.filter(d => d.rarity === rarity);
+        function selectCoin(coinName) {
+            const params = new URLSearchParams({
+                banner: selectedBanner,
+                pool: selectedPool,
+                character: rolledCharacter,
+                coin: coinName,
+                goldStar: goldStar || '',
+                goldStarPercent: goldStarPercent || '',
+                pity: pity || '',
+                pityRarity: pityRarity || ''
+            });
             
-            if (availableDrops.length === 0) {
-                // Fallback to any drop if no drops of this rarity exist
-                return weightedRandom(
-                    banner.drops.map(d => d.item),
-                    banner.drops.map(d => d.chance)
-                );
-            }
-            
-            return weightedRandom(
-                availableDrops.map(d => d.item),
-                availableDrops.map(d => d.chance)
-            );
-        }
-
-        function weightedRandom(items, weights) {
-            const totalWeight = weights.reduce((sum, w) => sum + w, 0);
-            let random = Math.random() * totalWeight;
-            
-            for (let i = 0; i < items.length; i++) {
-                random -= weights[i];
-                if (random <= 0) {
-                    return items[i];
-                }
-            }
-            return items[items.length - 1];
-        }
-
-        function displayResults(character, drop, rarity) {
-            // Update animation based on rarity and coin
-            const animationDiv = document.getElementById('animation');
-            
-            // Map rarity to animation file
-            // Add timestamp to force fresh load and prevent caching/replay
-            const animationPath = `animations/${selectedCoin}/${selectedCoin}-${rarity}.gif?t=${Date.now()}`;
-            
-            animationDiv.innerHTML = `<img src="${animationPath}" alt="${rarity} animation">`;
-            
-            // Show results after animation plays fully (adjust time based on GIF duration)
-            setTimeout(() => {
-                document.getElementById('characterResult').textContent = character;
-                document.getElementById('dropResult').textContent = drop;
-                
-                const rarityText = rarity.charAt(0).toUpperCase() + rarity.slice(1);
-                const rarityDescriptions = {
-                    'special': 'Special written piece - AU fanfic or canon backstory/side story',
-                    'legendary': 'Fully rendered piece with background',
-                    'rare': 'Clean sketch with line art and shading',
-                    'common': 'Sketch - A doodle'
-                };
-                
-                document.getElementById('dropRarity').innerHTML = 
-                    `<span class="rarity-${rarity}">${rarityText}</span> - ${rarityDescriptions[rarity]}`;
-                
-                document.getElementById('results').style.display = 'block';
-            }, 4000);
-        }
-
-        function rollAgain() {
-            window.location.href = 'index.html';
-        }
-
-        function goHome() {
-            window.location.href = 'index.html';
+            window.location.href = `drop-results.html?${params.toString()}`;
         }
     </script>
 </body>

@@ -3,7 +3,7 @@
         {
             "name": "diamond",
             "displayName": "Diamond Token",
-            "img": "coins/diamond.png",
+            "img": "tokens/diamond.png",
             "rarityOdds": {
                 "special": 0.20,
                 "legendary": 0.25,
@@ -14,7 +14,7 @@
         {
             "name": "gold",
             "displayName": "Gold Token",
-            "img": "coins/gold.png",
+            "img": "tokens/gold.png",
             "rarityOdds": {
                 "special": 0.05,
                 "legendary": 0.15,
@@ -25,7 +25,7 @@
         {
             "name": "silver",
             "displayName": "Silver Token",
-            "img": "coins/silver.png",
+            "img": "tokens/silver.png",
             "rarityOdds": {
                 "special": 0.01,
                 "legendary": 0.09,
@@ -36,7 +36,7 @@
         {
             "name": "copper",
             "displayName": "Copper Token",
-            "img": "coins/copper.png",
+            "img": "tokens/copper.png",
             "rarityOdds": {
                 "special": 0.00,
                 "legendary": 0.05,
