@@ -53,6 +53,33 @@
                     "rarity": "common"
                 }
             ]
+        },
+        {
+            "name": "vampire-banner",
+            "active": true,
+            "img": "banner_art/bannervamp.png",
+            "drops": [
+                {
+                    "item": "gothic inspired outfit",
+                    "chance": 0.45,
+                    "rarity": "common"
+                },
+                {
+                    "item": "vampire transformation",
+                    "chance": 0.30,
+                    "rarity": "common"
+                },
+                {
+                    "item": "duo suggestive pose",
+                    "chance": 0.15,
+                    "rarity": "common"
+                },
+                {
+                    "item": "mini comic",
+                    "chance": 0.10,
+                    "rarity": "common"
+                }
+            ]
         }
     ]
 }
