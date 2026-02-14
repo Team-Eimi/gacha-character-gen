@@ -2,82 +2,103 @@
     "banners": [
         {
             "name": "cutesy",
-            "active": true,
+            "status": "active",
             "img": "banner_art/bannercutesy.png",
             "drops": [
                 {
                     "item": "single chibi",
-                    "chance": 0.5,
-                    "rarity": "common"
+                    "chance": 0.5
                 },
                 {
                     "item": "duo chibi",
-                    "chance": 0.5,
-                    "rarity": "common"
+                    "chance": 0.5
                 },
                 {                    
                     "item": "squish",
-                    "chance": 0.2,
-                    "rarity": "rare"
+                    "chance": 0.2
                 },
                 {
                     "item": "3+/squad chibi",
-                    "chance": 0.05,
-                    "rarity": "rare"
+                    "chance": 0.05
                 }
             ]
         },
         {
             "name": "whump",
-            "active": true,
+            "status": "past",
             "img": "banner_art/bannerwhump.png",
             "drops": [
                 {
                     "item": "single character grief",
-                    "chance": 0.25,
-                    "rarity": "common"
+                    "chance": 0.25
                 },
                 {
                     "item": "single character injured",
-                    "chance": 0.25,
-                    "rarity": "common"
+                    "chance": 0.25
                 },
                 {
                     "item": "duo character grief",
-                    "chance": 0.25,
-                    "rarity": "common"
+                    "chance": 0.25
                 },
                 {
                     "item": "symbolic pain",
-                    "chance": 0.25,
-                    "rarity": "common"
+                    "chance": 0.25
                 }
             ]
         },
         {
-            "name": "vampire-banner",
-            "active": false,
+            "name": "vampire",
+            "status": "upcoming",
+            "date": "2/16",
             "img": "banner_art/bannervamp.png",
             "drops": [
                 {
                     "item": "gothic inspired outfit",
-                    "chance": 0.45,
-                    "rarity": "common"
+                    "chance": 0.45
                 },
                 {
                     "item": "vampire transformation",
-                    "chance": 0.30,
-                    "rarity": "common"
+                    "chance": 0.30
                 },
                 {
                     "item": "duo suggestive pose",
-                    "chance": 0.15,
-                    "rarity": "common"
+                    "chance": 0.15
                 },
                 {
                     "item": "mini comic",
-                    "chance": 0.10,
-                    "rarity": "common"
+                    "chance": 0.10
+                }
+            ]
+        },
+        {
+            "name": "cursed",
+            "status": "upcoming",
+            "date": "2/19",
+            "img": "banner_art/cursedbanner.png",
+            "drops": [
+                {
+                    "item": "cursed outfit",
+                    "chance": 0.20
+                },
+                {
+                    "item": "cursed duo pose",
+                    "chance": 0.15
+                },
+                {
+                    "item": "meme redraw",
+                    "chance": 0.15
+                },
+                {
+                    "item": "mplsona",
+                    "chance": 0.15
+                },
+                {
+                    "item": "warrior cats sona",
+                    "chance": 0.15
+                },
+                {
+                    "item": "vocaloid sona",
+                    "chance": 0.20
                 }
             ]
         }

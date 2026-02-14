@@ -98,9 +98,17 @@
             .then(data => {
                 const bannerGrid = document.getElementById('bannerGrid');
                 
-                // Separate active and upcoming banners
-                const activeBanners = data.banners.filter(banner => banner.active);
-                const upcomingBanners = data.banners.filter(banner => !banner.active);
+                // Separate banners by status
+                const activeBanners = data.banners.filter(banner => banner.status === 'active');
+                const upcomingBanners = data.banners.filter(banner => banner.status === 'upcoming')
+                    .sort((a, b) => {
+                        // Sort by date (earliest first)
+                        if (!a.date || !b.date) return 0;
+                        const dateA = new Date(a.date + '/2026');
+                        const dateB = new Date(b.date + '/2026');
+                        return dateA - dateB;
+                    });
+                const pastBanners = data.banners.filter(banner => banner.status === 'past');
                 
                 // Display upcoming banners FIRST
                 if (upcomingBanners.length > 0) {
@@ -116,7 +124,7 @@
                         
                         bannerCard.innerHTML = `
                             <img src="${banner.img}" alt="${banner.name} Banner">
-                            <div class="upcoming-badge">COMING SOON</div>
+                            <div class="upcoming-badge">COMING ${banner.date || 'SOON'}</div>
                         `;
                         
                         bannerGrid.appendChild(bannerCard);
@@ -134,6 +142,28 @@
                         const bannerCard = document.createElement('a');
                         bannerCard.href = `character.html?banner=${banner.name}`;
                         bannerCard.className = 'banner-card';
+                        
+                        bannerCard.innerHTML = `
+                            <img src="${banner.img}" alt="${banner.name} Banner">
+                        `;
+                        
+                        bannerGrid.appendChild(bannerCard);
+                    });
+                }
+                
+                // Display past banners
+                if (pastBanners.length > 0) {
+                    const pastTitle = document.createElement('div');
+                    pastTitle.className = 'section-title';
+                    pastTitle.style.color = '#999';
+                    pastTitle.style.borderBottomColor = '#ddd';
+                    pastTitle.textContent = 'Past Banners';
+                    bannerGrid.appendChild(pastTitle);
+                    
+                    pastBanners.forEach(banner => {
+                        const bannerCard = document.createElement('div');
+                        bannerCard.className = 'banner-card';
+                        bannerCard.style.cursor = 'not-allowed';
                         
                         bannerCard.innerHTML = `
                             <img src="${banner.img}" alt="${banner.name} Banner">

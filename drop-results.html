@@ -170,10 +170,17 @@
         });
 
         function performRoll() {
-            // 1. Roll for drop rarity based on coin
+            // 1. Check for crit fail (2% chance)
+            const critFailChance = 0.02;
+            if (Math.random() < critFailChance) {
+                displayCritFail();
+                return;
+            }
+            
+            // 2. Roll for drop rarity based on coin
             const rarity = rollRarity();
             
-            // 2. Roll for specific drop from banner's drops of that rarity
+            // 3. Roll for specific drop from banner's drops of that rarity
             const drop = rollDrop(rarity);
             
             // Display results
@@ -265,6 +272,23 @@
                 }
             }
             return items[items.length - 1];
+        }
+
+        function displayCritFail() {
+            // Update animation to show crit fail animation
+            const animationDiv = document.getElementById('animation');
+            const animationPath = `animations/${selectedCoin}/${selectedCoin}-critfail.gif?t=${Date.now()}`;
+            
+            animationDiv.innerHTML = `<img src="${animationPath}" alt="Crit Fail animation">`;
+            
+            // Show results after animation plays fully
+            setTimeout(() => {
+                document.getElementById('characterResult').textContent = rolledCharacter;
+                document.getElementById('dropResult').textContent = '❌ CRIT FAIL';
+                document.getElementById('dropRarity').innerHTML = '<span style="color: red; font-weight: bold;">You got nothing!</span>';
+                
+                document.getElementById('results').style.display = 'block';
+            }, 4000);
         }
 
         function displayResults(character, drop, rarity) {
