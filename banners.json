@@ -48,8 +48,7 @@
         },
         {
             "name": "vampire",
-            "status": "upcoming",
-            "date": "2/16",
+            "status": "active",
             "img": "banner_art/bannervamp.png",
             "drops": [
                 {
