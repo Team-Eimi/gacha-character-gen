@@ -170,20 +170,20 @@
         });
 
         function performRoll() {
-            // 1. Check for crit fail (2% chance)
+            // 1) Crit fail check (2% chance) 
             const critFailChance = 0.02;
             if (Math.random() < critFailChance) {
                 displayCritFail();
                 return;
             }
             
-            // 2. Roll for drop rarity based on coin
+            // 2) Roll rarity using the selected coin's rarity odds.
             const rarity = rollRarity();
             
-            // 3. Roll for specific drop from banner's drops of that rarity
+            // 3) Roll the specific banner item using its own chance weights.
             const drop = rollDrop(rarity);
             
-            // Display results
+            // 4) Display results + animation.
             displayResults(rolledCharacter, drop, rarity);
         }
 
@@ -245,23 +245,16 @@
 
         function rollDrop(rarity) {
             const banner = bannersData.banners.find(b => b.name === selectedBanner);
-            const availableDrops = banner.drops.filter(d => d.rarity === rarity);
-            
-            if (availableDrops.length === 0) {
-                // Fallback to any drop if no drops of this rarity exist
-                return weightedRandom(
-                    banner.drops.map(d => d.item),
-                    banner.drops.map(d => d.chance)
-                );
-            }
-            
+
+            // The banner drop is chosen from the full list using each item's `chance` weight.
             return weightedRandom(
-                availableDrops.map(d => d.item),
-                availableDrops.map(d => d.chance)
+                banner.drops.map(d => d.item),
+                banner.drops.map(d => d.chance)
             );
         }
 
         function weightedRandom(items, weights) {
+            // Weighted random selection: higher `chance` = more likely.
             const totalWeight = weights.reduce((sum, w) => sum + w, 0);
             let random = Math.random() * totalWeight;
             
@@ -277,7 +270,7 @@
         function displayCritFail() {
             // Update animation to show crit fail animation
             const animationDiv = document.getElementById('animation');
-            const animationPath = `animations/${selectedCoin}/${selectedCoin}-critfail.gif?t=${Date.now()}`;
+            const animationPath = `animations/${selectedCoin}/${selectedCoin}-crit-fail.gif?t=${Date.now()}`;
             
             animationDiv.innerHTML = `<img src="${animationPath}" alt="Crit Fail animation">`;
             
@@ -285,7 +278,7 @@
             setTimeout(() => {
                 document.getElementById('characterResult').textContent = rolledCharacter;
                 document.getElementById('dropResult').textContent = '❌ CRIT FAIL';
-                document.getElementById('dropRarity').innerHTML = '<span style="color: red; font-weight: bold;">You got nothing!</span>';
+                document.getElementById('dropRarity').innerHTML = '<span style="color: red; font-weight: bold;">Hehehehe</span>';
                 
                 document.getElementById('results').style.display = 'block';
             }, 4000);

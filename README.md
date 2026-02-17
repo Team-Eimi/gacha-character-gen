@@ -7,9 +7,9 @@ A multi-step gacha system for rolling characters and artwork drops with customiz
 The gacha generator follows a 4-step process:
 
 ### 1. **Choose Banner** (`index.html`)
-- Select from available banners (loaded from `banners.json`)
-- Each banner has its own unique set of drops with different rarities
-- Only active banners are displayed
+- Banners are grouped into **Upcoming**, **Active**, and **Past** sections.
+- Upcoming banners show a **COMING <date>** badge (if `date` is set).
+- Only **Active** banners are clickable.
 
 ### 2. **Select Character** (`character.html`)
 - Choose a character pool (Wuxia, Ael Academy, or The Keys)
@@ -17,22 +17,16 @@ The gacha generator follows a 4-step process:
   - Specify a character name and boost percentage
   - Adds that percentage directly to the character's base probability
   - Example: 10% base + 25% boost = 35% chance to get that character
+- Optionally enable **"I Didn't Want to Pity"** (affects rarity odds)
 
-### 3. **Choose Coin** (`coin.html`)
-- Select a token that affects your drop rarity odds
-- **Diamond Token**: 10% special, 30% legendary, 40% rare, 20% common
-- **Gold Token**: 5% special, 15% legendary, 40% rare, 40% common
-- **Silver Token**: 1% special, 9% legendary, 30% rare, 60% common
-- **Copper Token**: 0% special, 5% legendary, 10% rare, 85% common
+### 3. **Character Result + Token Select** (`results.html`)
+- The character is rolled and displayed immediately.
+- You then choose a token to determine rarity odds.
 
-### 4. **Results** (`results.html`)
-- Performs two independent rolls:
-  1. **Character Roll**: Uses selected pool + gold star boost (if applicable)
-  2. **Drop Roll**: 
-     - First rolls for rarity based on coin odds
-     - Then selects a specific drop from the banner's drops matching that rarity
-- Displays animation based on rarity (special, legendary, rare, common)
-- Shows final character + drop type result
+### 4. **Drop Result** (`drop-results.html`)
+- **Crit Fail** check happens first (2% chance).
+- If not a crit fail, rarity is rolled using the token odds (and pity if enabled).
+- Animation + rarity label display with the final drop.
 
 ## 📊 Drop Rarities Explained
 
@@ -46,12 +40,14 @@ The gacha generator follows a 4-step process:
 ```
 ├── index.html           # Banner selection page
 ├── character.html       # Character pool & gold star selection
-├── coin.html           # Token selection
-├── results.html        # Final roll & results display
-├── banners.json        # Banner configurations & drops
-├── coins.json          # Coin types & rarity odds
-├── characters.json     # Character pools (wuxia, academy, keys)
-└── banner_art/         # Banner images
+├── results.html         # Character result + token selection
+├── drop-results.html    # Final roll & results display
+├── banners.json         # Banner configurations & drops
+├── coins.json           # Token types & rarity odds
+├── characters.json      # Character pools (wuxia, academy, keys)
+├── banner_art/          # Banner images
+├── tokens/              # Token images
+└── animations/          # Roll animations by token + rarity
 ```
 
 ## 🔧 JSON Configuration
@@ -62,13 +58,12 @@ The gacha generator follows a 4-step process:
   "banners": [
     {
       "name": "cutesy",
-      "active": true,
+      "status": "active",
       "img": "banner_art/bannercutesy.png",
       "drops": [
         {
           "item": "single chibi",
-          "chance": 0.5,
-          "rarity": "common"
+          "chance": 0.5
         }
       ]
     }
@@ -83,7 +78,7 @@ The gacha generator follows a 4-step process:
     {
       "name": "diamond",
       "displayName": "Diamond Token",
-      "img": "coins/diamond.png",
+      "img": "tokens/diamond.png",
       "rarityOdds": {
         "special": 0.10,
         "legendary": 0.30,
@@ -117,9 +112,11 @@ Example with 10 characters and 25% boost:
 - Gold star character: 10% + 25% = **35% chance**
 - Other 9 characters: 65% / 9 = **7.22% each**
 
-### Drop Roll
+### Crit Fail
+- **2% chance** to trigger a crit fail before any rarity roll.
+
+### Token Rarity Roll
 1. **Rarity Roll**: Uses coin's `rarityOdds` to determine rarity level
-2. **Drop Selection**: From banner's drops matching that rarity, weighted by each drop's `chance` value
 
 ## 🚀 Running Locally
 
@@ -150,8 +147,9 @@ Visit: `http://localhost:8000`
 - All probabilities should sum to 1.0 within each system
 - The `chance` values in banner drops are relative weights (don't need to sum to 1)
 - Banner images should be placed in `banner_art/` folder
-- Coin images should be placed in `coins/` folder (optional)
-- Set `"active": false` in `banners.json` to hide a banner without deleting it
+- Token images should be placed in `tokens/` folder
+- Set `"status": "upcoming"` or `"status": "past"` to control banner placement
+- Upcoming banners can include a `date` field (e.g., `"2/16"`) for sorting and display
 
 ## 🐛 Troubleshooting
 
