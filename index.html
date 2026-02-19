@@ -155,20 +155,17 @@
                 if (pastBanners.length > 0) {
                     const pastTitle = document.createElement('div');
                     pastTitle.className = 'section-title';
-                    pastTitle.style.color = '#999';
-                    pastTitle.style.borderBottomColor = '#ddd';
                     pastTitle.textContent = 'Past Banners';
                     bannerGrid.appendChild(pastTitle);
                     
                     pastBanners.forEach(banner => {
-                        const bannerCard = document.createElement('div');
+                        const bannerCard = document.createElement('a');
+                        bannerCard.href = `character.html?banner=${banner.name}`;
                         bannerCard.className = 'banner-card';
-                        bannerCard.style.cursor = 'not-allowed';
                         
                         bannerCard.innerHTML = `
                             <img src="${banner.img}" alt="${banner.name} Banner">
                         `;
-                        
                         bannerGrid.appendChild(bannerCard);
                     });
                 }
