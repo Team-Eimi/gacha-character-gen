@@ -48,7 +48,7 @@
         },
         {
             "name": "vampire",
-            "status": "active",
+            "status": "past",
             "img": "banner_art/bannervamp.png",
             "drops": [
                 {
@@ -71,8 +71,7 @@
         },
         {
             "name": "cursed",
-            "status": "upcoming",
-            "date": "2/19",
+            "status": "active",
             "img": "banner_art/cursedbanner.png",
             "drops": [
                 {
