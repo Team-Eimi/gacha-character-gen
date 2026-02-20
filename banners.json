@@ -13,7 +13,7 @@
                     "item": "duo chibi",
                     "chance": 0.5
                 },
-                {                    
+                {
                     "item": "squish",
                     "chance": 0.2
                 },
@@ -97,6 +97,162 @@
                 {
                     "item": "vocaloid sona",
                     "chance": 0.20
+                }
+            ]
+        },
+        {
+            "name": "spicy",
+            "status": "upcoming",
+            "date": "2/23",
+            "img": "banner_art/nsfwbanner.png",
+            "drops": [
+                {
+                    "item": "low spice pair",
+                    "chance": 0.20
+                },
+                {
+                    "item": "pinup solo",
+                    "chance": 0.20
+                },
+                {
+                    "item": "high spice solo",
+                    "chance": 0.20
+                },
+                {
+                    "item": "high spice pair",
+                    "chance": 0.15
+                },
+                {
+                    "item": "low spice rarepair",
+                    "chance": 0.10
+                },
+                {
+                    "item": "high spice rarepair",
+                    "chance": 0.10
+                },
+                {
+                    "item": "low spice crack pair",
+                    "chance": 0.05
+                }
+            ]
+        },
+        {
+            "name": "shopping",
+            "status": "upcoming",
+            "date": "2/24",
+            "img": "banner_art/shoppingbanner.png",
+            "drops": [
+                {
+                    "item": "you pick",
+                    "chance": 0.08
+                },
+                {
+                    "item": "Vintage",
+                    "chance": 0.04
+                },
+                {
+                    "item": "Goth/punk",
+                    "chance": 0.04
+                },
+                {
+                    "item": "Formal",
+                    "chance": 0.04
+                },
+                {
+                    "item": "Haute couture",
+                    "chance": 0.04
+                },
+                {
+                    "item": "Sexy",
+                    "chance": 0.04
+                },
+                {
+                    "item": "Prep",
+                    "chance": 0.04
+                },
+                {
+                    "item": "Sleep/very casual",
+                    "chance": 0.04
+                },
+                {
+                    "item": "D&D adventurer",
+                    "chance": 0.04
+                },
+                {
+                    "item": "what you’re wearing right now",
+                    "chance": 0.04
+                },
+                {
+                    "item": "Chinese/Mongolian",
+                    "chance": 0.04
+                },
+                {
+                    "item": "Dark academia",
+                    "chance": 0.04
+                },
+                {
+                    "item": "Beach",
+                    "chance": 0.04
+                },
+                {
+                    "item": "Country",
+                    "chance": 0.04
+                },
+                {
+                    "item": "Masquerade ball",
+                    "chance": 0.04
+                },
+                {
+                    "item": "Maid",
+                    "chance": 0.04
+                },
+                {
+                    "item": "Japanese",
+                    "chance": 0.04
+                },
+                {
+                    "item": "Geek",
+                    "chance": 0.04
+                },
+                {
+                    "item": "Fairytale",
+                    "chance": 0.04
+                },
+                {
+                    "item": "Royal",
+                    "chance": 0.04
+                },
+                {
+                    "item": "Celestial",
+                    "chance": 0.04
+                },
+                {
+                    "item": "Lolita",
+                    "chance": 0.04
+                },
+                {
+                    "item": "School uniform",
+                    "chance": 0.04
+                },
+                {
+                    "item": "Poor lecher",
+                    "chance": 0.04
+                }
+            ]
+        },
+        {
+            "name": "baby",
+            "status": "upcoming",
+            "date": "2/26",
+            "img": "banner_art/babybanner.png",
+            "drops": [
+                {
+                    "item": "random",
+                    "chance": 0.75
+                },
+                {
+                    "item": "you pick",
+                    "chance": 0.25
                 }
             ]
         }
