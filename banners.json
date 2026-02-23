@@ -71,7 +71,7 @@
         },
         {
             "name": "cursed",
-            "status": "active",
+            "status": "past",
             "img": "banner_art/cursedbanner.png",
             "drops": [
                 {
@@ -102,8 +102,7 @@
         },
         {
             "name": "spicy",
-            "status": "upcoming",
-            "date": "2/23",
+            "status": "active",
             "img": "banner_art/nsfwbanner.png",
             "drops": [
                 {
