@@ -102,7 +102,7 @@
         },
         {
             "name": "spicy",
-            "status": "active",
+            "status": "past",
             "img": "banner_art/nsfwbanner.png",
             "drops": [
                 {
@@ -137,8 +137,7 @@
         },
         {
             "name": "shopping",
-            "status": "upcoming",
-            "date": "2/24",
+            "status": "active",
             "img": "banner_art/shoppingbanner.png",
             "drops": [
                 {
