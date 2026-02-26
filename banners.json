@@ -137,7 +137,7 @@
         },
         {
             "name": "shopping",
-            "status": "active",
+            "status": "past",
             "img": "banner_art/shoppingbanner.png",
             "drops": [
                 {
@@ -240,7 +240,7 @@
         },
         {
             "name": "baby",
-            "status": "upcoming",
+            "status": "active",
             "date": "2/26",
             "img": "banner_art/babybanner.png",
             "drops": [

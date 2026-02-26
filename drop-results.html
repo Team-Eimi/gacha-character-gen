@@ -88,6 +88,53 @@
             margin-top: 5px;
             font-weight: normal;
         }
+        .parents-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .parent-box {
+            flex: 1;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .parent-box.mommy {
+            border-left: 5px solid #ff69b4;
+        }
+        .parent-box.daddy {
+            border-left: 5px solid #4169e1;
+        }
+        .trait-item {
+            background-color: #fff;
+            padding: 10px 15px;
+            margin: 8px 0;
+            border-radius: 5px;
+            border-left: 3px solid #4CAF50;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .trait-label {
+            font-weight: bold;
+            color: #666;
+        }
+        .trait-value {
+            color: #333;
+        }
+        .trait-source {
+            font-size: 12px;
+            color: #999;
+            font-style: italic;
+        }
+        .baby-traits {
+            background-color: #fff8e1;
+            padding: 20px;
+            border-radius: 10px;
+            border: 3px solid #ffc107;
+            margin-top: 20px;
+        }
         button {
             background-color: #4CAF50;
             color: white;
@@ -120,15 +167,45 @@
         </div>
         
         <div class="results" id="results" style="display: none;">
-            <div class="result-item">
-                <div class="result-label">Character</div>
-                <div class="result-value" id="characterResult"></div>
+            <!-- Regular results -->
+            <div id="regularResults">
+                <div class="result-item">
+                    <div class="result-label">Character</div>
+                    <div class="result-value" id="characterResult"></div>
+                </div>
+                
+                <div class="result-item">
+                    <div class="result-label">Drop Type</div>
+                    <div class="result-value" id="dropResult"></div>
+                    <div class="drop-rarity" id="dropRarity"></div>
+                </div>
             </div>
             
-            <div class="result-item">
-                <div class="result-label">Drop Type</div>
-                <div class="result-value" id="dropResult"></div>
-                <div class="drop-rarity" id="dropRarity"></div>
+            <!-- Baby banner results -->
+            <div id="babyResults" style="display: none;">
+                <h2 style="text-align: center; color: #333; margin-bottom: 20px;">👶 Baby Creator</h2>
+                
+                <div class="parents-container">
+                    <div class="parent-box mommy">
+                        <div class="result-label">Mommy</div>
+                        <div class="result-value" id="mommyName" style="font-size: 18px;"></div>
+                    </div>
+                    <div class="parent-box daddy">
+                        <div class="result-label">Daddy</div>
+                        <div class="result-value" id="daddyName" style="font-size: 18px;"></div>
+                    </div>
+                </div>
+                
+                <div class="baby-traits">
+                    <h3 style="text-align: center; margin-top: 0; color: #f57f17;">Baby Traits</h3>
+                    <div id="babyTraitsList"></div>
+                </div>
+                
+                <div class="result-item" style="margin-top: 20px;">
+                    <div class="result-label">Drop Type</div>
+                    <div class="result-value" id="dropResultBaby"></div>
+                    <div class="drop-rarity" id="dropRarityBaby"></div>
+                </div>
             </div>
             
             <button class="button-secondary" onclick="goHome()">Back to Home</button>
@@ -149,6 +226,8 @@
         const goldStarPercent = urlParams.get('goldStarPercent');
         const pity = urlParams.get('pity');
         const pityRarity = urlParams.get('pityRarity');
+        const daddyCharacter = urlParams.get('daddy');
+        const prerolledDrop = urlParams.get('prerolledDrop');
 
         // Load all data and perform the roll
         Promise.all([
@@ -174,7 +253,8 @@
             const rarity = rollRarity();
             
             // 2) Roll the specific banner item using its own chance weights.
-            const drop = rollDrop(rarity);
+            // If prerolledDrop exists (from baby banner), use that instead
+            const drop = prerolledDrop || rollDrop(rarity);
 
             // 3) Crit fail check (2% chance) happens after rolls, but before display.
             const critFailChance = 0.02;
@@ -289,9 +369,6 @@
             
             // Show results after animation plays fully
             setTimeout(() => {
-                document.getElementById('characterResult').textContent = character;
-                document.getElementById('dropResult').textContent = drop;
-
                 const rarityText = rarity.charAt(0).toUpperCase() + rarity.slice(1);
                 const rarityDescriptions = {
                     'special': 'Special written piece - AU fanfic or canon backstory/side story',
@@ -300,12 +377,39 @@
                     'common': 'Sketch - A doodle'
                 };
 
-                document.getElementById('dropRarity').innerHTML = 
-                    `<span class="rarity-${rarity}">${rarityText}</span> - ${rarityDescriptions[rarity]}` +
-                    `<br><span style="color: red; font-weight: bold;">CRIT FAIL</span> — ${drawer} draws your pull`;
+                const critFailMessage = `<br><span style="color: red; font-weight: bold;">CRIT FAIL</span> — ${drawer} draws your pull`;
+
+                // Check if this is a baby banner
+                if (selectedBanner === 'baby' && daddyCharacter) {
+                    // Show baby results with crit fail
+                    document.getElementById('regularResults').style.display = 'none';
+                    document.getElementById('babyResults').style.display = 'block';
+                    
+                    // Display parent names
+                    document.getElementById('mommyName').textContent = character;
+                    document.getElementById('daddyName').textContent = daddyCharacter;
+                    
+                    // Generate and display baby traits
+                    const babyTraits = generateBabyTraits(character, daddyCharacter);
+                    displayBabyTraits(babyTraits);
+                    
+                    // Display drop info for baby with crit fail
+                    document.getElementById('dropResultBaby').textContent = drop;
+                    document.getElementById('dropRarityBaby').innerHTML = 
+                        `<span class="rarity-${rarity}">${rarityText}</span> - ${rarityDescriptions[rarity]}` + critFailMessage;
+                } else {
+                    // Show regular results with crit fail
+                    document.getElementById('regularResults').style.display = 'block';
+                    document.getElementById('babyResults').style.display = 'none';
+                    
+                    document.getElementById('characterResult').textContent = character;
+                    document.getElementById('dropResult').textContent = drop;
+                    document.getElementById('dropRarity').innerHTML = 
+                        `<span class="rarity-${rarity}">${rarityText}</span> - ${rarityDescriptions[rarity]}` + critFailMessage;
+                }
                 
                 document.getElementById('results').style.display = 'block';
-            }, 5000);
+            }, 7500);
         }
 
         function displayResults(character, drop, rarity) {
@@ -320,9 +424,6 @@
             
             // Show results after animation plays fully (adjust time based on GIF duration)
             setTimeout(() => {
-                document.getElementById('characterResult').textContent = character;
-                document.getElementById('dropResult').textContent = drop;
-                
                 const rarityText = rarity.charAt(0).toUpperCase() + rarity.slice(1);
                 const rarityDescriptions = {
                     'special': 'Special written piece - AU fanfic or canon backstory/side story',
@@ -331,15 +432,141 @@
                     'common': 'Sketch - A doodle'
                 };
                 
-                document.getElementById('dropRarity').innerHTML = 
-                    `<span class="rarity-${rarity}">${rarityText}</span> - ${rarityDescriptions[rarity]}`;
+                // Check if this is a baby banner
+                if (selectedBanner === 'baby' && daddyCharacter) {
+                    // Show baby results
+                    document.getElementById('regularResults').style.display = 'none';
+                    document.getElementById('babyResults').style.display = 'block';
+                    
+                    // Display parent names
+                    document.getElementById('mommyName').textContent = character;
+                    document.getElementById('daddyName').textContent = daddyCharacter;
+                    
+                    // Generate and display baby traits
+                    const babyTraits = generateBabyTraits(character, daddyCharacter);
+                    displayBabyTraits(babyTraits);
+                    
+                    // Display drop info for baby
+                    document.getElementById('dropResultBaby').textContent = drop;
+                    document.getElementById('dropRarityBaby').innerHTML = 
+                        `<span class="rarity-${rarity}">${rarityText}</span> - ${rarityDescriptions[rarity]}`;
+                } else {
+                    // Show regular results
+                    document.getElementById('regularResults').style.display = 'block';
+                    document.getElementById('babyResults').style.display = 'none';
+                    
+                    document.getElementById('characterResult').textContent = character;
+                    document.getElementById('dropResult').textContent = drop;
+                    document.getElementById('dropRarity').innerHTML = 
+                        `<span class="rarity-${rarity}">${rarityText}</span> - ${rarityDescriptions[rarity]}`;
+                }
                 
                 document.getElementById('results').style.display = 'block';
-            }, 4000);
+            }, rarity === 'special' ? 7500 : 5000);
         }
 
         function rollAgain() {
             window.location.href = `character.html?banner=${selectedBanner}`;
+        }
+
+        function generateBabyTraits(mommy, daddy) {
+            const traits = [
+                'Eye Shape',
+                'Nose',
+                'Mouth Shape',
+                'Hair Texture',
+                'Height',
+                'Teeth',
+                'Skin Color',
+                'Hair Color',
+                'Eye Color',
+                'Special Additions',
+                'Sex'
+            ];
+            
+            const specialAdditions = [
+                'None',
+                'Wings',
+                'Horns',
+                'Tail',
+                'Scales',
+                'Pointy Ears',
+                'Fangs',
+                'Claws',
+                'Animal Ears',
+                'Third Eye',
+                'Gills',
+                'Tentacles',
+                'Antennae'
+            ];
+            
+            const sexOptions = ['Male', 'Female', 'Non-binary', 'Intersex'];
+            
+            const babyTraits = {};
+            
+            traits.forEach(trait => {
+                // Randomly choose between mommy (0) or daddy (1)
+                const parent = Math.random() < 0.5 ? mommy : daddy;
+                
+                if (trait === 'Special Additions') {
+                    // Randomly select a special addition
+                    const specialAdd = specialAdditions[Math.floor(Math.random() * specialAdditions.length)];
+                    babyTraits[trait] = {
+                        value: specialAdd,
+                        from: parent
+                    };
+                } else if (trait === 'Sex') {
+                    // Randomly select sex
+                    const sex = sexOptions[Math.floor(Math.random() * sexOptions.length)];
+                    babyTraits[trait] = {
+                        value: sex,
+                        from: 'Random'
+                    };
+                } else {
+                    // Just show a generic value, the source will be shown separately
+                    babyTraits[trait] = {
+                        value: '—',
+                        from: parent
+                    };
+                }
+            });
+            
+            return babyTraits;
+        }
+
+        function displayBabyTraits(traits) {
+            const traitsContainer = document.getElementById('babyTraitsList');
+            traitsContainer.innerHTML = '';
+            
+            for (const [traitName, traitData] of Object.entries(traits)) {
+                const traitDiv = document.createElement('div');
+                traitDiv.className = 'trait-item';
+                
+                const leftDiv = document.createElement('div');
+                const traitLabel = document.createElement('span');
+                traitLabel.className = 'trait-label';
+                traitLabel.textContent = traitName + ': ';
+                
+                const traitValue = document.createElement('span');
+                traitValue.className = 'trait-value';
+                traitValue.textContent = traitData.value;
+                
+                leftDiv.appendChild(traitLabel);
+                leftDiv.appendChild(traitValue);
+                
+                const traitSource = document.createElement('span');
+                traitSource.className = 'trait-source';
+                if (traitData.from === 'Random') {
+                    traitSource.textContent = '(randomly determined)';
+                } else {
+                    traitSource.textContent = `(inherited from ${traitData.from})`;
+                }
+                
+                traitDiv.appendChild(leftDiv);
+                traitDiv.appendChild(traitSource);
+                
+                traitsContainer.appendChild(traitDiv);
+            }
         }
 
         function goHome() {

@@ -126,6 +126,7 @@
 
     <script>
         let coinsData = null;
+        let allCharacters = [];
 
         // Get parameters from URL
         const urlParams = new URLSearchParams(window.location.search);
@@ -138,10 +139,27 @@
         const pityRarity = urlParams.get('pityRarity');
 
         // Display the rolled character
-        document.getElementById('characterResult').textContent = rolledCharacter;
+        if (selectedBanner === 'baby') {
+            document.getElementById('characterResult').textContent = rolledCharacter + ' (Mommy)';
+        } else {
+            document.getElementById('characterResult').textContent = rolledCharacter;
+        }
 
         // Update back link to preserve banner selection
         document.getElementById('backLink').href = `character.html?banner=${selectedBanner}`;
+
+        // Load characters data for baby banner
+        if (selectedBanner === 'baby') {
+            fetch('characters.json')
+                .then(response => response.json())
+                .then(data => {
+                    // Combine all character lists into one array
+                    allCharacters = [...data.wuxia, ...data.academy, ...data.keys];
+                })
+                .catch(error => {
+                    console.error('Error loading characters:', error);
+                });
+        }
 
         // Load coins from JSON file
         fetch('coins.json')
@@ -171,18 +189,87 @@
             });
 
         function selectCoin(coinName) {
-            const params = new URLSearchParams({
-                banner: selectedBanner,
-                pool: selectedPool,
-                character: rolledCharacter,
-                coin: coinName,
-                goldStar: goldStar || '',
-                goldStarPercent: goldStarPercent || '',
-                pity: pity || '',
-                pityRarity: pityRarity || ''
-            });
+            // For baby banner, we need to roll the drop first to see if it's "you pick"
+            if (selectedBanner === 'baby') {
+                // Load banners data and roll drop
+                fetch('banners.json')
+                    .then(response => response.json())
+                    .then(data => {
+                        const banner = data.banners.find(b => b.name === selectedBanner);
+                        const drop = rollDrop(banner);
+                        
+                        const params = new URLSearchParams({
+                            banner: selectedBanner,
+                            pool: selectedPool,
+                            character: rolledCharacter,
+                            coin: coinName,
+                            goldStar: goldStar || '',
+                            goldStarPercent: goldStarPercent || '',
+                            pity: pity || '',
+                            pityRarity: pityRarity || '',
+                            prerolledDrop: drop
+                        });
+                        
+                        // Only pick a specific daddy if it's NOT "you pick"
+                        if (drop !== 'you pick' && allCharacters.length > 0) {
+                            // Filter out the mommy character to prevent same character being both parents
+                            const availableDaddies = allCharacters.filter(char => char !== rolledCharacter);
+                            
+                            if (availableDaddies.length > 0) {
+                                const randomIndex = Math.floor(Math.random() * availableDaddies.length);
+                                const daddyCharacter = availableDaddies[randomIndex];
+                                params.append('daddy', daddyCharacter);
+                            } else {
+                                // Fallback if somehow only one character exists
+                                params.append('daddy', 'Daddy');
+                            }
+                        } else {
+                            // For "you pick", just use generic "Daddy" label
+                            params.append('daddy', 'Daddy');
+                        }
+                        
+                        window.location.href = `drop-results.html?${params.toString()}`;
+                    })
+                    .catch(error => {
+                        console.error('Error loading banner data:', error);
+                        alert('Error loading banner data. Please try again.');
+                    });
+            } else {
+                // Non-baby banner: proceed normally
+                const params = new URLSearchParams({
+                    banner: selectedBanner,
+                    pool: selectedPool,
+                    character: rolledCharacter,
+                    coin: coinName,
+                    goldStar: goldStar || '',
+                    goldStarPercent: goldStarPercent || '',
+                    pity: pity || '',
+                    pityRarity: pityRarity || ''
+                });
+                
+                window.location.href = `drop-results.html?${params.toString()}`;
+            }
+        }
+        
+        function rollDrop(banner) {
+            // Roll for drop using weighted random based on banner drops
+            return weightedRandom(
+                banner.drops.map(d => d.item),
+                banner.drops.map(d => d.chance)
+            );
+        }
+        
+        function weightedRandom(items, weights) {
+            const totalWeight = weights.reduce((sum, w) => sum + w, 0);
+            let random = Math.random() * totalWeight;
             
-            window.location.href = `drop-results.html?${params.toString()}`;
+            for (let i = 0; i < items.length; i++) {
+                random -= weights[i];
+                if (random <= 0) {
+                    return items[i];
+                }
+            }
+            return items[items.length - 1];
         }
     </script>
 </body>
