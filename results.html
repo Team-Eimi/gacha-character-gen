@@ -154,7 +154,7 @@
                 .then(response => response.json())
                 .then(data => {
                     // Combine all character lists into one array
-                    allCharacters = [...data.wuxia, ...data.academy, ...data.keys];
+                    allCharacters = [...data.wuxia, ...data.academy, ...data.keys, ...data.chromyr];
                 })
                 .catch(error => {
                     console.error('Error loading characters:', error);

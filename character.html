@@ -88,6 +88,7 @@
             <option value="wuxia">Wuxia</option>
             <option value="academy">Ael Academy</option>
             <option value="keys">The Keys</option>
+            <option value="chromyr">Chromyr</option>
         </select>
 
         <label for="goldStarToggle">
@@ -125,21 +126,24 @@
     </div>
 
     <script>
+        // HEY CHANGE
         let wuxiaCharacters = [];
         let academyCharacters = [];
         let keyCharacters = [];
+        let chromyrCharacters = [];
 
         // Get the banner from URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         const selectedBanner = urlParams.get('banner');
 
-        // Load character data from JSON file
+        // Load character data from JSON file HEY CHANGE
         fetch('characters.json')
             .then(response => response.json())
             .then(data => {
                 wuxiaCharacters = data.wuxia;
                 academyCharacters = data.academy;
                 keyCharacters = data.keys;
+                chromyrCharacters = data.chromyr; 
             })
             .catch(error => {
                 console.error('Error loading characters:', error);
@@ -171,6 +175,8 @@
                     pool = academyCharacters;
                 } else if (poolChoice === 'keys') {
                     pool = keyCharacters;
+                } else if (poolChoice === 'chromyr') {
+                    pool = chromyrCharacters;
                 }
                 
                 listDiv.innerHTML = '<strong>Available Characters:</strong><br>' + 
@@ -196,7 +202,10 @@
                 pool = academyCharacters;
             } else if (poolChoice === 'keys') {
                 pool = keyCharacters;
-            }
+            } else if (poolChoice === 'chromyr') {
+                pool = chromyrCharacters;
+             }
+        
 
             // Check if characters are loaded
             if (pool.length === 0) {
@@ -280,7 +289,7 @@
             const pityEnabled = document.getElementById('pityToggle').checked;
             const pityRarity = document.getElementById('pityRarity').value;
             
-            // Get pool and roll character
+            // Get pool and roll character hey 
             let pool;
             if (poolChoice === 'wuxia') {
                 pool = wuxiaCharacters;
@@ -288,8 +297,10 @@
                 pool = academyCharacters;
             } else if (poolChoice === 'keys') {
                 pool = keyCharacters;
-            }
-
+            } else if (poolChoice === 'chromyr') {
+                pool = chromyrCharacters;
+             }
+            
             // Roll for character with gold star boost for custom character
             const rolledCharacter = rollCharacter(pool, true, goldStarChar, goldStarPercent);
             
