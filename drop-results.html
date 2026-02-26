@@ -184,6 +184,7 @@
             <!-- Baby banner results -->
             <div id="babyResults" style="display: none;">
                 <h2 style="text-align: center; color: #333; margin-bottom: 20px;">Congratulations! It's a--</h2>
+                <h1 id="babySexDisplay" style="text-align: center; margin: 20px 0; font-size: 48px;"></h1>
                 
                 <div class="parents-container">
                     <div class="parent-box mommy">
@@ -392,6 +393,7 @@
                     // Generate and display baby traits
                     const babyTraits = generateBabyTraits(character, daddyCharacter);
                     displayBabyTraits(babyTraits);
+                    displayBabySex(babyTraits.Sex);
                     
                     // Display drop info for baby with crit fail
                     document.getElementById('dropResultBaby').textContent = drop;
@@ -445,6 +447,7 @@
                     // Generate and display baby traits
                     const babyTraits = generateBabyTraits(character, daddyCharacter);
                     displayBabyTraits(babyTraits);
+                    displayBabySex(babyTraits.Sex);
                     
                     // Display drop info for baby
                     document.getElementById('dropResultBaby').textContent = drop;
@@ -532,6 +535,31 @@
             });
             
             return babyTraits;
+        }
+
+        function displayBabySex(sexTrait) {
+            const sexDisplay = document.getElementById('babySexDisplay');
+            const sex = sexTrait.value;
+            
+            let displayText = '';
+            let color = '';
+            
+            if (sex === 'Male') {
+                displayText = 'Boy!';
+                color = '#4169e1'; // Royal blue
+            } else if (sex === 'Female') {
+                displayText = 'Girl!';
+                color = '#ff69b4'; // Hot pink
+            } else if (sex === 'Non-binary') {
+                displayText = 'Non-binary Baby!';
+                color = '#9b59b6'; // Purple
+            } else if (sex === 'Intersex') {
+                displayText = 'Intersex Baby!';
+                color = '#f39c12'; // Orange
+            }
+            
+            sexDisplay.textContent = displayText;
+            sexDisplay.style.color = color;
         }
 
         function displayBabyTraits(traits) {
