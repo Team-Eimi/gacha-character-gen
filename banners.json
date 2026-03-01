@@ -48,7 +48,8 @@
         },
         {
             "name": "vampire",
-            "status": "past",
+            "status": "upcoming",
+            "date": "3/2",
             "img": "banner_art/bannervamp.png",
             "drops": [
                 {
@@ -252,6 +253,38 @@
                     "item": "you pick",
                     "chance": 0.25
                 }
+            ]
+        },
+        {
+            "name": "duo",
+            "status": "upcoming",
+            "date": "3/5",
+            "img": "banner_art/duobanner.png",
+            "drops": [
+                {
+                    "item": "hanging out",
+                    "chance": 0.30
+                },
+                {
+                    "item": "cute selfie",
+                    "chance": 0.30
+                },
+                {
+                    "item": "romantic pose",
+                    "chance": 0.20
+                },
+                {
+                    "item": "drama",
+                    "chance": 0.20
+                }
+            ]
+        },
+        {
+            "name": "redesign",
+            "status": "upcoming",
+            "date": "3/4",
+            "img": "banner_art/redesignbanner.png",
+            "drops": [
             ]
         }
     ]
