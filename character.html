@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,18 +13,23 @@
             padding: 20px;
             background-color: #f0f0f0;
         }
+
         .container {
             background: white;
             padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
+
         label {
             display: block;
             margin-top: 15px;
             font-weight: bold;
         }
-        select, input, button {
+
+        select,
+        input,
+        button {
             width: 100%;
             padding: 10px;
             margin-top: 5px;
@@ -31,6 +37,7 @@
             border-radius: 5px;
             box-sizing: border-box;
         }
+
         button {
             background-color: #4CAF50;
             color: white;
@@ -39,56 +46,68 @@
             margin-top: 20px;
             font-size: 16px;
         }
+
         button:hover {
             background-color: #45a049;
         }
+
         .error {
             color: red;
             font-size: 14px;
             margin-top: 5px;
         }
+
         #goldStarOptions {
             display: none;
         }
+
         .back-link {
             display: inline-block;
             margin-bottom: 20px;
             color: #2196F3;
             text-decoration: none;
         }
+
         .back-link:hover {
             text-decoration: underline;
         }
+
         .button-group {
             display: none;
             gap: 10px;
             margin-top: 10px;
         }
+
         .button-group button {
             width: calc(50% - 5px);
             margin: 0;
         }
+
         .button-secondary {
             background-color: #2196F3 !important;
         }
+
         .button-secondary:hover {
             background-color: #0b7dda !important;
         }
+
         #pityOptions {
             display: none;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <a href="index.html" class="back-link">← Back to Banner Selection</a>
-                
+
         <label for="poolSelect">Choose Character Pool:</label>
         <select id="poolSelect">
             <option value="wuxia">Wuxia</option>
             <option value="academy">Ael Academy</option>
             <option value="keys">The Keys</option>
             <option value="chromyr">Chromyr</option>
+            <option value="luminant">Luminant</option>
         </select>
 
         <label for="goldStarToggle">
@@ -100,10 +119,13 @@
             <input type="text" id="goldStarChar" placeholder="Enter character name">
             <div id="charError" class="error"></div>
             <div class="button-group" id="buttonGroup">
-                <button type="button" class="button-secondary" onclick="toggleCharacterList()">View Available Characters</button>
+                <button type="button" class="button-secondary" onclick="toggleCharacterList()">View Available
+                    Characters</button>
                 <button type="button" onclick="addAndContinue()">Add to List & Continue</button>
             </div>
-            <div id="characterList" style="display:none; margin-top:10px; padding:10px; background-color:#f5f5f5; border-radius:5px; max-height:200px; overflow-y:auto;"></div>
+            <div id="characterList"
+                style="display:none; margin-top:10px; padding:10px; background-color:#f5f5f5; border-radius:5px; max-height:200px; overflow-y:auto;">
+            </div>
 
             <label for="goldStarPercent">Gold Star Percentage (%):</label>
             <input type="number" id="goldStarPercent" min="0" max="100" value="5">
@@ -131,7 +153,8 @@
         let academyCharacters = [];
         let keyCharacters = [];
         let chromyrCharacters = [];
-
+        let luminantCharacters = [];
+        
         // Get the banner from URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         const selectedBanner = urlParams.get('banner');
@@ -143,30 +166,31 @@
                 wuxiaCharacters = data.wuxia;
                 academyCharacters = data.academy;
                 keyCharacters = data.keys;
-                chromyrCharacters = data.chromyr; 
+                chromyrCharacters = data.chromyr;
+                luminantCharacters = data.luminant;
             })
             .catch(error => {
                 console.error('Error loading characters:', error);
                 alert('Failed to load character data. Please refresh the page.');
             });
 
-        document.getElementById('goldStarToggle').addEventListener('change', function() {
-            document.getElementById('goldStarOptions').style.display = 
+        document.getElementById('goldStarToggle').addEventListener('change', function () {
+            document.getElementById('goldStarOptions').style.display =
                 this.checked ? 'block' : 'none';
             document.getElementById('charError').textContent = '';
             document.getElementById('buttonGroup').style.display = 'none';
             document.getElementById('characterList').style.display = 'none';
         });
 
-        document.getElementById('pityToggle').addEventListener('change', function() {
-            document.getElementById('pityOptions').style.display = 
+        document.getElementById('pityToggle').addEventListener('change', function () {
+            document.getElementById('pityOptions').style.display =
                 this.checked ? 'block' : 'none';
         });
 
         function toggleCharacterList() {
             const listDiv = document.getElementById('characterList');
             const poolChoice = document.getElementById('poolSelect').value;
-            
+
             if (listDiv.style.display === 'none') {
                 let pool;
                 if (poolChoice === 'wuxia') {
@@ -178,8 +202,11 @@
                 } else if (poolChoice === 'chromyr') {
                     pool = chromyrCharacters;
                 }
-                
-                listDiv.innerHTML = '<strong>Available Characters:</strong><br>' + 
+                else if (poolChoice === 'luminant') {
+                    pool = luminantCharacters;
+                }
+
+                listDiv.innerHTML = '<strong>Available Characters:</strong><br>' +
                     pool.map(char => `• ${char}`).join('<br>');
                 listDiv.style.display = 'block';
             } else {
@@ -194,7 +221,7 @@
             const goldStarPercent = document.getElementById('goldStarPercent').value;
             const pityEnabled = document.getElementById('pityToggle').checked;
             const pityRarity = document.getElementById('pityRarity').value;
-            
+
             let pool;
             if (poolChoice === 'wuxia') {
                 pool = wuxiaCharacters;
@@ -204,8 +231,11 @@
                 pool = keyCharacters;
             } else if (poolChoice === 'chromyr') {
                 pool = chromyrCharacters;
-             }
-        
+            }
+            else if (poolChoice === 'luminant') {
+                pool = luminantCharacters;
+            }
+
 
             // Check if characters are loaded
             if (pool.length === 0) {
@@ -215,7 +245,7 @@
 
             // Validate gold star character
             if (goldStarEnabled && goldStarChar && !pool.includes(goldStarChar)) {
-                document.getElementById('charError').textContent = 
+                document.getElementById('charError').textContent =
                     `'${goldStarChar}' not found in pool!`;
                 document.getElementById('buttonGroup').style.display = 'flex';
                 return;
@@ -226,11 +256,11 @@
 
             // Build URL with rolled character and all parameters
             let url = `results.html?banner=${selectedBanner}&pool=${poolChoice}&character=${encodeURIComponent(rolledCharacter)}`;
-            
+
             if (goldStarEnabled && goldStarChar) {
                 url += `&goldStar=${encodeURIComponent(goldStarChar)}&goldStarPercent=${goldStarPercent}`;
             }
-            
+
             if (pityEnabled) {
                 url += `&pity=true&pityRarity=${pityRarity}`;
             }
@@ -241,22 +271,22 @@
         function rollCharacter(pool, goldStarEnabled, goldStarChar, goldStarPercent) {
             let characters = [...pool];
             let weights = new Array(characters.length).fill(1);
-            
+
             if (goldStarEnabled && goldStarChar) {
                 let goldStarIndex = characters.indexOf(goldStarChar);
-                
+
                 // If custom character not in pool, add it temporarily
                 if (goldStarIndex === -1) {
                     characters.push(goldStarChar);
                     goldStarIndex = characters.length - 1;
                     weights.push(1);
                 }
-                
+
                 const baseProb = 1 / characters.length;
                 const boostedProb = baseProb + (parseFloat(goldStarPercent) / 100);
                 const remainingProb = 1 - boostedProb;
                 const otherCharProb = remainingProb / (characters.length - 1);
-                
+
                 for (let i = 0; i < weights.length; i++) {
                     if (i === goldStarIndex) {
                         weights[i] = boostedProb;
@@ -272,7 +302,7 @@
         function weightedRandom(items, weights) {
             const totalWeight = weights.reduce((sum, w) => sum + w, 0);
             let random = Math.random() * totalWeight;
-            
+
             for (let i = 0; i < items.length; i++) {
                 random -= weights[i];
                 if (random <= 0) {
@@ -288,7 +318,7 @@
             const goldStarPercent = document.getElementById('goldStarPercent').value;
             const pityEnabled = document.getElementById('pityToggle').checked;
             const pityRarity = document.getElementById('pityRarity').value;
-            
+
             // Get pool and roll character HEY CHANGE 
             let pool;
             if (poolChoice === 'wuxia') {
@@ -299,21 +329,25 @@
                 pool = keyCharacters;
             } else if (poolChoice === 'chromyr') {
                 pool = chromyrCharacters;
-             }
-            
+            }
+            else if (poolChoice === 'luminant') {
+                pool = luminantCharacters;
+            }
+
             // Roll for character with gold star boost for custom character
             const rolledCharacter = rollCharacter(pool, true, goldStarChar, goldStarPercent);
-            
+
             // Build URL with rolled character and all parameters, including the custom character
             let url = `results.html?banner=${selectedBanner}&pool=${poolChoice}&character=${encodeURIComponent(rolledCharacter)}`;
             url += `&goldStar=${encodeURIComponent(goldStarChar)}&goldStarPercent=${goldStarPercent}`;
-            
+
             if (pityEnabled) {
                 url += `&pity=true&pityRarity=${pityRarity}`;
             }
-            
+
             window.location.href = url;
         }
     </script>
 </body>
+
 </html>
