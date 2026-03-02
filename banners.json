@@ -241,8 +241,7 @@
         },
         {
             "name": "baby",
-            "status": "active",
-            "date": "2/26",
+            "status": "past",
             "img": "banner_art/babybanner.png",
             "drops": [
                 {
@@ -257,8 +256,7 @@
         },
         {
             "name": "duo",
-            "status": "upcoming",
-            "date": "3/5",
+            "status": "active",
             "img": "banner_art/duobanner.png",
             "drops": [
                 {
