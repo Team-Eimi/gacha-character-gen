@@ -61,6 +61,7 @@
     "Jin Gylnne",
     "Ustrina",
     "Elphina Willow",
+<<<<<<< HEAD
     "Cassian Dasi",
     "Rafayl",
     "Arbor Veretium",
@@ -85,5 +86,10 @@
     "Milios Hartwell",
     "Astra",
     "Red"
+=======
+    "Cassian Ficius",
+    "Rafayl", 
+    "Arbor Veretium"
+>>>>>>> f9b6454eacb811d9b64c324c25b9448a9b0a314e
   ]
 }
