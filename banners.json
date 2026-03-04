@@ -280,7 +280,7 @@
         {
             "name": "whimsy",
             "status": "active",
-            "img": "",
+            "img": "banner_art/whimsybanner.jpg",
             "drops": [
                 {
                     "item": "Watercolor",
