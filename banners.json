@@ -281,7 +281,9 @@
             "name": "redesign",
             "status": "active",
             "img": "banner_art/redesignbanner.png",
-            "drops": [
+            "drops": [ {
+                "item": "redesign",
+                "chance": 1.0}
             ]
         }
     ]
