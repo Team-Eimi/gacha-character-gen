@@ -61,6 +61,17 @@
             height: auto;
             display: block;
         }
+        .banner-card-placeholder {
+            min-height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+            text-transform: capitalize;
+            color: #444;
+            background-color: #f4f4f4;
+        }
         .banner-card.upcoming {
             cursor: not-allowed;
         }
@@ -143,9 +154,15 @@
                         bannerCard.href = `character.html?banner=${banner.name}`;
                         bannerCard.className = 'banner-card';
                         
-                        bannerCard.innerHTML = `
-                            <img src="${banner.img}" alt="${banner.name} Banner">
-                        `;
+                        if (banner.img) {
+                            bannerCard.innerHTML = `
+                                <img src="${banner.img}" alt="${banner.name} Banner">
+                            `;
+                        } else {
+                            bannerCard.innerHTML = `
+                                <div class="banner-card-placeholder">${banner.name}</div>
+                            `;
+                        }
                         
                         bannerGrid.appendChild(bannerCard);
                     });
@@ -163,9 +180,15 @@
                         bannerCard.href = `character.html?banner=${banner.name}`;
                         bannerCard.className = 'banner-card';
                         
-                        bannerCard.innerHTML = `
-                            <img src="${banner.img}" alt="${banner.name} Banner">
-                        `;
+                        if (banner.img) {
+                            bannerCard.innerHTML = `
+                                <img src="${banner.img}" alt="${banner.name} Banner">
+                            `;
+                        } else {
+                            bannerCard.innerHTML = `
+                                <div class="banner-card-placeholder">${banner.name}</div>
+                            `;
+                        }
                         bannerGrid.appendChild(bannerCard);
                     });
                 }

@@ -227,6 +227,7 @@
         const goldStarPercent = urlParams.get('goldStarPercent');
         const pity = urlParams.get('pity');
         const pityRarity = urlParams.get('pityRarity');
+        const whimsyFlavors = urlParams.get('whimsyFlavors');
         const daddyCharacter = urlParams.get('daddy');
         const prerolledDrop = urlParams.get('prerolledDrop');
 
@@ -327,11 +328,27 @@
 
         function rollDrop(rarity) {
             const banner = bannersData.banners.find(b => b.name === selectedBanner);
+            let availableDrops = banner.drops;
+
+            if (selectedBanner === 'whimsy' && whimsyFlavors) {
+                const selectedFlavorList = whimsyFlavors
+                    .split(',')
+                    .map(flavor => flavor.trim())
+                    .filter(Boolean);
+
+                const flavorFilteredDrops = banner.drops.filter(drop =>
+                    drop.flavor && selectedFlavorList.includes(drop.flavor)
+                );
+
+                if (flavorFilteredDrops.length > 0) {
+                    availableDrops = flavorFilteredDrops;
+                }
+            }
 
             // The banner drop is chosen from the full list using each item's `chance` weight.
             return weightedRandom(
-                banner.drops.map(d => d.item),
-                banner.drops.map(d => d.chance)
+                availableDrops.map(d => d.item),
+                availableDrops.map(d => d.chance)
             );
         }
 

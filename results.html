@@ -137,6 +137,7 @@
         const goldStarPercent = urlParams.get('goldStarPercent');
         const pity = urlParams.get('pity');
         const pityRarity = urlParams.get('pityRarity');
+        const whimsyFlavors = urlParams.get('whimsyFlavors');
 
         // Display the rolled character
         if (selectedBanner === 'baby') {
@@ -207,6 +208,7 @@
                             goldStarPercent: goldStarPercent || '',
                             pity: pity || '',
                             pityRarity: pityRarity || '',
+                            whimsyFlavors: whimsyFlavors || '',
                             prerolledDrop: drop
                         });
                         
@@ -244,7 +246,8 @@
                     goldStar: goldStar || '',
                     goldStarPercent: goldStarPercent || '',
                     pity: pity || '',
-                    pityRarity: pityRarity || ''
+                    pityRarity: pityRarity || '',
+                    whimsyFlavors: whimsyFlavors || ''
                 });
                 
                 window.location.href = `drop-results.html?${params.toString()}`;

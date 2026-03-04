@@ -18,6 +18,7 @@ The gacha generator follows a 4-step process:
   - Adds that percentage directly to the character's base probability
   - Example: 10% base + 25% boost = 35% chance to get that character
 - Optionally enable **"I Didn't Want to Pity"** (affects rarity odds)
+- If the selected banner is **Whimsy**, choose one or more flavors (multi-select); only tools from those flavor groups can roll as drops
 
 ### 3. **Character Result + Token Select** (`results.html`)
 - The character is rolled and displayed immediately.
