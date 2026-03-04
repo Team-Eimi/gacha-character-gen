@@ -256,7 +256,7 @@
         },
         {
             "name": "duo",
-            "status": "active",
+            "status": "past",
             "img": "banner_art/duobanner.png",
             "drops": [
                 {
@@ -279,8 +279,7 @@
         },
         {
             "name": "redesign",
-            "status": "upcoming",
-            "date": "3/4",
+            "status": "active",
             "img": "banner_art/redesignbanner.png",
             "drops": [
             ]
