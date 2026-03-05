@@ -48,8 +48,7 @@
         },
         {
             "name": "vampire",
-            "status": "upcoming",
-            "date": "3/2",
+            "status": "active",
             "img": "banner_art/bannervamp.png",
             "drops": [
                 {
@@ -351,7 +350,7 @@
         },
         {
             "name": "redesign",
-            "status": "active",
+            "status": "past",
             "img": "banner_art/redesignbanner.png",
             "drops": [ {
                 "item": "redesign",
