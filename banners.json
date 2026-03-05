@@ -48,7 +48,7 @@
         },
         {
             "name": "vampire",
-            "status": "past",
+            "status": "active",
             "img": "banner_art/bannervamp.png",
             "drops": [
                 {
