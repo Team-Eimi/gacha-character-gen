@@ -25,7 +25,7 @@
         },
         {
             "name": "whump",
-            "status": "past",
+            "status": "active",
             "img": "banner_art/bannerwhump.png",
             "drops": [
                 {
@@ -48,7 +48,7 @@
         },
         {
             "name": "vampire",
-            "status": "active",
+            "status": "past",
             "img": "banner_art/bannervamp.png",
             "drops": [
                 {
