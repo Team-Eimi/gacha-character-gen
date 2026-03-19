@@ -328,6 +328,22 @@
 
         function rollDrop(rarity) {
             const banner = bannersData.banners.find(b => b.name === selectedBanner);
+
+            // Duo banner has an independent mini comic roll.
+            if (selectedBanner === 'duo') {
+                const miniComicChance = typeof banner.miniComicChance === 'number' ? banner.miniComicChance : 0.10;
+                if (Math.random() < miniComicChance) {
+                    const genreOptions = Array.isArray(banner.drops) && banner.drops.length > 0
+                        ? banner.drops.map(d => d.item)
+                        : ['romantic', 'drama', 'cute'];
+                    const genre = weightedRandom(
+                        genreOptions,
+                        new Array(genreOptions.length).fill(1)
+                    );
+                    return `mini comic (${genre})`;
+                }
+            }
+
             let availableDrops = banner.drops;
 
             if (selectedBanner === 'whimsy' && whimsyFlavors) {

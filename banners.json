@@ -48,7 +48,7 @@
         },
         {
             "name": "vampire",
-            "status": "active",
+            "status": "past",
             "img": "banner_art/bannervamp.png",
             "drops": [
                 {
@@ -257,17 +257,18 @@
             "name": "duo",
             "status": "past",
             "img": "banner_art/duobanner.png",
+            "miniComicChance": 0.10,
             "drops": [
                 {
                     "item": "hanging out",
                     "chance": 0.30
                 },
                 {
-                    "item": "cute selfie",
+                    "item": "cute",
                     "chance": 0.30
                 },
                 {
-                    "item": "romantic pose",
+                    "item": "romantic",
                     "chance": 0.20
                 },
                 {
