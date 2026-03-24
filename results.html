@@ -112,7 +112,7 @@
         <h1>🎉 Character Rolled!</h1>
         
         <div class="character-result">
-            <div class="result-label">Your Character</div>
+            <div class="result-label" id="characterResultLabel">Your Character</div>
             <div class="result-value" id="characterResult"></div>
         </div>
         
@@ -133,15 +133,20 @@
         const selectedBanner = urlParams.get('banner');
         const selectedPool = urlParams.get('pool');
         const rolledCharacter = urlParams.get('character');
+        const rolledCharacter2 = urlParams.get('character2');
+        const selectedPool2 = urlParams.get('pool2');
         const goldStar = urlParams.get('goldStar');
         const goldStarPercent = urlParams.get('goldStarPercent');
         const pity = urlParams.get('pity');
         const pityRarity = urlParams.get('pityRarity');
         const whimsyFlavors = urlParams.get('whimsyFlavors');
 
-        // Display the rolled character
+        // Display the rolled character(s)
         if (selectedBanner === 'baby') {
             document.getElementById('characterResult').textContent = rolledCharacter + ' (Mommy)';
+        } else if (selectedBanner === 'fusion' && rolledCharacter2) {
+            document.getElementById('characterResultLabel').textContent = 'Your Characters';
+            document.getElementById('characterResult').textContent = rolledCharacter + ' & ' + rolledCharacter2;
         } else {
             document.getElementById('characterResult').textContent = rolledCharacter;
         }
@@ -249,6 +254,11 @@
                     pityRarity: pityRarity || '',
                     whimsyFlavors: whimsyFlavors || ''
                 });
+
+                if (selectedBanner === 'fusion' && rolledCharacter2) {
+                    params.append('character2', rolledCharacter2);
+                    if (selectedPool2) params.append('pool2', selectedPool2);
+                }
                 
                 window.location.href = `drop-results.html?${params.toString()}`;
             }

@@ -142,7 +142,7 @@
     <div class="container">
         <a href="index.html" class="back-link">← Back to Banner Selection</a>
 
-        <label for="poolSelect">Choose Character Pool:</label>
+        <label for="poolSelect" id="poolSelectLabel">Choose Character Pool:</label>
         <select id="poolSelect">
             <option value="wuxia">Wuxia</option>
             <option value="academy">Ael Academy</option>
@@ -150,6 +150,18 @@
             <option value="chromyr">Chromyr</option>
             <option value="luminant">Luminant</option>
         </select>
+
+        <div id="fusionPool2Container" style="display: none;">
+            <label for="poolSelect2">Choose Character Pool (Character 2):</label>
+            <select id="poolSelect2">
+                <option value="any">Any</option>
+                <option value="wuxia">Wuxia</option>
+                <option value="academy">Ael Academy</option>
+                <option value="keys">The Keys</option>
+                <option value="chromyr">Chromyr</option>
+                <option value="luminant">Luminant</option>
+            </select>
+        </div>
 
         <label for="goldStarToggle">
             <input type="checkbox" id="goldStarToggle"> Include Gold Star Boost?
@@ -246,6 +258,20 @@
         let keyCharacters = [];
         let chromyrCharacters = [];
         let luminantCharacters = [];
+
+        function getPool(poolChoice) {
+            if (poolChoice === 'any') {
+                return [...wuxiaCharacters, ...academyCharacters, ...keyCharacters, ...chromyrCharacters, ...luminantCharacters];
+            }
+            const poolMap = {
+                wuxia: wuxiaCharacters,
+                academy: academyCharacters,
+                keys: keyCharacters,
+                chromyr: chromyrCharacters,
+                luminant: luminantCharacters,
+            };
+            return poolMap[poolChoice] || [];
+        }
         
         // Get the banner from URL parameters
         const urlParams = new URLSearchParams(window.location.search);
@@ -254,6 +280,17 @@
 
         if (selectedBanner === 'whimsy') {
             whimsyFlavorOptions.style.display = 'block';
+        }
+
+        if (selectedBanner === 'fusion') {
+            document.getElementById('fusionPool2Container').style.display = 'block';
+            document.getElementById('poolSelectLabel').textContent = 'Choose Character Pool (Character 1):';
+            // Add 'Any' option to char 1 pool only for fusion
+            const anyOpt = document.createElement('option');
+            anyOpt.value = 'any';
+            anyOpt.textContent = 'Any';
+            const poolSelect = document.getElementById('poolSelect');
+            poolSelect.insertBefore(anyOpt, poolSelect.firstChild);
         }
 
         // Load character data from JSON file HEY CHANGE
@@ -289,20 +326,7 @@
             const poolChoice = document.getElementById('poolSelect').value;
 
             if (listDiv.style.display === 'none') {
-                let pool;
-                if (poolChoice === 'wuxia') {
-                    pool = wuxiaCharacters;
-                } else if (poolChoice === 'academy') {
-                    pool = academyCharacters;
-                } else if (poolChoice === 'keys') {
-                    pool = keyCharacters;
-                } else if (poolChoice === 'chromyr') {
-                    pool = chromyrCharacters;
-                }
-                else if (poolChoice === 'luminant') {
-                    pool = luminantCharacters;
-                }
-
+                const pool = getPool(poolChoice);
                 listDiv.innerHTML = '<strong>Available Characters:</strong><br>' +
                     pool.map(char => `• ${char}`).join('<br>');
                 listDiv.style.display = 'block';
@@ -320,20 +344,7 @@
             const pityRarity = document.getElementById('pityRarity').value;
             const selectedFlavors = getSelectedWhimsyFlavors();
 
-            let pool;
-            if (poolChoice === 'wuxia') {
-                pool = wuxiaCharacters;
-            } else if (poolChoice === 'academy') {
-                pool = academyCharacters;
-            } else if (poolChoice === 'keys') {
-                pool = keyCharacters;
-            } else if (poolChoice === 'chromyr') {
-                pool = chromyrCharacters;
-            }
-            else if (poolChoice === 'luminant') {
-                pool = luminantCharacters;
-            }
-
+            const pool = getPool(poolChoice);
 
             // Check if characters are loaded
             if (pool.length === 0) {
@@ -371,6 +382,18 @@
 
             if (selectedBanner === 'whimsy' && selectedFlavors.length > 0) {
                 url += `&whimsyFlavors=${encodeURIComponent(selectedFlavors.join(','))}`;
+            }
+
+            // For fusion banner, roll a second character from pool 2
+            if (selectedBanner === 'fusion') {
+                const pool2Choice = document.getElementById('poolSelect2').value;
+                const pool2 = getPool(pool2Choice);
+                if (pool2.length === 0) {
+                    alert('Characters are still loading. Please wait a moment and try again.');
+                    return;
+                }
+                const rolledCharacter2 = rollCharacter(pool2, false, '', 0);
+                url += `&pool2=${pool2Choice}&character2=${encodeURIComponent(rolledCharacter2)}`;
             }
 
             window.location.href = url;
@@ -434,20 +457,8 @@
             }
             document.getElementById('flavorError').textContent = '';
 
-            // Get pool and roll character HEY CHANGE 
-            let pool;
-            if (poolChoice === 'wuxia') {
-                pool = wuxiaCharacters;
-            } else if (poolChoice === 'academy') {
-                pool = academyCharacters;
-            } else if (poolChoice === 'keys') {
-                pool = keyCharacters;
-            } else if (poolChoice === 'chromyr') {
-                pool = chromyrCharacters;
-            }
-            else if (poolChoice === 'luminant') {
-                pool = luminantCharacters;
-            }
+            // Get pool and roll character
+            const pool = getPool(poolChoice);
 
             // Roll for character with gold star boost for custom character
             const rolledCharacter = rollCharacter(pool, true, goldStarChar, goldStarPercent);
@@ -462,6 +473,18 @@
 
             if (selectedBanner === 'whimsy' && selectedFlavors.length > 0) {
                 url += `&whimsyFlavors=${encodeURIComponent(selectedFlavors.join(','))}`;
+            }
+
+            // For fusion banner, roll a second character from pool 2
+            if (selectedBanner === 'fusion') {
+                const pool2Choice = document.getElementById('poolSelect2').value;
+                const pool2 = getPool(pool2Choice);
+                if (pool2.length === 0) {
+                    alert('Characters are still loading. Please wait a moment and try again.');
+                    return;
+                }
+                const rolledCharacter2 = rollCharacter(pool2, false, '', 0);
+                url += `&pool2=${pool2Choice}&character2=${encodeURIComponent(rolledCharacter2)}`;
             }
 
             window.location.href = url;

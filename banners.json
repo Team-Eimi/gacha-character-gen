@@ -357,6 +357,38 @@
                 "item": "redesign",
                 "chance": 1.0}
             ]
+        },
+        {
+            "name": "emoji",
+            "status": "upcoming",
+            "date": "??",
+            "img": "banner_art/emojibanner.png",
+            "drops": [
+                {
+                    "item": "emoji",
+                    "chance": 1.0
+                }
+            ]
+        },
+        {
+            "name": "fusion",
+            "status": "upcoming",
+            "date": "??",
+            "img": "banner_art/fusionbanner.png",
+            "drops": [
+                {
+                    "item": "outfit swap",
+                    "chance": 0.5
+                },
+                {
+                    "item": "character fusion",
+                    "chance": 0.25
+                },
+                {
+                    "item": "circumstance swap",
+                    "chance": 0.25
+                }
+            ]
         }
     ]
 }

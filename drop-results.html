@@ -222,6 +222,7 @@
         const selectedBanner = urlParams.get('banner');
         const selectedPool = urlParams.get('pool');
         const rolledCharacter = urlParams.get('character');
+        const rolledCharacter2 = urlParams.get('character2');
         const selectedCoin = urlParams.get('coin');
         const goldStar = urlParams.get('goldStar');
         const goldStarPercent = urlParams.get('goldStarPercent');
@@ -436,7 +437,12 @@
                     document.getElementById('regularResults').style.display = 'block';
                     document.getElementById('babyResults').style.display = 'none';
                     
-                    document.getElementById('characterResult').textContent = character;
+                    if (selectedBanner === 'fusion' && rolledCharacter2) {
+                        document.querySelector('#regularResults .result-label').textContent = 'Characters';
+                        document.getElementById('characterResult').textContent = character + ' & ' + rolledCharacter2;
+                    } else {
+                        document.getElementById('characterResult').textContent = character;
+                    }
                     document.getElementById('dropResult').textContent = drop;
                     document.getElementById('dropRarity').innerHTML = 
                         `<span class="rarity-${rarity}">${rarityText}</span> - ${rarityDescriptions[rarity]}` + critFailMessage;
@@ -490,7 +496,12 @@
                     document.getElementById('regularResults').style.display = 'block';
                     document.getElementById('babyResults').style.display = 'none';
                     
-                    document.getElementById('characterResult').textContent = character;
+                    if (selectedBanner === 'fusion' && rolledCharacter2) {
+                        document.querySelector('#regularResults .result-label').textContent = 'Characters';
+                        document.getElementById('characterResult').textContent = character + ' & ' + rolledCharacter2;
+                    } else {
+                        document.getElementById('characterResult').textContent = character;
+                    }
                     document.getElementById('dropResult').textContent = drop;
                     document.getElementById('dropRarity').innerHTML = 
                         `<span class="rarity-${rarity}">${rarityText}</span> - ${rarityDescriptions[rarity]}`;
