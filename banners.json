@@ -372,8 +372,7 @@
         },
         {
             "name": "fusion",
-            "status": "upcoming",
-            "date": "3/25",
+            "status": "active"
             "img": "banner_art/fusionbanner.png",
             "drops": [
                 {
