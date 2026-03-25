@@ -372,7 +372,7 @@
         },
         {
             "name": "fusion",
-            "status": "active"
+            "status": "active",
             "img": "banner_art/fusionbanner.png",
             "drops": [
                 {
