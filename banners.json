@@ -360,8 +360,7 @@
         },
         {
             "name": "emoji",
-            "status": "upcoming",
-            "date": "3/27",
+            "status": "active"
             "img": "banner_art/emojibanner.png",
             "drops": [
                 {
@@ -372,7 +371,7 @@
         },
         {
             "name": "fusion",
-            "status": "active",
+            "status": "past",
             "img": "banner_art/fusionbanner.png",
             "drops": [
                 {
