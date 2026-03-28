@@ -25,7 +25,8 @@
         },
         {
             "name": "whump",
-            "status": "past",
+            "status": "upcoming",
+            "date": "4/2",
             "img": "banner_art/bannerwhump.png",
             "drops": [
                 {
@@ -137,7 +138,8 @@
         },
         {
             "name": "shopping",
-            "status": "past",
+            "status": "upcoming",
+            "date": "3/30",
             "img": "banner_art/shoppingbanner.png",
             "drops": [
                 {
