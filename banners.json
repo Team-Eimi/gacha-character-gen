@@ -138,8 +138,7 @@
         },
         {
             "name": "shopping",
-            "status": "upcoming",
-            "date": "3/30",
+            "status": "active",
             "img": "banner_art/shoppingbanner.png",
             "drops": [
                 {
