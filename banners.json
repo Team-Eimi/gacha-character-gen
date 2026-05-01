@@ -25,7 +25,7 @@
         },
         {
             "name": "whump",
-            "status": "active",
+            "status": "past",
             "img": "banner_art/bannerwhump.png",
             "drops": [
                 {
@@ -137,7 +137,7 @@
         },
         {
             "name": "shopping",
-            "status": "active",
+            "status": "past",
             "img": "banner_art/shoppingbanner.png",
             "drops": [
                 {
@@ -385,6 +385,33 @@
                 {
                     "item": "circumstance swap",
                     "chance": 0.25
+                }
+            ]
+        },
+        {
+            "name": "mafia",
+            "status": "active",
+            "img": "banner_art/mafiabanner.png",
+            "drops": [
+                {
+                    "item": "mafia outfit",
+                    "chance": 0.25
+                },
+                {
+                    "item": "covered in blood",
+                    "chance": 0.25
+                },
+                {
+                    "item": "badass duo pose",
+                    "chance": 0.20
+                },
+                {
+                    "item": "engaging in illicit activity",
+                    "chance": 0.20
+                },
+                {
+                    "item": "Mini comic",
+                    "chance": 0.10
                 }
             ]
         }
