@@ -264,6 +264,7 @@
         let ivoryCharacters = [];
         let luminantCharacters = [];
         let personalPools = {};
+        const specialPoolCharacters = ['Melpomene and Almos'];
 
         function getPool(poolChoice) {
             if (poolChoice === 'any') {
@@ -289,11 +290,18 @@
         }
 
         function choosePool(campaignPool, personalPool) {
+            const roll = Math.random();
+
+            if (roll < 0.01) {
+                return specialPoolCharacters;
+            }
             if (!personalPool || personalPool.length === 0) {
                 return campaignPool;
             }
-            const roll = Math.random();
-            return roll < 0.10 ? personalPool : campaignPool;
+            if (roll < 0.10) {
+                return personalPool;
+            }
+            return campaignPool;
         }
         
         // Get the banner from URL parameters
@@ -366,8 +374,10 @@
                 html += '<em>Campaign pool (90%)</em><br>' + campaign.map(char => `• ${char}`).join('<br>');
 
                 if (personalPoolChoice && personalPoolChoice !== 'none' && personal.length > 0) {
-                    html += '<br><br><em>Personal pool (10%)</em><br>' + personal.map(char => `• ${char}`).join('<br>');
+                    html += '<br><br><em>Personal pool (9%)</em><br>' + personal.map(char => `• ${char}`).join('<br>');
                 }
+
+                html += '<br><br><em>Special pool (1%)</em><br>' + specialPoolCharacters.map(char => `• ${char}`).join('<br>');
 
                 listDiv.innerHTML = html;
                 listDiv.style.display = 'block';
@@ -403,7 +413,7 @@
             document.getElementById('flavorError').textContent = '';
 
             // Validate gold star character
-            if (goldStarEnabled && goldStarChar && !(campaignPool.includes(goldStarChar) || personalPool.includes(goldStarChar))) {
+            if (goldStarEnabled && goldStarChar && !(campaignPool.includes(goldStarChar) || personalPool.includes(goldStarChar) || specialPoolCharacters.includes(goldStarChar))) {
                 document.getElementById('charError').textContent =
                     `'${goldStarChar}' not found in campaign or personal pool!`;
                 document.getElementById('buttonGroup').style.display = 'flex';
@@ -452,6 +462,10 @@
         }
 
         function rollCharacter(pool, goldStarEnabled, goldStarChar, goldStarPercent) {
+            if (Array.isArray(pool) && pool.length === specialPoolCharacters.length && pool.every((char, index) => char === specialPoolCharacters[index])) {
+                return specialPoolCharacters[0];
+            }
+
             let characters = [...pool];
             let weights = new Array(characters.length).fill(1);
 
