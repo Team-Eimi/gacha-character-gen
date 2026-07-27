@@ -229,6 +229,7 @@
         const pity = urlParams.get('pity');
         const pityRarity = urlParams.get('pityRarity');
         const whimsyFlavors = urlParams.get('whimsyFlavors');
+        const selectedVariant = urlParams.get('variant');
         const daddyCharacter = urlParams.get('daddy');
         const prerolledDrop = urlParams.get('prerolledDrop');
 
@@ -346,6 +347,14 @@
             }
 
             let availableDrops = banner.drops;
+
+            if (selectedBanner === 'easteregg' && Array.isArray(banner.variants) && banner.variants.length > 0) {
+                const matchingVariant = banner.variants.find(v => v.name === selectedVariant);
+                const chosenVariant = matchingVariant || banner.variants[Math.floor(Math.random() * banner.variants.length)];
+                if (Array.isArray(chosenVariant.drops) && chosenVariant.drops.length > 0) {
+                    availableDrops = chosenVariant.drops;
+                }
+            }
 
             if (selectedBanner === 'whimsy' && whimsyFlavors) {
                 const selectedFlavorList = whimsyFlavors

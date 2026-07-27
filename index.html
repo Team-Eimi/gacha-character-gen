@@ -103,6 +103,35 @@
     </div>
 
     <script>
+        function getBannerVariant(banner) {
+            const variants = Array.isArray(banner.variants) && banner.variants.length > 0 ? banner.variants : null;
+            if (variants) {
+                const weightedVariants = variants.map((variant, index) => {
+                    const weight = variant.name === 'evening' ? 0.2 : 0.8; // Adjust weights as needed
+                    return { variant, weight, image: Array.isArray(banner.imgVariants) && banner.imgVariants[index]
+                        ? banner.imgVariants[index]
+                        : banner.img };
+                });
+
+                const totalWeight = weightedVariants.reduce((sum, item) => sum + item.weight, 0);
+                let random = Math.random() * totalWeight;
+
+                for (const item of weightedVariants) {
+                    random -= item.weight;
+                    if (random <= 0) {
+                        return { variant: item.variant, image: item.image };
+                    }
+                }
+
+                return { variant: weightedVariants[0].variant, image: weightedVariants[0].image };
+            }
+            if (Array.isArray(banner.imgVariants) && banner.imgVariants.length > 0) {
+                const randomIndex = Math.floor(Math.random() * banner.imgVariants.length);
+                return { variant: null, image: banner.imgVariants[randomIndex] };
+            }
+            return { variant: null, image: banner.img };
+        }
+
         // Load banners from JSON file
         fetch('banners.json')
             .then(response => response.json())
@@ -133,8 +162,10 @@
                         bannerCard.className = 'banner-card upcoming';
                         bannerCard.style.position = 'relative';
                         
+                        const selectedVariant = getBannerVariant(banner);
+                        const bannerImage = selectedVariant.image;
                         bannerCard.innerHTML = `
-                            <img src="${banner.img}" alt="${banner.name} Banner">
+                            <img src="${bannerImage}" alt="${banner.displayName || banner.name} Banner">
                             <div class="upcoming-badge">COMING ${banner.date || 'SOON'}</div>
                         `;
                         
@@ -151,16 +182,19 @@
                     
                     activeBanners.forEach(banner => {
                         const bannerCard = document.createElement('a');
-                        bannerCard.href = `character.html?banner=${banner.name}`;
+                        const selectedVariant = getBannerVariant(banner);
+                        const variantQuery = selectedVariant.variant ? `&variant=${encodeURIComponent(selectedVariant.variant.name)}` : '';
+                        bannerCard.href = `character.html?banner=${banner.name}${variantQuery}`;
                         bannerCard.className = 'banner-card';
                         
-                        if (banner.img) {
+                        const bannerImage = selectedVariant.image;
+                        if (bannerImage) {
                             bannerCard.innerHTML = `
-                                <img src="${banner.img}" alt="${banner.name} Banner">
+                                <img src="${bannerImage}" alt="${banner.displayName || banner.name} Banner">
                             `;
                         } else {
                             bannerCard.innerHTML = `
-                                <div class="banner-card-placeholder">${banner.name}</div>
+                                <div class="banner-card-placeholder">${banner.displayName || banner.name}</div>
                             `;
                         }
                         
@@ -177,16 +211,19 @@
                     
                     pastBanners.forEach(banner => {
                         const bannerCard = document.createElement('a');
-                        bannerCard.href = `character.html?banner=${banner.name}`;
+                        const selectedVariant = getBannerVariant(banner);
+                        const variantQuery = selectedVariant.variant ? `&variant=${encodeURIComponent(selectedVariant.variant.name)}` : '';
+                        bannerCard.href = `character.html?banner=${banner.name}${variantQuery}`;
                         bannerCard.className = 'banner-card';
                         
-                        if (banner.img) {
+                        const bannerImage = selectedVariant.image;
+                        if (bannerImage) {
                             bannerCard.innerHTML = `
-                                <img src="${banner.img}" alt="${banner.name} Banner">
+                                <img src="${bannerImage}" alt="${banner.displayName || banner.name} Banner">
                             `;
                         } else {
                             bannerCard.innerHTML = `
-                                <div class="banner-card-placeholder">${banner.name}</div>
+                                <div class="banner-card-placeholder">${banner.displayName || banner.name}</div>
                             `;
                         }
                         bannerGrid.appendChild(bannerCard);

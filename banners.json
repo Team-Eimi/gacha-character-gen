@@ -24,6 +24,81 @@
             ]
         },
         {
+            "name": "easteregg",
+            "displayName": "Easter Egg Banner",
+            "status": "upcoming",
+            "date": "7/28",
+            "img": "banner_art/ednabanner_morning.png",
+            "imgVariants": [
+                "banner_art/ednabanner_morning.png",
+                "banner_art/ednabanner_evening.png"
+            ],
+            "variants": [
+                {
+                    "name": "morning",
+                    "label": "Morning",
+                    "drops": [
+                        {
+                            "item": "A peaceful moment",
+                            "chance": 0.30
+                        },
+                        {
+                            "item": "With a flower",
+                            "chance": 0.30
+                        },
+                        {
+                            "item": "Flower field outfit",
+                            "chance": 0.30
+                        },
+                        {
+                            "item": "A garden with another",
+                            "chance": 0.10
+                        }
+                    ]
+                },
+                {
+                    "name": "evening",
+                    "label": "Evening",
+                    "drops": [
+                        {
+                            "item": "A moment of grief",
+                            "chance": 0.30
+                        },
+                        {
+                            "item": "Something dying",
+                            "chance": 0.30
+                        },
+                        {
+                            "item": "Dolled up in a farce",
+                            "chance": 0.30
+                        },
+                        {
+                            "item": "Terrified in Edna’s Garden",
+                            "chance": 0.10
+                        }
+                    ]
+                }
+            ],
+            "drops": [
+                {
+                    "item": "A peaceful moment",
+                    "chance": 0.30
+                },
+                {
+                    "item": "With a flower",
+                    "chance": 0.30
+                },
+                {
+                    "item": "Flower field outfit",
+                    "chance": 0.30
+                },
+                {
+                    "item": "A garden with another",
+                    "chance": 0.10
+                }
+            ]
+        },
+        {
             "name": "whump",
             "status": "past",
             "img": "banner_art/bannerwhump.png",

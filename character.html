@@ -278,6 +278,7 @@
         // Get the banner from URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         const selectedBanner = urlParams.get('banner');
+        const selectedVariant = urlParams.get('variant');
         const whimsyFlavorOptions = document.getElementById('whimsyFlavorOptions');
 
         if (selectedBanner === 'whimsy') {
@@ -373,6 +374,10 @@
 
             // Build URL with rolled character and all parameters
             let url = `results.html?banner=${selectedBanner}&pool=${poolChoice}&character=${encodeURIComponent(rolledCharacter)}`;
+
+            if (selectedVariant) {
+                url += `&variant=${encodeURIComponent(selectedVariant)}`;
+            }
 
             if (goldStarEnabled && goldStarChar) {
                 url += `&goldStar=${encodeURIComponent(goldStarChar)}&goldStarPercent=${goldStarPercent}`;

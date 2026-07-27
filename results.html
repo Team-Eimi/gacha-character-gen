@@ -140,6 +140,7 @@
         const pity = urlParams.get('pity');
         const pityRarity = urlParams.get('pityRarity');
         const whimsyFlavors = urlParams.get('whimsyFlavors');
+        const selectedVariant = urlParams.get('variant');
 
         // Display the rolled character(s)
         if (selectedBanner === 'baby') {
@@ -152,7 +153,10 @@
         }
 
         // Update back link to preserve banner selection
-        document.getElementById('backLink').href = `character.html?banner=${selectedBanner}`;
+        const backLinkUrl = selectedVariant
+            ? `character.html?banner=${selectedBanner}&variant=${encodeURIComponent(selectedVariant)}`
+            : `character.html?banner=${selectedBanner}`;
+        document.getElementById('backLink').href = backLinkUrl;
 
         // Load characters data for baby banner
         if (selectedBanner === 'baby') {
@@ -222,6 +226,10 @@
                             whimsyFlavors: whimsyFlavors || '',
                             prerolledDrop: drop
                         });
+
+                        if (selectedVariant) {
+                            params.append('variant', selectedVariant);
+                        }
                         
                         // Only pick a specific daddy if it's NOT "you pick"
                         if (drop !== 'you pick' && allCharacters.length > 0) {
@@ -260,6 +268,10 @@
                     pityRarity: pityRarity || '',
                     whimsyFlavors: whimsyFlavors || ''
                 });
+
+                if (selectedVariant) {
+                    params.append('variant', selectedVariant);
+                }
 
                 if (selectedBanner === 'fusion' && rolledCharacter2) {
                     params.append('character2', rolledCharacter2);
