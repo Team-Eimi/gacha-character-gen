@@ -8,11 +8,12 @@ The gacha generator follows a 4-step process:
 
 ### 1. **Choose Banner** (`index.html`)
 - Banners are grouped into **Upcoming**, **Active**, and **Past** sections.
-- Upcoming banners show a **COMING <date>** badge (if `date` is set).
-- Only **Active** banners are clickable.
+- Upcoming banners show a **COMING <date>** badge (if `date` is set in `banner.json`).
+- Only **Active** and **Past** banners are clickable.
 
 ### 2. **Select Character** (`character.html`)
 - Choose a character pool (Wuxia, Ael Academy, or The Keys)
+- Optionally choose a personal pool. Edit this pool in the `personal.json`
 - Optionally enable **Gold Star Boost** for a specific character
   - Specify a character name and boost percentage
   - Adds that percentage directly to the character's base probability
@@ -46,6 +47,7 @@ The gacha generator follows a 4-step process:
 ├── banners.json         # Banner configurations & drops
 ├── coins.json           # Token types & rarity odds
 ├── characters.json      # Character pools (wuxia, academy, keys)
+├── personal.json        # Personal character pools
 ├── banner_art/          # Banner images
 ├── tokens/              # Token images
 └── animations/          # Roll animations by token + rarity
@@ -64,6 +66,18 @@ The gacha generator follows a 4-step process:
       "drops": [
         {
           "item": "single chibi",
+          "chance": 0.5
+        }
+      ]
+    },
+    {
+      "name": "mafia",
+      "status": "upcoming",
+      "date": "7/28",
+      "img": "banner_art/bannermafia.png",
+      "drops": [
+        {
+          "item": "mafia",
           "chance": 0.5
         }
       ]
@@ -97,6 +111,14 @@ The gacha generator follows a 4-step process:
   "wuxia": ["Character 1", "Character 2"],
   "academy": ["Character 3", "Character 4"],
   "keys": ["Character 5", "Character 6"]
+}
+```
+
+### `personal.json`
+```json
+{
+  "Name": ["Character 1", "Character 2"],
+  "Name": ["Character 1", "Character 2"]
 }
 ```
 

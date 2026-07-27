@@ -142,13 +142,18 @@
     <div class="container">
         <a href="index.html" class="back-link">← Back to Banner Selection</a>
 
-        <label for="poolSelect" id="poolSelectLabel">Choose Character Pool:</label>
+        <label for="poolSelect" id="poolSelectLabel">Choose Campaign Pool:</label>
         <select id="poolSelect">
             <option value="seal">The Seal</option>
             <option value="ivory">Ivoryhale</option>
             <option value="chromyr">The Kingdom of Chromyr</option>
             <option value="wuxia">Wuxia</option>
             <option value="luminant">Luminant</option>
+        </select>
+
+        <label for="personalPoolSelect">Choose Personal Pool:</label>
+        <select id="personalPoolSelect">
+            <option value="none">None</option>
         </select>
 
         <div id="fusionPool2Container" style="display: none;">
@@ -258,6 +263,7 @@
         let chromyrCharacters = [];
         let ivoryCharacters = [];
         let luminantCharacters = [];
+        let personalPools = {};
 
         function getPool(poolChoice) {
             if (poolChoice === 'any') {
@@ -273,6 +279,21 @@
                 keys: sealCharacters,
             };
             return poolMap[poolChoice] || [];
+        }
+
+        function getPersonalPool(poolName) {
+            if (!poolName || poolName === 'none') {
+                return [];
+            }
+            return personalPools[poolName] || [];
+        }
+
+        function choosePool(campaignPool, personalPool) {
+            if (!personalPool || personalPool.length === 0) {
+                return campaignPool;
+            }
+            const roll = Math.random();
+            return roll < 0.10 ? personalPool : campaignPool;
         }
         
         // Get the banner from URL parameters
@@ -296,15 +317,24 @@
             poolSelect.insertBefore(anyOpt, poolSelect.firstChild);
         }
 
-        // Load character data from JSON file HEY CHANGE
-        fetch('characters.json')
-            .then(response => response.json())
-            .then(data => {
-                wuxiaCharacters = data.wuxia || [];
-                sealCharacters = data.seal || [...(data.academy || []), ...(data.keys || [])];
-                chromyrCharacters = data.chromyr || [];
-                ivoryCharacters = data.ivory || [];
-                luminantCharacters = data.luminant || [];
+        // Load character data from JSON files
+        Promise.all([
+            fetch('characters.json').then(response => response.json()),
+            fetch('personal.json').then(response => response.json())
+        ])
+            .then(([characterData, personalData]) => {
+                wuxiaCharacters = characterData.wuxia || [];
+                sealCharacters = characterData.seal || [...(characterData.academy || []), ...(characterData.keys || [])];
+                chromyrCharacters = characterData.chromyr || [];
+                ivoryCharacters = characterData.ivory || [];
+                luminantCharacters = characterData.luminant || [];
+                personalPools = personalData['personal-pools'] || {};
+
+                const personalSelect = document.getElementById('personalPoolSelect');
+                personalSelect.innerHTML = '<option value="none">None</option>' +
+                    Object.keys(personalPools)
+                        .map(name => `<option value="${name}">${name}</option>`)
+                        .join('');
             })
             .catch(error => {
                 console.error('Error loading characters:', error);
@@ -327,11 +357,19 @@
         function toggleCharacterList() {
             const listDiv = document.getElementById('characterList');
             const poolChoice = document.getElementById('poolSelect').value;
+            const personalPoolChoice = document.getElementById('personalPoolSelect').value;
 
             if (listDiv.style.display === 'none') {
-                const pool = getPool(poolChoice);
-                listDiv.innerHTML = '<strong>Available Characters:</strong><br>' +
-                    pool.map(char => `• ${char}`).join('<br>');
+                const campaign = getPool(poolChoice);
+                const personal = getPersonalPool(personalPoolChoice);
+                let html = '<strong>Available Characters:</strong><br>';
+                html += '<em>Campaign pool (90%)</em><br>' + campaign.map(char => `• ${char}`).join('<br>');
+
+                if (personalPoolChoice && personalPoolChoice !== 'none' && personal.length > 0) {
+                    html += '<br><br><em>Personal pool (10%)</em><br>' + personal.map(char => `• ${char}`).join('<br>');
+                }
+
+                listDiv.innerHTML = html;
                 listDiv.style.display = 'block';
             } else {
                 listDiv.style.display = 'none';
@@ -340,6 +378,7 @@
 
         function goToCoinSelection() {
             const poolChoice = document.getElementById('poolSelect').value;
+            const personalPoolChoice = document.getElementById('personalPoolSelect').value;
             const goldStarEnabled = document.getElementById('goldStarToggle').checked;
             const goldStarChar = document.getElementById('goldStarChar').value.trim();
             const goldStarPercent = document.getElementById('goldStarPercent').value;
@@ -347,7 +386,9 @@
             const pityRarity = document.getElementById('pityRarity').value;
             const selectedFlavors = getSelectedWhimsyFlavors();
 
-            const pool = getPool(poolChoice);
+            const campaignPool = getPool(poolChoice);
+            const personalPool = getPersonalPool(personalPoolChoice);
+            const pool = choosePool(campaignPool, personalPool);
 
             // Check if characters are loaded
             if (pool.length === 0) {
@@ -362,9 +403,9 @@
             document.getElementById('flavorError').textContent = '';
 
             // Validate gold star character
-            if (goldStarEnabled && goldStarChar && !pool.includes(goldStarChar)) {
+            if (goldStarEnabled && goldStarChar && !(campaignPool.includes(goldStarChar) || personalPool.includes(goldStarChar))) {
                 document.getElementById('charError').textContent =
-                    `'${goldStarChar}' not found in pool!`;
+                    `'${goldStarChar}' not found in campaign or personal pool!`;
                 document.getElementById('buttonGroup').style.display = 'flex';
                 return;
             }
@@ -401,6 +442,10 @@
                 }
                 const rolledCharacter2 = rollCharacter(pool2, false, '', 0);
                 url += `&pool2=${pool2Choice}&character2=${encodeURIComponent(rolledCharacter2)}`;
+            }
+
+            if (personalPoolChoice && personalPoolChoice !== 'none') {
+                url += `&personalPool=${encodeURIComponent(personalPoolChoice)}`;
             }
 
             window.location.href = url;
@@ -452,11 +497,16 @@
 
         function addAndContinue() {
             const poolChoice = document.getElementById('poolSelect').value;
+            const personalPoolChoice = document.getElementById('personalPoolSelect').value;
             const goldStarChar = document.getElementById('goldStarChar').value.trim();
             const goldStarPercent = document.getElementById('goldStarPercent').value;
             const pityEnabled = document.getElementById('pityToggle').checked;
             const pityRarity = document.getElementById('pityRarity').value;
             const selectedFlavors = getSelectedWhimsyFlavors();
+
+            const campaignPool = getPool(poolChoice);
+            const personalPool = getPersonalPool(personalPoolChoice);
+            const pool = choosePool(campaignPool, personalPool);
 
             if (selectedBanner === 'whimsy' && selectedFlavors.length === 0) {
                 document.getElementById('flavorError').textContent = 'Pick at least one flavor for the Whimsy Banner.';
@@ -464,14 +514,14 @@
             }
             document.getElementById('flavorError').textContent = '';
 
-            // Get pool and roll character
-            const pool = getPool(poolChoice);
-
             // Roll for character with gold star boost for custom character
             const rolledCharacter = rollCharacter(pool, true, goldStarChar, goldStarPercent);
 
             // Build URL with rolled character and all parameters, including the custom character
             let url = `results.html?banner=${selectedBanner}&pool=${poolChoice}&character=${encodeURIComponent(rolledCharacter)}`;
+            if (personalPoolChoice && personalPoolChoice !== 'none') {
+                url += `&personalPool=${encodeURIComponent(personalPoolChoice)}`;
+            }
             url += `&goldStar=${encodeURIComponent(goldStarChar)}&goldStarPercent=${goldStarPercent}`;
 
             if (pityEnabled) {
