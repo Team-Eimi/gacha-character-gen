@@ -77,9 +77,11 @@
                 
         <label for="poolSelect">Choose Character Pool:</label>
         <select id="poolSelect">
+            <option value="seal">The Seal</option>
+            <option value="ivory">Ivoryhale</option>
+            <option value="chromyr">The Kingdom of Chromyr</option>
             <option value="wuxia">Wuxia</option>
-            <option value="academy">Ael Academy</option>
-            <option value="keys">The Keys</option>
+            <option value="luminant">Luminant</option>
         </select>
 
         <label for="goldStarToggle">
@@ -104,8 +106,10 @@
 
     <script>
         let wuxiaCharacters = [];
-        let academyCharacters = [];
-        let keyCharacters = [];
+        let sealCharacters = [];
+        let chromyrCharacters = [];
+        let ivoryCharacters = [];
+        let luminantCharacters = [];
 
         // Get the pool from URL parameters
         const urlParams = new URLSearchParams(window.location.search);
@@ -116,8 +120,10 @@
             const bannerImg = document.getElementById('bannerImg');
             const poolMapping = {
                 'wuxia': 'banner1.png',
-                'academy': 'banner1.png',
-                'keys': 'banner1.png'
+                'seal': 'banner1.png',
+                'chromyr': 'banner1.png',
+                'ivory': 'banner1.png',
+                'luminant': 'banner1.png'
             };
             if (poolMapping[selectedPool]) {
                 bannerImg.src = poolMapping[selectedPool];
@@ -128,9 +134,11 @@
         fetch('characters.json')
             .then(response => response.json())
             .then(data => {
-                wuxiaCharacters = data.wuxia;
-                academyCharacters = data.academy;
-                keyCharacters = data.keys;
+                wuxiaCharacters = data.wuxia || [];
+                sealCharacters = data.seal || [...(data.academy || []), ...(data.keys || [])];
+                chromyrCharacters = data.chromyr || [];
+                ivoryCharacters = data.ivory || [];
+                luminantCharacters = data.luminant || [];
                 
                 // Pre-select the pool from URL parameter
                 if (selectedPool) {
@@ -156,14 +164,7 @@
             const poolChoice = document.getElementById('poolSelect').value;
             
             if (listDiv.style.display === 'none') {
-                let pool;
-                if (poolChoice === 'wuxia') {
-                    pool = wuxiaCharacters;
-                } else if (poolChoice === 'academy') {
-                    pool = academyCharacters;
-                } else if (poolChoice === 'keys') {
-                    pool = keyCharacters;
-                }
+                let pool = getPool(poolChoice);
                 
                 listDiv.innerHTML = '<strong>Available Characters:</strong><br>' + 
                     pool.map(char => `• ${char}`).join('<br>');
@@ -179,14 +180,7 @@
             const goldStarChar = document.getElementById('goldStarChar').value.trim();
             const goldStarPercent = parseFloat(document.getElementById('goldStarPercent').value) / 100;
             
-            let pool;
-            if (poolChoice === 'wuxia') {
-                pool = [...wuxiaCharacters];
-            } else if (poolChoice === 'academy') {
-                pool = [...academyCharacters];
-            } else if (poolChoice === 'keys') {
-                pool = [...keyCharacters];
-            }
+            let pool = getPool(poolChoice);
 
             // Check if characters are loaded
             if (pool.length === 0) {
@@ -242,6 +236,17 @@
             const resultDiv = document.getElementById('result');
             resultDiv.textContent = `You got: ${result}`;
             resultDiv.style.display = 'block';
+        }
+
+        function getPool(poolChoice) {
+            const poolMap = {
+                seal: [...sealCharacters],
+                chromyr: [...chromyrCharacters],
+                ivory: [...ivoryCharacters],
+                wuxia: [...wuxiaCharacters],
+                luminant: [...luminantCharacters]
+            };
+            return poolMap[poolChoice] || [];
         }
 
         function weightedRandom(items, weights) {

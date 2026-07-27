@@ -144,10 +144,10 @@
 
         <label for="poolSelect" id="poolSelectLabel">Choose Character Pool:</label>
         <select id="poolSelect">
+            <option value="seal">The Seal</option>
+            <option value="ivory">Ivoryhale</option>
+            <option value="chromyr">The Kingdom of Chromyr</option>
             <option value="wuxia">Wuxia</option>
-            <option value="academy">Ael Academy</option>
-            <option value="keys">The Keys</option>
-            <option value="chromyr">Chromyr</option>
             <option value="luminant">Luminant</option>
         </select>
 
@@ -155,10 +155,10 @@
             <label for="poolSelect2">Choose Character Pool (Character 2):</label>
             <select id="poolSelect2">
                 <option value="any">Any</option>
+                <option value="seal">The Seal</option>
+                <option value="ivory">Ivoryhale</option>
+                <option value="chromyr">The Kingdom of Chromyr</option>
                 <option value="wuxia">Wuxia</option>
-                <option value="academy">Ael Academy</option>
-                <option value="keys">The Keys</option>
-                <option value="chromyr">Chromyr</option>
                 <option value="luminant">Luminant</option>
             </select>
         </div>
@@ -254,21 +254,23 @@
     <script>
         // HEY CHANGE
         let wuxiaCharacters = [];
-        let academyCharacters = [];
-        let keyCharacters = [];
+        let sealCharacters = [];
         let chromyrCharacters = [];
+        let ivoryCharacters = [];
         let luminantCharacters = [];
 
         function getPool(poolChoice) {
             if (poolChoice === 'any') {
-                return [...wuxiaCharacters, ...academyCharacters, ...keyCharacters, ...chromyrCharacters, ...luminantCharacters];
+                return [...wuxiaCharacters, ...sealCharacters, ...chromyrCharacters, ...ivoryCharacters, ...luminantCharacters];
             }
             const poolMap = {
                 wuxia: wuxiaCharacters,
-                academy: academyCharacters,
-                keys: keyCharacters,
+                seal: sealCharacters,
                 chromyr: chromyrCharacters,
+                ivory: ivoryCharacters,
                 luminant: luminantCharacters,
+                academy: sealCharacters,
+                keys: sealCharacters,
             };
             return poolMap[poolChoice] || [];
         }
@@ -297,11 +299,11 @@
         fetch('characters.json')
             .then(response => response.json())
             .then(data => {
-                wuxiaCharacters = data.wuxia;
-                academyCharacters = data.academy;
-                keyCharacters = data.keys;
-                chromyrCharacters = data.chromyr;
-                luminantCharacters = data.luminant;
+                wuxiaCharacters = data.wuxia || [];
+                sealCharacters = data.seal || [...(data.academy || []), ...(data.keys || [])];
+                chromyrCharacters = data.chromyr || [];
+                ivoryCharacters = data.ivory || [];
+                luminantCharacters = data.luminant || [];
             })
             .catch(error => {
                 console.error('Error loading characters:', error);
