@@ -211,7 +211,8 @@
         },
         {
             "name": "shopping",
-            "status": "past",
+            "status": "upcoming",
+            "date": "7/30",
             "img": "banner_art/shoppingbanner.png",
             "drops": [
                 {
