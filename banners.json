@@ -26,8 +26,7 @@
         {
             "name": "easteregg",
             "displayName": "Easter Egg Banner",
-            "status": "upcoming",
-            "date": "7/28",
+            "status": "active",
             "img": "banner_art/ednabanner_morning.png",
             "imgVariants": [
                 "banner_art/ednabanner_morning.png",
