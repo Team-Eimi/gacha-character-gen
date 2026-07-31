@@ -147,6 +147,7 @@
             <option value="seal">The Seal</option>
             <option value="ivory">Ivoryhale</option>
             <option value="chromyr">The Kingdom of Chromyr</option>
+            <option value="cermonte">The Metropolis of Cermonte</option>
             <option value="wuxia">Wuxia</option>
             <option value="luminant">Luminant</option>
         </select>
@@ -164,6 +165,7 @@
                 <option value="ivory">Ivoryhale</option>
                 <option value="chromyr">The Kingdom of Chromyr</option>
                 <option value="wuxia">Wuxia</option>
+                <option value="cermonte">The Metropolis of Cermonte</option>
                 <option value="luminant">Luminant</option>
             </select>
         </div>
@@ -262,19 +264,21 @@
         let sealCharacters = [];
         let chromyrCharacters = [];
         let ivoryCharacters = [];
+        let cermonteCharacters = [];
         let luminantCharacters = [];
         let personalPools = {};
         const specialPoolCharacters = ['Melpomene and Almos'];
 
         function getPool(poolChoice) {
             if (poolChoice === 'any') {
-                return [...wuxiaCharacters, ...sealCharacters, ...chromyrCharacters, ...ivoryCharacters, ...luminantCharacters];
+                return [...wuxiaCharacters, ...sealCharacters, ...chromyrCharacters, ...ivoryCharacters, ...cermonteCharacters, ...luminantCharacters];
             }
             const poolMap = {
                 wuxia: wuxiaCharacters,
                 seal: sealCharacters,
                 chromyr: chromyrCharacters,
                 ivory: ivoryCharacters,
+                cermonte: cermonteCharacters,
                 luminant: luminantCharacters,
                 academy: sealCharacters,
                 keys: sealCharacters,
@@ -303,7 +307,7 @@
             }
             return campaignPool;
         }
-        
+
         // Get the banner from URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         const selectedBanner = urlParams.get('banner');
@@ -335,6 +339,7 @@
                 sealCharacters = characterData.seal || [...(characterData.academy || []), ...(characterData.keys || [])];
                 chromyrCharacters = characterData.chromyr || [];
                 ivoryCharacters = characterData.ivory || [];
+                cermonteCharacters = characterData.cermonte || [];
                 luminantCharacters = characterData.luminant || [];
                 personalPools = personalData['personal-pools'] || {};
 
