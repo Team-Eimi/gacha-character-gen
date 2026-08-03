@@ -24,6 +24,78 @@
             ]
         },
         {
+            "name": "whimsy",
+            "status": "active",
+            "img": "banner_art/whimsybanner.jpg",
+            "drops": [
+                {
+                    "item": "Watercolor",
+                    "chance": 0.30,
+                    "flavor": "strawberry"
+                },
+                {
+                    "item": "Ballpoint pen",
+                    "chance": 0.40,
+                    "flavor": "strawberry"
+                },
+                {
+                    "item": "Colored pencil",
+                    "chance": 0.30,
+                    "flavor": "strawberry"
+                },
+                {
+                    "item": "Crayon",
+                    "chance": 0.20,
+                    "flavor": "hamburger"
+                },
+                {
+                    "item": "Tempera paint",
+                    "chance": 0.40,
+                    "flavor": "hamburger"
+                },
+                {
+                    "item": "Pastel",
+                    "chance": 0.25,
+                    "flavor": "hamburger"
+                },
+                {
+                    "item": "A truly unhinged art tool (sharpie, highlighter, etc)",
+                    "chance": 0.10,
+                    "flavor": "hamburger"
+                },
+                {
+                    "item": "Charcoal",
+                    "chance": 0.20,
+                    "flavor": "chocolate"
+                },
+                {
+                    "item": "Graphite",
+                    "chance": 0.40,
+                    "flavor": "chocolate"
+                },
+                {
+                    "item": "Pen and ink",
+                    "chance": 0.20,
+                    "flavor": "chocolate"
+                },
+                {
+                    "item": "Clay",
+                    "chance": 0.20,
+                    "flavor": "orange"
+                },
+                {
+                    "item": "Paper craft",
+                    "chance": 0.40,
+                    "flavor": "orange"
+                },
+                {
+                    "item": "Something rlly weird",
+                    "chance": 0.20,
+                    "flavor": "orange"
+                }
+            ]
+        },
+        {
             "name": "easteregg",
             "displayName": "Easter Egg Banner",
             "status": "past",
@@ -211,7 +283,7 @@
         },
         {
             "name": "shopping",
-            "status": "active",
+            "status": "past",
             "img": "banner_art/shoppingbanner.png",
             "drops": [
                 {
@@ -352,78 +424,6 @@
             ]
         },
         {
-            "name": "whimsy",
-            "status": "active",
-            "img": "banner_art/whimsybanner.jpg",
-            "drops": [
-                {
-                    "item": "Watercolor",
-                    "chance": 0.30,
-                    "flavor": "strawberry"
-                },
-                {
-                    "item": "Ballpoint pen",
-                    "chance": 0.40,
-                    "flavor": "strawberry"
-                },
-                {
-                    "item": "Colored pencil",
-                    "chance": 0.30,
-                    "flavor": "strawberry"
-                },
-                {
-                    "item": "Crayon",
-                    "chance": 0.20,
-                    "flavor": "hamburger"
-                },
-                {
-                    "item": "Tempera paint",
-                    "chance": 0.40,
-                    "flavor": "hamburger"
-                },
-                {
-                    "item": "Pastel",
-                    "chance": 0.25,
-                    "flavor": "hamburger"
-                },
-                {
-                    "item": "A truly unhinged art tool (sharpie, highlighter, etc)",
-                    "chance": 0.10,
-                    "flavor": "hamburger"
-                },
-                {
-                    "item": "Charcoal",
-                    "chance": 0.20,
-                    "flavor": "chocolate"
-                },
-                {
-                    "item": "Graphite",
-                    "chance": 0.40,
-                    "flavor": "chocolate"
-                },
-                {
-                    "item": "Pen and ink",
-                    "chance": 0.20,
-                    "flavor": "chocolate"
-                },
-                {
-                    "item": "Clay",
-                    "chance": 0.20,
-                    "flavor": "orange"
-                },
-                {
-                    "item": "Paper craft",
-                    "chance": 0.40,
-                    "flavor": "orange"
-                },
-                {
-                    "item": "Something rlly weird",
-                    "chance": 0.20,
-                    "flavor": "orange"
-                }
-            ]
-        },
-        {
             "name": "redesign",
             "status": "past",
             "img": "banner_art/redesignbanner.png",
@@ -485,6 +485,29 @@
                 },
                 {
                     "item": "Mini comic",
+                    "chance": 0.10
+                }
+            ]
+        },
+        {
+            "name": "romance",
+            "status": "active",
+            "img": "banner_art/romancebanner.png",
+            "drops": [
+                {
+                    "item": "cutesy love love moment",
+                    "chance": 0.20
+                },
+                {
+                    "item": "emotional moment",
+                    "chance": 0.20
+                },
+                {
+                    "item": "how the other one sees them",
+                    "chance": 0.20
+                },
+                {
+                    "item": "crackship",
                     "chance": 0.10
                 }
             ]
