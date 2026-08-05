@@ -491,7 +491,7 @@
         },
         {
             "name": "romance",
-            "status": "active",
+            "status": "past",
             "img": "banner_art/romancebanner.png",
             "drops": [
                 {
@@ -508,6 +508,33 @@
                 },
                 {
                     "item": "crackship",
+                    "chance": 0.10
+                }
+            ]
+        },
+        {
+            "name": "flip",
+            "status": "active",
+            "img": "banner_art/bannerflip.png",
+            "drops": [
+                {
+                    "item": "Redesign in a new genre",
+                    "chance": 0.30
+                },
+                {
+                    "item": "In their new circumstance",
+                    "chance": 0.30
+                },
+                {
+                    "item": "Behold! My power",
+                    "chance": 0.20
+                },
+                {
+                    "item": "A new partnership",
+                    "chance": 0.10
+                },
+                {
+                    "item": "This isn't what I signed up for...",
                     "chance": 0.10
                 }
             ]
