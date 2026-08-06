@@ -217,7 +217,7 @@
         },
         {
             "name": "cursed",
-            "status": "past",
+            "status": "active",
             "img": "banner_art/cursedbanner.png",
             "drops": [
                 {
