@@ -465,7 +465,7 @@
         {
             "name": "comic",
             "img": "banner_art/bannercomic.png",
-            "status": "upcoming",
+            "status": "active",
             "date": "09/09",
             "drops": [
                 {
