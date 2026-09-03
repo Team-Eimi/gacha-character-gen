@@ -177,6 +177,12 @@
                 <div class="result-item" id="comicStoryResult" style="display: none;">
                     <div class="result-label">Comic Setup</div>
                     <div class="result-value" id="comicStoryValue"></div>
+                    <div class="drop-rarity" id="comicRarityValue"></div>
+                </div>
+
+                <div class="result-item" id="comicRoleResult" style="display: none;">
+                    <div class="result-label">Comic Role</div>
+                    <div class="result-value" id="comicRoleValue"></div>
                 </div>
                 
                 <div class="result-item" id="dropTypeResult">
@@ -242,13 +248,22 @@
         const comicStory = urlParams.get('comicStory');
         const comicRole = urlParams.get('comicRole');
 
-        function displayComicSetup() {
+        function displayComicSetup(rarityText, extraMessage = '') {
             if (selectedBanner !== 'comic' || comicMode !== 'new' || !comicGenre || !comicStory || !comicRole) {
                 return;
             }
 
             document.getElementById('comicStoryValue').textContent =
                 `Theme: ${comicGenre} | Story: ${comicStory} | Role: ${comicRole}`;
+            const rarityDescriptions = {
+                special: 'Special written piece - AU fanfic or canon backstory/side story',
+                legendary: 'Fully rendered piece with background',
+                rare: 'Clean sketch with line art and shading',
+                common: 'Sketch - A doodle'
+            };
+            const rarityKey = rarityText.toLowerCase();
+            document.getElementById('comicRarityValue').innerHTML =
+                `<span class="rarity-${rarityKey}">${rarityText}</span> - ${rarityDescriptions[rarityKey]}${extraMessage}`;
             document.getElementById('comicStoryResult').style.display = 'block';
         }
 
@@ -277,7 +292,7 @@
             
             // 2) Roll the specific banner item using its own chance weights.
             // If prerolledDrop exists (from baby banner), use that instead
-            const drop = comicMode === 'new' ? null : (prerolledDrop || rollDrop(rarity));
+            const drop = prerolledDrop || rollDrop(rarity);
 
             // 3) Crit fail check (2% chance) happens after rolls, but before display.
             const critFailChance = 0.02;
@@ -474,8 +489,8 @@
                     document.getElementById('dropResult').textContent = drop;
                     document.getElementById('dropRarity').innerHTML = 
                         `<span class="rarity-${rarity}">${rarityText}</span> - ${rarityDescriptions[rarity]}` + critFailMessage;
-                    displayComicSetup();
-                    setComicRarityOnly(rarityText);
+                    displayComicSetup(rarityText, critFailMessage);
+                    setComicDropType(rarityText, critFailMessage);
                 }
                 
                 document.getElementById('results').style.display = 'block';
@@ -535,19 +550,71 @@
                     document.getElementById('dropResult').textContent = drop;
                     document.getElementById('dropRarity').innerHTML = 
                         `<span class="rarity-${rarity}">${rarityText}</span> - ${rarityDescriptions[rarity]}`;
-                    displayComicSetup();
-                    setComicRarityOnly(rarityText);
+                    displayComicSetup(rarityText);
+                    setComicDropType(rarityText);
                 }
                 
                 document.getElementById('results').style.display = 'block';
             }, rarity === 'special' ? 6500 : 4000);
         }
 
-        function setComicRarityOnly(rarityText) {
-            if (selectedBanner === 'comic' && comicMode === 'new') {
-                document.getElementById('dropResult').textContent = rarityText;
-                document.getElementById('dropRarity').style.display = 'none';
+        function setComicDropType(rarityText, extraMessage = '') {
+            if (selectedBanner !== 'comic') {
+                displayComicRole(rarityText);
+                return;
             }
+
+            if (comicMode !== 'new') {
+                displayComicRole(rarityText);
+                document.getElementById('dropRarity').style.display = 'none';
+                return;
+            }
+
+            const comicRoles = {
+                common: 'Background NPC',
+                rare: 'Important NPC',
+                legendary: 'Protagonist'
+            };
+            const comicRole = comicMode === 'new' ? 'Protagonist' : comicRoles[rarityText.toLowerCase()];
+
+            if (comicMode === 'new') {
+                document.getElementById('dropTypeResult').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('dropResult').textContent = comicRole || '';
+            const dropRarity = document.getElementById('dropRarity');
+            if (comicMode === 'new') {
+                const rarityDescriptions = {
+                    special: 'Special written piece - AU fanfic or canon backstory/side story',
+                    legendary: 'Fully rendered piece with background',
+                    rare: 'Clean sketch with line art and shading',
+                    common: 'Sketch - A doodle'
+                };
+                const rarityKey = rarityText.toLowerCase();
+                dropRarity.innerHTML = `<span class="rarity-${rarityKey}">${rarityText}</span> - ${rarityDescriptions[rarityKey]}${extraMessage}`;
+                dropRarity.style.display = 'block';
+            } else {
+                dropRarity.style.display = 'none';
+            }
+        }
+
+        function displayComicRole(rarityText) {
+            if (selectedBanner !== 'comic') {
+                return;
+            }
+
+            const comicRoles = {
+                common: 'Background NPC',
+                rare: 'Important NPC',
+                legendary: 'Protagonist'
+            };
+            const rarityKey = rarityText.toLowerCase();
+            const role = comicRoles[rarityKey];
+            const roleText = role ? `Role: ${role}` : rarityText;
+            document.getElementById('comicRoleValue').innerHTML =
+                `<span class="rarity-${rarityKey}">${roleText}</span>`;
+            document.getElementById('comicRoleResult').style.display = 'block';
         }
 
         function rollAgain() {

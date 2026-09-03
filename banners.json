@@ -466,6 +466,7 @@
             "name": "comic",
             "img": "banner_art/bannercomic.png",
             "status": "active",
+            "date": "09/09",
             "drops": [
                 {
                     "item": "business as usual",
