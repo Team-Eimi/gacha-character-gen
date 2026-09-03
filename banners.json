@@ -578,6 +578,45 @@
                     "chance": 0.10
                 }
             ]
+        },
+        {
+            "name": "comic",
+            "displayName": "Comic Banner",
+            "status": "past",
+            "drops": [
+                {
+                    "item": "business as usual",
+                    "chance": 0.3
+                },
+                {
+                    "item": "a turn for the worse",
+                    "chance": 0.2
+                },
+                {
+                    "item": "a turn for the better",
+                    "chance": 0.2
+                },
+                {
+                    "item": "something important changes",
+                    "chance": 0.1
+                },
+                {
+                    "item": "something horrible happens",
+                    "chance": 0.05
+                },
+                {
+                    "item": "something bewildering happens",
+                    "chance": 0.05
+                },
+                {
+                    "item": "something romantic happens",
+                    "chance": 0.05
+                },
+                {
+                    "item": "something amazing happens",
+                    "chance": 0.05
+                }
+            ]
         }
     ]
 }
