@@ -463,6 +463,17 @@
             ]
         },
         {
+            "name": "comic",
+            "displayName": "Comic Banner",
+            "status": "active",
+            "drops": [
+                {
+                    "item": "comic page",
+                    "chance": 1.0
+                }
+            ]
+        },
+        {
             "name": "mafia",
             "status": "active",
             "img": "banner_art/mafiabanner.png",

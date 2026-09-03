@@ -16,7 +16,7 @@
         "Cian",
         "Headmistress",
         "Croia of Nel",
-        "Dolly",
+        "Ellen",
         "Elchik on Tov",
         "General Eleos",
         "Mika Dionte",
@@ -27,7 +27,6 @@
         "Mio Robin",
         "Clio Amarette",
         "Aurene Oryin",
-        "Silas Aquila",
         "Alice Van Aalsburg",
         "Alexi Van Aalsburg",
         "Edna Utillian",
@@ -124,6 +123,17 @@
         "Liana",
         "Beria",
         "Maia"
+      ]
+    },
+    {
+      "id": "somnus",
+      "display": "Somnus",
+      "characters": [
+        "Solara",
+        "Samara",
+        "Kibo Kaan",
+        "Cenn",
+        "Ofri"
       ]
     },
     {

@@ -429,7 +429,21 @@
             }
         }
 
-        function goToCoinSelection() {
+        const storyApiUrl = window.COMIC_API_URL || 'http://localhost:3000/api';
+
+        async function claimComicRole(character) {
+            if (selectedBanner !== 'comic') return null;
+
+            const response = await fetch(`${storyApiUrl}/comic/roll`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ character })
+            });
+            if (!response.ok) throw new Error(`Comic story API returned ${response.status}`);
+            return response.json();
+        }
+
+        async function goToCoinSelection() {
             const poolChoice = document.getElementById('poolSelect').value;
             const personalPoolChoice = document.getElementById('personalPoolSelect').value;
             const goldStarEnabled = document.getElementById('goldStarToggle').checked;
@@ -465,9 +479,20 @@
 
             // Roll for character now
             const rolledCharacter = rollCharacter(pool, goldStarEnabled, goldStarChar, goldStarPercent);
+            let comicStory;
+            try {
+                comicStory = await claimComicRole(rolledCharacter);
+            } catch (error) {
+                console.error('Unable to save comic story roll:', error);
+                alert('The Comic Banner is temporarily unavailable. Please try again.');
+                return;
+            }
 
             // Build URL with rolled character and all parameters
             let url = `results.html?banner=${selectedBanner}&pool=${poolChoice}&character=${encodeURIComponent(rolledCharacter)}`;
+            if (comicStory) {
+                url += `&comicGenre=${encodeURIComponent(comicStory.genre)}&comicStory=${encodeURIComponent(comicStory.story)}&comicRole=${encodeURIComponent(comicStory.role)}`;
+            }
 
             if (selectedVariant) {
                 url += `&variant=${encodeURIComponent(selectedVariant)}`;
@@ -552,7 +577,7 @@
             return items[items.length - 1];
         }
 
-        function addAndContinue() {
+        async function addAndContinue() {
             const poolChoice = document.getElementById('poolSelect').value;
             const personalPoolChoice = document.getElementById('personalPoolSelect').value;
             const goldStarChar = document.getElementById('goldStarChar').value.trim();
@@ -573,9 +598,20 @@
 
             // Roll for character with gold star boost for custom character
             const rolledCharacter = rollCharacter(pool, true, goldStarChar, goldStarPercent);
+            let comicStory;
+            try {
+                comicStory = await claimComicRole(rolledCharacter);
+            } catch (error) {
+                console.error('Unable to save comic story roll:', error);
+                alert('The Comic Banner is temporarily unavailable. Please try again.');
+                return;
+            }
 
             // Build URL with rolled character and all parameters, including the custom character
             let url = `results.html?banner=${selectedBanner}&pool=${poolChoice}&character=${encodeURIComponent(rolledCharacter)}`;
+            if (comicStory) {
+                url += `&comicGenre=${encodeURIComponent(comicStory.genre)}&comicStory=${encodeURIComponent(comicStory.story)}&comicRole=${encodeURIComponent(comicStory.role)}`;
+            }
             if (personalPoolChoice && personalPoolChoice !== 'none') {
                 url += `&personalPool=${encodeURIComponent(personalPoolChoice)}`;
             }

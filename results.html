@@ -114,6 +114,7 @@
         <div class="character-result">
             <div class="result-label" id="characterResultLabel">Your Character</div>
             <div class="result-value" id="characterResult"></div>
+            <div class="result-label" id="comicStoryResult" style="display:none;"></div>
         </div>
         
         <div>
@@ -141,6 +142,9 @@
         const pityRarity = urlParams.get('pityRarity');
         const whimsyFlavors = urlParams.get('whimsyFlavors');
         const selectedVariant = urlParams.get('variant');
+        const comicGenre = urlParams.get('comicGenre');
+        const comicStory = urlParams.get('comicStory');
+        const comicRole = urlParams.get('comicRole');
 
         // Display the rolled character(s)
         if (selectedBanner === 'baby') {
@@ -150,6 +154,12 @@
             document.getElementById('characterResult').textContent = rolledCharacter + ' & ' + rolledCharacter2;
         } else {
             document.getElementById('characterResult').textContent = rolledCharacter;
+        }
+
+        if (selectedBanner === 'comic' && comicGenre && comicStory && comicRole) {
+            const comicStoryResult = document.getElementById('comicStoryResult');
+            comicStoryResult.textContent = `${comicGenre} / ${comicStory} / ${comicRole}`;
+            comicStoryResult.style.display = 'block';
         }
 
         // Update back link to preserve banner selection
