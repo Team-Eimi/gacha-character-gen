@@ -114,9 +114,10 @@
         <div class="character-result">
             <div class="result-label" id="characterResultLabel">Your Character</div>
             <div class="result-value" id="characterResult"></div>
+            <div class="result-label" id="comicStoryResult" style="display:none;"></div>
         </div>
         
-        <div>
+        <div id="comicDropSelection">
             <p class="subtitle">Now select your token to see what drop you get!</p>
             <div class="coin-grid" id="coinGrid">
                 <!-- Coins will be loaded dynamically from coins.json -->
@@ -141,6 +142,10 @@
         const pityRarity = urlParams.get('pityRarity');
         const whimsyFlavors = urlParams.get('whimsyFlavors');
         const selectedVariant = urlParams.get('variant');
+        const comicGenre = urlParams.get('comicGenre');
+        const comicStory = urlParams.get('comicStory');
+        const comicRole = urlParams.get('comicRole');
+        const comicMode = urlParams.get('comicMode');
 
         // Display the rolled character(s)
         if (selectedBanner === 'baby') {
@@ -275,6 +280,13 @@
                 if (selectedBanner === 'fusion' && rolledCharacter2) {
                     params.append('character2', rolledCharacter2);
                     if (selectedPool2) params.append('pool2', selectedPool2);
+                }
+
+                if (comicMode === 'new') {
+                    params.append('comicMode', comicMode);
+                    params.append('comicGenre', comicGenre);
+                    params.append('comicStory', comicStory);
+                    params.append('comicRole', comicRole);
                 }
                 
                 window.location.href = `drop-results.html?${params.toString()}`;

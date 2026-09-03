@@ -155,6 +155,10 @@
             <select id="poolSelect2"></select>
         </div>
 
+        <label for="newComicToggle" id="newComicOption" style="display: none;">
+            <input type="checkbox" id="newComicToggle"> Starting a new comic?
+        </label>
+
         <label for="goldStarToggle">
             <input type="checkbox" id="goldStarToggle"> Include Gold Star Boost?
         </label>
@@ -351,6 +355,10 @@
             whimsyFlavorOptions.style.display = 'block';
         }
 
+        if (selectedBanner === 'comic') {
+            document.getElementById('newComicOption').style.display = 'block';
+        }
+
         if (selectedBanner === 'fusion') {
             document.getElementById('fusionPool2Container').style.display = 'block';
             document.getElementById('poolSelectLabel').textContent = 'Choose Character Pool (Character 1):';
@@ -438,6 +446,7 @@
             const pityEnabled = document.getElementById('pityToggle').checked;
             const pityRarity = document.getElementById('pityRarity').value;
             const selectedFlavors = getSelectedWhimsyFlavors();
+            const startingNewComic = selectedBanner === 'comic' && document.getElementById('newComicToggle').checked;
 
             const campaignPool = getPool(poolChoice);
             const personalPool = getPersonalPool(personalPoolChoice);
@@ -466,8 +475,14 @@
             // Roll for character now
             const rolledCharacter = rollCharacter(pool, goldStarEnabled, goldStarChar, goldStarPercent);
 
+            const comicSetup = startingNewComic ? rollComicSetup() : null;
+
             // Build URL with rolled character and all parameters
             let url = `results.html?banner=${selectedBanner}&pool=${poolChoice}&character=${encodeURIComponent(rolledCharacter)}`;
+
+            if (comicSetup) {
+                url += `&comicMode=new&comicGenre=${encodeURIComponent(comicSetup.genre)}&comicStory=${encodeURIComponent(comicSetup.story)}&comicRole=protagonist`;
+            }
 
             if (selectedVariant) {
                 url += `&variant=${encodeURIComponent(selectedVariant)}`;
@@ -550,6 +565,16 @@
                 }
             }
             return items[items.length - 1];
+        }
+
+        function rollComicSetup() {
+            const genres = ['slice of life', 'crime', 'horror', 'adventure', 'comedy', 'isekai', 'sci fi', 'thriller'];
+            const stories = ['romantic', 'mystery', 'just fucking around', 'action', 'a day in life', 'catastrophe', 'FOIL piece', 'exploring'];
+
+            return {
+                genre: genres[Math.floor(Math.random() * genres.length)],
+                story: stories[Math.floor(Math.random() * stories.length)]
+            };
         }
 
         function addAndContinue() {

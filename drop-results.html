@@ -173,8 +173,13 @@
                     <div class="result-label">Character</div>
                     <div class="result-value" id="characterResult"></div>
                 </div>
+
+                <div class="result-item" id="comicStoryResult" style="display: none;">
+                    <div class="result-label">Comic Setup</div>
+                    <div class="result-value" id="comicStoryValue"></div>
+                </div>
                 
-                <div class="result-item">
+                <div class="result-item" id="dropTypeResult">
                     <div class="result-label">Drop Type</div>
                     <div class="result-value" id="dropResult"></div>
                     <div class="drop-rarity" id="dropRarity"></div>
@@ -232,6 +237,20 @@
         const selectedVariant = urlParams.get('variant');
         const daddyCharacter = urlParams.get('daddy');
         const prerolledDrop = urlParams.get('prerolledDrop');
+        const comicMode = urlParams.get('comicMode');
+        const comicGenre = urlParams.get('comicGenre');
+        const comicStory = urlParams.get('comicStory');
+        const comicRole = urlParams.get('comicRole');
+
+        function displayComicSetup() {
+            if (selectedBanner !== 'comic' || comicMode !== 'new' || !comicGenre || !comicStory || !comicRole) {
+                return;
+            }
+
+            document.getElementById('comicStoryValue').textContent =
+                `Theme: ${comicGenre} | Story: ${comicStory} | Role: ${comicRole}`;
+            document.getElementById('comicStoryResult').style.display = 'block';
+        }
 
         // Load all data and perform the roll
         Promise.all([
@@ -258,7 +277,7 @@
             
             // 2) Roll the specific banner item using its own chance weights.
             // If prerolledDrop exists (from baby banner), use that instead
-            const drop = prerolledDrop || rollDrop(rarity);
+            const drop = comicMode === 'new' ? null : (prerolledDrop || rollDrop(rarity));
 
             // 3) Crit fail check (2% chance) happens after rolls, but before display.
             const critFailChance = 0.02;
@@ -455,6 +474,8 @@
                     document.getElementById('dropResult').textContent = drop;
                     document.getElementById('dropRarity').innerHTML = 
                         `<span class="rarity-${rarity}">${rarityText}</span> - ${rarityDescriptions[rarity]}` + critFailMessage;
+                    displayComicSetup();
+                    setComicRarityOnly(rarityText);
                 }
                 
                 document.getElementById('results').style.display = 'block';
@@ -480,7 +501,7 @@
                     'rare': 'Clean sketch with line art and shading',
                     'common': 'Sketch - A doodle'
                 };
-                
+
                 // Check if this is a baby banner
                 if (selectedBanner === 'baby' && daddyCharacter) {
                     // Show baby results
@@ -514,10 +535,19 @@
                     document.getElementById('dropResult').textContent = drop;
                     document.getElementById('dropRarity').innerHTML = 
                         `<span class="rarity-${rarity}">${rarityText}</span> - ${rarityDescriptions[rarity]}`;
+                    displayComicSetup();
+                    setComicRarityOnly(rarityText);
                 }
                 
                 document.getElementById('results').style.display = 'block';
             }, rarity === 'special' ? 6500 : 4000);
+        }
+
+        function setComicRarityOnly(rarityText) {
+            if (selectedBanner === 'comic' && comicMode === 'new') {
+                document.getElementById('dropResult').textContent = rarityText;
+                document.getElementById('dropRarity').style.display = 'none';
+            }
         }
 
         function rollAgain() {
