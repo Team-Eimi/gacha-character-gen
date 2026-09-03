@@ -538,6 +538,17 @@
                     "chance": 0.10
                 }
             ]
+        },
+        {
+            "name": "comic",
+            "displayName": "Comic Banner",
+            "status": "active",
+            "drops": [
+                {
+                    "item": "comic page",
+                    "chance": 1.0
+                }
+            ]
         }
     ]
 }
