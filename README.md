@@ -157,6 +157,8 @@ Visit: `http://localhost:8000`
 2. Right-click `index.html`
 3. Select "Open with Live Server"
 
+To use the Comic Banner locally, start the API with `docker compose up --build` and serve the static files on `http://localhost:8000`. For another API host, define `window.COMIC_API_URL` before the character page script loads.
+
 ## 🎨 Customization
 
 - **Add new banners**: Edit `banners.json` and add new banner objects
