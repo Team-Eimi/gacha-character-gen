@@ -163,14 +163,13 @@
             fetch('characters.json')
                 .then(response => response.json())
                 .then(data => {
-                    // Combine all character lists into one array
-                    allCharacters = [
-                        ...(data.wuxia || []),
-                        ...(data.seal || [...(data.academy || []), ...(data.keys || [])]),
-                        ...(data.chromyr || []),
-                        ...(data.ivory || []),
-                        ...(data.luminant || [])
-                    ];
+                    const campaigns = Array.isArray(data.campaigns)
+                        ? data.campaigns
+                        : Object.entries(data)
+                            .filter(([key, value]) => Array.isArray(value))
+                            .map(([key, value]) => ({ id: key, display: key, characters: value }));
+
+                    allCharacters = campaigns.flatMap(campaign => campaign.characters || []);
                 })
                 .catch(error => {
                     console.error('Error loading characters:', error);

@@ -76,13 +76,7 @@
         <a href="index.html" class="back-link">← Back to Banner Selection</a>
                 
         <label for="poolSelect">Choose Character Pool:</label>
-        <select id="poolSelect">
-            <option value="seal">The Seal</option>
-            <option value="ivory">Ivoryhale</option>
-            <option value="chromyr">The Kingdom of Chromyr</option>
-            <option value="wuxia">Wuxia</option>
-            <option value="luminant">Luminant</option>
-        </select>
+        <select id="poolSelect"></select>
 
         <label for="goldStarToggle">
             <input type="checkbox" id="goldStarToggle"> Include Gold Star Boost?
@@ -109,7 +103,57 @@
         let sealCharacters = [];
         let chromyrCharacters = [];
         let ivoryCharacters = [];
+        let cermonteCharacters = [];
         let luminantCharacters = [];
+        let evangelineCharacters = [];
+        let campaignData = {};
+        let campaigns = [];
+
+        function formatPoolLabel(poolKey) {
+            return poolKey
+                .replace(/[_-]+/g, ' ')
+                .replace(/\b\w/g, char => char.toUpperCase());
+        }
+
+        function normalizeCampaigns(characterData) {
+            if (Array.isArray(characterData.campaigns)) {
+                return characterData.campaigns.map((campaign, index) => ({
+                    id: campaign.id || campaign.name || `campaign-${index}`,
+                    display: campaign.display || campaign.label || campaign.name || formatPoolLabel(campaign.id || campaign.name || `campaign-${index}`),
+                    characters: Array.isArray(campaign.characters) ? campaign.characters : []
+                }));
+            }
+
+            return Object.entries(characterData)
+                .filter(([key, value]) => Array.isArray(value))
+                .map(([key, value]) => ({
+                    id: key,
+                    display: formatPoolLabel(key),
+                    characters: value
+                }));
+        }
+
+        function populatePoolOptions(characterData) {
+            campaigns = normalizeCampaigns(characterData);
+            campaignData = Object.fromEntries(campaigns.map(campaign => [campaign.id, campaign.characters]));
+
+            const campaignKeys = campaigns.map(campaign => campaign.id);
+            const options = ['all', ...campaignKeys]
+                .filter((value, index, arr) => arr.indexOf(value) === index)
+                .map(value => {
+                    if (value === 'all') {
+                        return '<option value="all">All</option>';
+                    }
+                    const campaign = campaigns.find(item => item.id === value);
+                    return `<option value="${campaign.id}">${campaign.display}</option>`;
+                })
+                .join('');
+
+            const poolSelect = document.getElementById('poolSelect');
+            if (poolSelect) {
+                poolSelect.innerHTML = options;
+            }
+        }
 
         // Get the pool from URL parameters
         const urlParams = new URLSearchParams(window.location.search);
@@ -123,23 +167,29 @@
                 'seal': 'banner1.png',
                 'chromyr': 'banner1.png',
                 'ivory': 'banner1.png',
-                'luminant': 'banner1.png'
+                'cermonte': 'banner1.png',
+                'luminant': 'banner1.png',
+                'evangeline': 'banner1.png'
             };
-            if (poolMapping[selectedPool]) {
-                bannerImg.src = poolMapping[selectedPool];
-            }
+            bannerImg.src = poolMapping[selectedPool] || 'banner1.png';
         }
 
         // Load character data from JSON file
         fetch('characters.json')
             .then(response => response.json())
             .then(data => {
-                wuxiaCharacters = data.wuxia || [];
-                sealCharacters = data.seal || [...(data.academy || []), ...(data.keys || [])];
-                chromyrCharacters = data.chromyr || [];
-                ivoryCharacters = data.ivory || [];
-                luminantCharacters = data.luminant || [];
-                
+                const normalizedCampaigns = normalizeCampaigns(data);
+                const byId = Object.fromEntries(normalizedCampaigns.map(campaign => [campaign.id, campaign.characters]));
+
+                wuxiaCharacters = byId.wuxia || [];
+                sealCharacters = byId.seal || [...(byId.academy || []), ...(byId.keys || [])];
+                chromyrCharacters = byId.chromyr || [];
+                ivoryCharacters = byId.ivory || [];
+                cermonteCharacters = byId.cermonte || [];
+                luminantCharacters = byId.luminant || [];
+                evangelineCharacters = byId.evangeline || [];
+                populatePoolOptions(data);
+
                 // Pre-select the pool from URL parameter
                 if (selectedPool) {
                     const poolSelect = document.getElementById('poolSelect');
@@ -239,12 +289,10 @@
         }
 
         function getPool(poolChoice) {
+            const allCharacters = campaigns.flatMap(campaign => campaign.characters || []);
             const poolMap = {
-                seal: [...sealCharacters],
-                chromyr: [...chromyrCharacters],
-                ivory: [...ivoryCharacters],
-                wuxia: [...wuxiaCharacters],
-                luminant: [...luminantCharacters]
+                all: [...allCharacters],
+                ...Object.fromEntries(campaigns.map(campaign => [campaign.id, campaign.characters]))
             };
             return poolMap[poolChoice] || [];
         }

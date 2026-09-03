@@ -143,14 +143,7 @@
         <a href="index.html" class="back-link">← Back to Banner Selection</a>
 
         <label for="poolSelect" id="poolSelectLabel">Choose Campaign Pool:</label>
-        <select id="poolSelect">
-            <option value="seal">The Seal</option>
-            <option value="ivory">Ivoryhale</option>
-            <option value="chromyr">The Kingdom of Chromyr</option>
-            <option value="cermonte">The Metropolis of Cermonte</option>
-            <option value="wuxia">Wuxia</option>
-            <option value="luminant">Luminant</option>
-        </select>
+        <select id="poolSelect"></select>
 
         <label for="personalPoolSelect">Choose Personal Pool:</label>
         <select id="personalPoolSelect">
@@ -159,15 +152,7 @@
 
         <div id="fusionPool2Container" style="display: none;">
             <label for="poolSelect2">Choose Character Pool (Character 2):</label>
-            <select id="poolSelect2">
-                <option value="any">Any</option>
-                <option value="seal">The Seal</option>
-                <option value="ivory">Ivoryhale</option>
-                <option value="chromyr">The Kingdom of Chromyr</option>
-                <option value="wuxia">Wuxia</option>
-                <option value="cermonte">The Metropolis of Cermonte</option>
-                <option value="luminant">Luminant</option>
-            </select>
+            <select id="poolSelect2"></select>
         </div>
 
         <label for="goldStarToggle">
@@ -266,24 +251,72 @@
         let ivoryCharacters = [];
         let cermonteCharacters = [];
         let luminantCharacters = [];
+        let evangelineCharacters = [];
+        let campaignData = {};
+        let campaigns = [];
         let personalPools = {};
         const specialPoolCharacters = ['Melpomene and Almos'];
 
-        function getPool(poolChoice) {
-            if (poolChoice === 'any') {
-                return [...wuxiaCharacters, ...sealCharacters, ...chromyrCharacters, ...ivoryCharacters, ...cermonteCharacters, ...luminantCharacters];
+        function formatPoolLabel(poolKey) {
+            return poolKey
+                .replace(/[_-]+/g, ' ')
+                .replace(/\b\w/g, char => char.toUpperCase());
+        }
+
+        function normalizeCampaigns(characterData) {
+            if (Array.isArray(characterData.campaigns)) {
+                return characterData.campaigns.map(campaign => ({
+                    id: campaign.id || campaign.name || 'unknown',
+                    display: campaign.display || campaign.label || campaign.name || formatPoolLabel(campaign.id || campaign.name || 'Unknown'),
+                    characters: Array.isArray(campaign.characters) ? campaign.characters : []
+                }));
             }
+
+            return Object.entries(characterData)
+                .filter(([key, value]) => Array.isArray(value))
+                .map(([key, value]) => ({
+                    id: key,
+                    display: formatPoolLabel(key),
+                    characters: value
+                }));
+        }
+
+        function populateCampaignOptions(characterData) {
+            campaigns = normalizeCampaigns(characterData);
+            campaignData = Object.fromEntries(campaigns.map(campaign => [campaign.id, campaign.characters]));
+
+            const optionMarkup = ['all', ...campaigns.map(campaign => campaign.id)]
+                .filter((value, index, arr) => arr.indexOf(value) === index)
+                .map(value => {
+                    if (value === 'all') {
+                        return '<option value="all">All</option>';
+                    }
+                    const campaign = campaigns.find(item => item.id === value);
+                    return `<option value="${campaign.id}">${campaign.display}</option>`;
+                })
+                .join('');
+
+            const poolSelect = document.getElementById('poolSelect');
+            poolSelect.innerHTML = optionMarkup;
+
+            const poolSelect2 = document.getElementById('poolSelect2');
+            if (poolSelect2) {
+                const char2Options = campaigns
+                    .map(campaign => `<option value="${campaign.id}">${campaign.display}</option>`)
+                    .join('');
+                poolSelect2.innerHTML = `<option value="any">Any</option>${char2Options}`;
+            }
+        }
+
+        function getPool(poolChoice) {
+            const allCharacters = campaigns.flatMap(campaign => campaign.characters || []);
             const poolMap = {
-                wuxia: wuxiaCharacters,
-                seal: sealCharacters,
-                chromyr: chromyrCharacters,
-                ivory: ivoryCharacters,
-                cermonte: cermonteCharacters,
-                luminant: luminantCharacters,
+                all: [...allCharacters],
+                ...Object.fromEntries(campaigns.map(campaign => [campaign.id, campaign.characters])),
                 academy: sealCharacters,
                 keys: sealCharacters,
             };
-            return poolMap[poolChoice] || [];
+            return poolChoice === 'any' ? [...allCharacters] : (poolMap[poolChoice] || []);
         }
 
         function getPersonalPool(poolName) {
@@ -335,13 +368,18 @@
             fetch('personal.json').then(response => response.json())
         ])
             .then(([characterData, personalData]) => {
-                wuxiaCharacters = characterData.wuxia || [];
-                sealCharacters = characterData.seal || [...(characterData.academy || []), ...(characterData.keys || [])];
-                chromyrCharacters = characterData.chromyr || [];
-                ivoryCharacters = characterData.ivory || [];
-                cermonteCharacters = characterData.cermonte || [];
-                luminantCharacters = characterData.luminant || [];
+                const normalizedCampaigns = normalizeCampaigns(characterData);
+                const byId = Object.fromEntries(normalizedCampaigns.map(campaign => [campaign.id, campaign.characters]));
+
+                wuxiaCharacters = byId.wuxia || [];
+                sealCharacters = byId.seal || [...(byId.academy || []), ...(byId.keys || [])];
+                chromyrCharacters = byId.chromyr || [];
+                ivoryCharacters = byId.ivory || [];
+                cermonteCharacters = byId.cermonte || [];
+                luminantCharacters = byId.luminant || [];
+                evangelineCharacters = byId.evangeline || [];
                 personalPools = personalData['personal-pools'] || {};
+                populateCampaignOptions(characterData);
 
                 const personalSelect = document.getElementById('personalPoolSelect');
                 personalSelect.innerHTML = '<option value="none">None</option>' +
