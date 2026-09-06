@@ -578,6 +578,29 @@
                     "chance": 0.10
                 }
             ]
+        },
+        {
+            "name": "animal",
+            "status": "upcoming",
+            "img": "banner_art/banneranimal.png",
+            "drops": [
+                {
+                    "item": "with animal companion",
+                    "chance": 0.30
+                },
+                {
+                    "item": "with animal traits",
+                    "chance": 0.30
+                },
+                {
+                    "item": "as a furry",
+                    "chance": 0.20
+                },
+                {
+                    "item": "as an animal",
+                    "chance": 0.20
+                }
+            ]
         }
     ]
 }
