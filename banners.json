@@ -581,8 +581,7 @@
         },
         {
             "name": "animal",
-            "status": "upcoming",
-            "date": "9/8",
+            "status": "active",
             "img": "banner_art/banneranimal.png",
             "drops": [
                 {
