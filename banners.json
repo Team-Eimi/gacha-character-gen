@@ -505,7 +505,7 @@
         },
         {
             "name": "mafia",
-            "status": "active",
+            "status": "past",
             "img": "banner_art/mafiabanner.png",
             "drops": [
                 {
@@ -581,17 +581,60 @@
             ]
         },
         {
-            "name": "new",
-            "img": "banner_art/echosadventure.PNG",
-            "status": "active",
+            "name": "animal",
+            "status": "past",
+            "img": "banner_art/banneranimal.png",
             "drops": [
                 {
-                    "item": "something new",
-                    "chance": 0.5
+                    "item": "with animal companion",
+                    "chance": 0.30
                 },
                 {
-                    "item": "something unexpected",
-                    "chance": 0.5
+                    "item": "with animal traits",
+                    "chance": 0.30
+                },
+                {
+                    "item": "as a furry",
+                    "chance": 0.20
+                },
+                {
+                    "item": "as an animal",
+                    "chance": 0.20
+                }
+            ]
+        },
+        {
+            "name": "new",
+            "status": "active",
+            "img": "banner_art/atmosphericbanner.png",
+            "drops": [
+                {
+                    "item": "Something the character uses a lot",
+                    "chance": 0.20
+                },
+                {
+                    "item": "A place they like to go",
+                    "chance": 0.20
+                },
+                {
+                    "item": "Completely random context",
+                    "chance": 0.20
+                },
+                {
+                    "item": "Exploring their environment",
+                    "chance": 0.10
+                },
+                {
+                    "item": "A moment of rest",
+                    "chance": 0.15
+                },
+                {
+                    "item": "Exploring together",
+                    "chance": 0.10
+                },
+                {
+                    "item": "Comic",
+                    "chance": 0.05
                 }
             ]
         }
