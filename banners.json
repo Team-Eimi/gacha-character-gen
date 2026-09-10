@@ -427,9 +427,11 @@
             "name": "redesign",
             "status": "past",
             "img": "banner_art/redesignbanner.png",
-            "drops": [ {
-                "item": "redesign",
-                "chance": 1.0}
+            "drops": [
+                {
+                    "item": "redesign",
+                    "chance": 1.0
+                }
             ]
         },
         {
@@ -465,8 +467,7 @@
         {
             "name": "comic",
             "img": "banner_art/bannercomic.png",
-            "status": "upcoming",
-            "date": "09/09",
+            "status": "past",
             "drops": [
                 {
                     "item": "business as usual",
@@ -580,41 +581,17 @@
             ]
         },
         {
-            "name": "comic",
-            "displayName": "Comic Banner",
-            "status": "past",
+            "name": "new",
+            "img": "banner_art/echosadventure.PNG",
+            "status": "active",
             "drops": [
                 {
-                    "item": "business as usual",
-                    "chance": 0.3
+                    "item": "something new",
+                    "chance": 0.5
                 },
                 {
-                    "item": "a turn for the worse",
-                    "chance": 0.2
-                },
-                {
-                    "item": "a turn for the better",
-                    "chance": 0.2
-                },
-                {
-                    "item": "something important changes",
-                    "chance": 0.1
-                },
-                {
-                    "item": "something horrible happens",
-                    "chance": 0.05
-                },
-                {
-                    "item": "something bewildering happens",
-                    "chance": 0.05
-                },
-                {
-                    "item": "something romantic happens",
-                    "chance": 0.05
-                },
-                {
-                    "item": "something amazing happens",
-                    "chance": 0.05
+                    "item": "something unexpected",
+                    "chance": 0.5
                 }
             ]
         }
