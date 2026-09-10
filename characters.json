@@ -4,69 +4,212 @@
       "id": "seal",
       "display": "The Seal",
       "characters": [
-        "Neris Dionte",
-        "Beiei",
-        "Edelweiss Van Aalsburg",
-        "Kali Eir",
-        "Leila Maurer",
-        "Edwin Rhys",
-        "Hari Layette",
-        "Lerofey Attin",
-        "Linyi",
-        "Cian",
-        "Headmistress",
-        "Croia of Nel",
-        "Dolly",
-        "Elchik on Tov",
-        "General Eleos",
-        "Mika Dionte",
-        "Thalos Korus",
-        "the sunik",
-        "Nestor Draco",
-        "Ash Belrose",
-        "Mio Robin",
-        "Clio Amarette",
-        "Aurene Oryin",
-        "Alice Van Aalsburg",
-        "Alexi Van Aalsburg",
-        "Edna Utillian",
-        "Nian Kempf"
+        {
+          "name": "Neris Dionte",
+          "img": "characters/seal/neris.png"
+        },
+        {
+          "name": "Beiei",
+          "img": "characters/seal/beiei.png"
+        },
+        {
+          "name": "Edelweiss Van Aalsburg",
+          "img": "characters/seal/edelweiss.png"
+        },
+        {
+          "name": "Kali Eir",
+          "img": "characters/seal/kali.png"
+        },
+        {
+          "name": "Leila Maurer"
+        },
+        {
+          "name": "Edwin Rhys"
+        },
+        {
+          "name": "Hari Layette",
+          "img": "characters/seal/hari.png"
+        },
+        {
+          "name": "Lerofey Attin",
+          "img": "characters/seal/lerofey.png"
+        },
+        {
+          "name": "Linyi",
+          "img": "characters/seal/linyi.png"
+        },
+        {
+          "name": "Cian",
+          "img": "characters/seal/cian.png"
+        },
+        {
+          "name": "Headmistress",
+          "img": "characters/seal/headmistress.png"
+        },
+        {
+          "name": "Croia of Nel"
+        },
+        {
+          "name": "Ellen",
+          "img": "characters/seal/ellen.png"
+        },
+        {
+          "name": "Elchik on Tov",
+          "img": "characters/seal/elchik.png"
+        },
+        {
+          "name": "General Eleos"
+        },
+        {
+          "name": "Mika Dionte",
+          "img": "characters/seal/nika.png"
+        },
+        {
+          "name": "Thalos Korus",
+          "img": "characters/seal/thalos.png"
+        },
+        {
+          "name": "the sunik"
+        },
+        {
+          "name": "Nestor Draco",
+          "img": "characters/seal/nestor.png"
+        },
+        {
+          "name": "Ash Belrose"
+        },
+        {
+          "name": "Mio Robin"
+        },
+        {
+          "name": "Clio Amarette",
+          "img": "characters/seal/clio.png"
+        },
+        {
+          "name": "Aurene Oryin",
+          "img": "characters/seal/aurene.png"
+        },
+        {
+          "name": "Alice Van Aalsburg",
+          "img": "characters/seal/alice.png"
+        },
+        {
+          "name": "Alexi Van Aalsburg",
+          "img": "characters/seal/alexi.png"
+        },
+        {
+          "name": "Edna Utillian",
+          "img": "characters/seal/edna.png"
+        },
+        {
+          "name": "Nian Kempf"
+        }
       ]
     },
     {
       "id": "chromyr",
       "display": "The Kingdom of Chromyr",
       "characters": [
-        "Himae Eyue",
-        "Berit Kron",
-        "Lumira Volle",
-        "Eden",
-        "Eidel Hargrave",
-        "Ave Laetus",
-        "Eron Tala",
-        "Eirean Satin",
-        "Jin Gylnne",
-        "Ustrina",
-        "Elphina Willow",
-        "Cassian Dasi",
-        "Rafayl",
-        "Arbor Veretium",
-        "Soteris",
-        "Mara Caelum",
-        "Dr. Luna Ellison",
-        "Henry Marc",
-        "Darion Cross",
-        "Isambard Wolfgang",
-        "Miracle",
-        "Dr. Alis Geode",
-        "Einarr Park",
-        "Henry Beaufort",
-        "Wolfie Beaufort",
-        "Orin Enn",
-        "Juan",
-        "Evangeline Rayne",
-        "Amber Starling",
-        "Riven"
+        {
+          "name": "Himae Eyue",
+          "img": "characters/chromyr/himae.png"
+        },
+        {
+          "name": "Berit Kron",
+          "img": "characters/chromyr/berit.png"
+        },
+        {
+          "name": "Lumira Volle"
+        },
+        {
+          "name": "Eden"
+        },
+        {
+          "name": "Eidel Hargrave"
+        },
+        {
+          "name": "Ave Laetus",
+          "img": "characters/chromyr/ave.png"
+        },
+        {
+          "name": "Eron Tala",
+          "img": "characters/chromyr/eron.png"
+        },
+        {
+          "name": "Eirean Satin",
+          "img": "characters/chromyr/eirean.png"
+        },
+        {
+          "name": "Jin Gylnne",
+          "img": "characters/chromyr/jin.png"
+        },
+        {
+          "name": "Ustrina"
+        },
+        {
+          "name": "Elphina Willow"
+        },
+        {
+          "name": "Cassian Dasi"
+        },
+        {
+          "name": "Rafayl"
+        },
+        {
+          "name": "Arbor Veretium"
+        },
+        {
+          "name": "Soteris",
+          "img": "characters/chromyr/soltari.png"
+        },
+        {
+          "name": "Mara Caelum"
+        },
+        {
+          "name": "Dr. Luna Ellison"
+        },
+        {
+          "name": "Henry Marc"
+        },
+        {
+          "name": "Darion Cross"
+        },
+        {
+          "name": "Isambard Wolfgang"
+        },
+        {
+          "name": "Miracle"
+        },
+        {
+          "name": "Dr. Alis Geode"
+        },
+        {
+          "name": "Einarr Park"
+        },
+        {
+          "name": "Henry Beaufort"
+        },
+        {
+          "name": "Wolfie Beaufort"
+        },
+        {
+          "name": "Orin Enn",
+          "img": "characters/chromyr/orin.png"
+        },
+        {
+          "name": "Juan",
+          "img": "characters/chromyr/juan.png"
+        },
+        {
+          "name": "Evangeline Rayne"
+        },
+        {
+          "name": "Amber Starling"
+        },
+        {
+          "name": "Riven",
+          "img": "characters/chromyr/riven.png"
+        }
       ]
     },
     {
@@ -113,18 +256,51 @@
       "id": "evangeline",
       "display": "Evangeline",
       "characters": [
-        "Tarsin",
-        "Luelle",
-        "Mariela",
-        "Chiye",
-        "Kiri",
-        "Zal",
-        "Reverie",
-        "Kallon",
-        "Liana",
-        "Beria",
-        "Maia",
-        "Esmeray"
+        {
+          "name": "Tarsin",
+          "img": "characters/evangeline/tarsin.png"
+        },
+        {
+          "name": "Luelle",
+          "img":"characters/evangeline/luelle.png"
+        },
+        {
+          "name": "Mariela",
+          "img": "characters/evangeline/mariela.png"
+        },
+        {
+          "name": "Chiye",
+          "img": "characters/evangeline/chiye.png"
+        },
+        {
+          "name": "Kiri",
+          "img": "characters/evangeline/kiri.png"
+        },
+        {
+          "name": "Zal",
+          "img": "characters/evangeline/zal.png"
+        },
+        {
+          "name": "Reverie"
+        },
+        {
+          "name": "Kallon",
+          "img": "characters/evangeline/kallon.png"
+        },
+        {
+          "name": "Liana"
+        },
+        {
+          "name": "Beria"
+        },
+        {
+          "name": "Maia",
+          "img": "characters/evangeline/maia.png"
+        },
+        {
+          "name": "Esmeray",
+          "img": "characters/evangeline/esmeray.png"
+        }
       ]
     },
     {

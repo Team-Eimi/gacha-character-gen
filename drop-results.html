@@ -83,6 +83,22 @@
             font-weight: bold;
             color: #333;
         }
+        .character-images {
+            display: none;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 18px;
+        }
+        .character-image {
+            max-width: 240px;
+            width: 100%;
+            max-height: 340px;
+            object-fit: contain;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+        }
         .drop-rarity {
             font-size: 16px;
             margin-top: 5px;
@@ -172,6 +188,7 @@
                 <div class="result-item">
                     <div class="result-label">Character</div>
                     <div class="result-value" id="characterResult"></div>
+                    <div class="character-images" id="characterImages"></div>
                 </div>
 
                 <div class="result-item" id="comicStoryResult" style="display: none;">
@@ -227,6 +244,7 @@
     <script>
         let bannersData = null;
         let coinsData = null;
+        let characterImageMap = new Map();
 
         // Get parameters from URL
         const urlParams = new URLSearchParams(window.location.search);
@@ -247,6 +265,49 @@
         const comicGenre = urlParams.get('comicGenre');
         const comicStory = urlParams.get('comicStory');
         const comicRole = urlParams.get('comicRole');
+
+        function getCharacterName(character) {
+            return typeof character === 'string' ? character : character.name;
+        }
+
+        function getCharacterImage(character) {
+            return typeof character === 'object' && character ? character.img : '';
+        }
+
+        function normalizeCampaigns(characterData) {
+            if (Array.isArray(characterData.campaigns)) {
+                return characterData.campaigns.map((campaign, index) => ({
+                    id: campaign.id || campaign.name || `campaign-${index}`,
+                    characters: Array.isArray(campaign.characters) ? campaign.characters : []
+                }));
+            }
+
+            return Object.entries(characterData)
+                .filter(([key, value]) => Array.isArray(value))
+                .map(([key, value]) => ({ id: key, characters: value }));
+        }
+
+        function loadCharacterImages(characterData) {
+            characterImageMap = new Map(
+                normalizeCampaigns(characterData)
+                    .flatMap(campaign => campaign.characters || [])
+                    .map(character => [getCharacterName(character), getCharacterImage(character)])
+                    .filter(([name, img]) => name && img)
+            );
+        }
+
+        function renderCharacterImages(names) {
+            const characterImages = document.getElementById('characterImages');
+            const imageMarkup = names
+                .filter(Boolean)
+                .map(name => ({ name, img: characterImageMap.get(name) }))
+                .filter(character => character.img)
+                .map(character => `<img class="character-image" src="${character.img}" alt="${character.name}">`)
+                .join('');
+
+            characterImages.innerHTML = imageMarkup;
+            characterImages.style.display = imageMarkup ? 'flex' : 'none';
+        }
 
         function displayComicSetup(rarityText, extraMessage = '') {
             if (selectedBanner !== 'comic' || comicMode !== 'new' || !comicGenre || !comicStory || !comicRole) {
@@ -270,11 +331,13 @@
         // Load all data and perform the roll
         Promise.all([
             fetch('banners.json').then(r => r.json()),
-            fetch('coins.json').then(r => r.json())
+            fetch('coins.json').then(r => r.json()),
+            fetch('characters.json').then(r => r.json())
         ])
-        .then(([banners, coins]) => {
+        .then(([banners, coins, characters]) => {
             bannersData = banners;
             coinsData = coins;
+            loadCharacterImages(characters);
             
             // Perform the roll after a short delay for animation
             setTimeout(() => {
@@ -483,8 +546,10 @@
                     if (selectedBanner === 'fusion' && rolledCharacter2) {
                         document.querySelector('#regularResults .result-label').textContent = 'Characters';
                         document.getElementById('characterResult').textContent = character + ' & ' + rolledCharacter2;
+                        renderCharacterImages([character, rolledCharacter2]);
                     } else {
                         document.getElementById('characterResult').textContent = character;
+                        renderCharacterImages([character]);
                     }
                     document.getElementById('dropResult').textContent = drop;
                     document.getElementById('dropRarity').innerHTML = 
@@ -544,8 +609,10 @@
                     if (selectedBanner === 'fusion' && rolledCharacter2) {
                         document.querySelector('#regularResults .result-label').textContent = 'Characters';
                         document.getElementById('characterResult').textContent = character + ' & ' + rolledCharacter2;
+                        renderCharacterImages([character, rolledCharacter2]);
                     } else {
                         document.getElementById('characterResult').textContent = character;
+                        renderCharacterImages([character]);
                     }
                     document.getElementById('dropResult').textContent = drop;
                     document.getElementById('dropRarity').innerHTML = 

@@ -115,12 +115,16 @@
                 .replace(/\b\w/g, char => char.toUpperCase());
         }
 
+        function getCharacterName(character) {
+            return typeof character === 'string' ? character : character.name;
+        }
+
         function normalizeCampaigns(characterData) {
             if (Array.isArray(characterData.campaigns)) {
                 return characterData.campaigns.map((campaign, index) => ({
                     id: campaign.id || campaign.name || `campaign-${index}`,
                     display: campaign.display || campaign.label || campaign.name || formatPoolLabel(campaign.id || campaign.name || `campaign-${index}`),
-                    characters: Array.isArray(campaign.characters) ? campaign.characters : []
+                    characters: Array.isArray(campaign.characters) ? campaign.characters.map(getCharacterName) : []
                 }));
             }
 
@@ -129,7 +133,7 @@
                 .map(([key, value]) => ({
                     id: key,
                     display: formatPoolLabel(key),
-                    characters: value
+                    characters: value.map(getCharacterName)
                 }));
         }
 

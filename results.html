@@ -129,6 +129,31 @@
         let coinsData = null;
         let allCharacters = [];
 
+        function getCharacterName(character) {
+            return typeof character === 'string' ? character : character.name;
+        }
+
+        function normalizeCampaigns(characterData) {
+            if (Array.isArray(characterData.campaigns)) {
+                return characterData.campaigns.map((campaign, index) => ({
+                    id: campaign.id || campaign.name || `campaign-${index}`,
+                    display: campaign.display || campaign.label || campaign.name || campaign.id || `campaign-${index}`,
+                    characters: Array.isArray(campaign.characters) ? campaign.characters : []
+                }));
+            }
+
+            return Object.entries(characterData)
+                .filter(([key, value]) => Array.isArray(value))
+                .map(([key, value]) => ({ id: key, display: key, characters: value }));
+        }
+
+        function loadCharacters(characterData) {
+            const campaigns = normalizeCampaigns(characterData);
+            allCharacters = campaigns.flatMap(campaign =>
+                (campaign.characters || []).map(getCharacterName)
+            );
+        }
+
         // Get parameters from URL
         const urlParams = new URLSearchParams(window.location.search);
         const selectedBanner = urlParams.get('banner');
@@ -163,23 +188,12 @@
             : `character.html?banner=${selectedBanner}`;
         document.getElementById('backLink').href = backLinkUrl;
 
-        // Load characters data for baby banner
-        if (selectedBanner === 'baby') {
-            fetch('characters.json')
-                .then(response => response.json())
-                .then(data => {
-                    const campaigns = Array.isArray(data.campaigns)
-                        ? data.campaigns
-                        : Object.entries(data)
-                            .filter(([key, value]) => Array.isArray(value))
-                            .map(([key, value]) => ({ id: key, display: key, characters: value }));
-
-                    allCharacters = campaigns.flatMap(campaign => campaign.characters || []);
-                })
-                .catch(error => {
-                    console.error('Error loading characters:', error);
-                });
-        }
+        fetch('characters.json')
+            .then(response => response.json())
+            .then(loadCharacters)
+            .catch(error => {
+                console.error('Error loading characters:', error);
+            });
 
         // Load coins from JSON file
         fetch('coins.json')

@@ -261,6 +261,10 @@
         let personalPools = {};
         const specialPoolCharacters = ['Melpomene and Almos'];
 
+        function getCharacterName(character) {
+            return typeof character === 'string' ? character : character.name;
+        }
+
         function formatPoolLabel(poolKey) {
             return poolKey
                 .replace(/[_-]+/g, ' ')
@@ -272,7 +276,7 @@
                 return characterData.campaigns.map(campaign => ({
                     id: campaign.id || campaign.name || 'unknown',
                     display: campaign.display || campaign.label || campaign.name || formatPoolLabel(campaign.id || campaign.name || 'Unknown'),
-                    characters: Array.isArray(campaign.characters) ? campaign.characters : []
+                    characters: Array.isArray(campaign.characters) ? campaign.characters.map(getCharacterName) : []
                 }));
             }
 
@@ -281,7 +285,7 @@
                 .map(([key, value]) => ({
                     id: key,
                     display: formatPoolLabel(key),
-                    characters: value
+                    characters: value.map(getCharacterName)
                 }));
         }
 
