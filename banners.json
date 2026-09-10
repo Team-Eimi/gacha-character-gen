@@ -604,7 +604,7 @@
             ]
         },
         {
-            "name": "new",
+            "name": "atmospheric",
             "status": "active",
             "img": "banner_art/atmosphericbanner.png",
             "drops": [
@@ -618,7 +618,16 @@
                 },
                 {
                     "item": "Completely random context",
-                    "chance": 0.20
+                    "chance": 0.20,
+                    "detailOptions": [
+                        "flower",
+                        "above the clouds",
+                        "underground",
+                        "water",
+                        "ship",
+                        "machine",
+                        "streets"
+                    ]
                 },
                 {
                     "item": "Exploring their environment",
@@ -635,6 +644,32 @@
                 {
                     "item": "Comic",
                     "chance": 0.05
+                }
+            ],
+            "secondaryDrops": [
+                {
+                    "item": "Nature",
+                    "chance": 0.20
+                },
+                {
+                    "item": "Buildings and infrastructure",
+                    "chance": 0.20
+                },
+                {
+                    "item": "Food",
+                    "chance": 0.10
+                },
+                {
+                    "item": "Mechanics",
+                    "chance": 0.10
+                },
+                {
+                    "item": "Weapons",
+                    "chance": 0.10
+                },
+                {
+                    "item": "SFX",
+                    "chance": 0.10
                 }
             ]
         }

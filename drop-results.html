@@ -207,6 +207,12 @@
                     <div class="result-value" id="dropResult"></div>
                     <div class="drop-rarity" id="dropRarity"></div>
                 </div>
+
+                <div class="result-item" id="secondaryDropResult" style="display: none;">
+                    <div class="result-label">Secondary Drop</div>
+                    <div class="result-value" id="secondaryDropValue"></div>
+                    <div class="drop-rarity" id="secondaryDropRarity"></div>
+                </div>
             </div>
             
             <!-- Baby banner results -->
@@ -356,17 +362,18 @@
             // 2) Roll the specific banner item using its own chance weights.
             // If prerolledDrop exists (from baby banner), use that instead
             const drop = prerolledDrop || rollDrop(rarity);
+            const secondaryDrop = rollSecondaryDrop();
 
             // 3) Crit fail check (2% chance) happens after rolls, but before display.
             const critFailChance = 0.02;
             if (Math.random() < critFailChance) {
                 const drawer = rollDrawer();
-                displayCritFail(rolledCharacter, drop, rarity, drawer);
+                displayCritFail(rolledCharacter, drop, rarity, drawer, secondaryDrop);
                 return;
             }
             
             // 4) Display results + animation.
-            displayResults(rolledCharacter, drop, rarity);
+            displayResults(rolledCharacter, drop, rarity, secondaryDrop);
         }
 
         function rollRarity() {
@@ -469,9 +476,31 @@
             }
 
             // The banner drop is chosen from the full list using each item's `chance` weight.
+            const selectedDrop = weightedRandom(
+                availableDrops,
+                availableDrops.map(drop => drop.chance)
+            );
+
+            if (Array.isArray(selectedDrop.detailOptions) && selectedDrop.detailOptions.length > 0) {
+                const detail = weightedRandom(
+                    selectedDrop.detailOptions,
+                    new Array(selectedDrop.detailOptions.length).fill(1)
+                );
+                return `${selectedDrop.item}: ${detail}`;
+            }
+
+            return selectedDrop.item;
+        }
+
+        function rollSecondaryDrop() {
+            const banner = bannersData.banners.find(bannerData => bannerData.name === selectedBanner);
+            if (!banner || !Array.isArray(banner.secondaryDrops) || banner.secondaryDrops.length === 0) {
+                return null;
+            }
+
             return weightedRandom(
-                availableDrops.map(d => d.item),
-                availableDrops.map(d => d.chance)
+                banner.secondaryDrops,
+                banner.secondaryDrops.map(drop => drop.chance)
             );
         }
 
@@ -500,7 +529,7 @@
             return drawers[index];
         }
 
-        function displayCritFail(character, drop, rarity, drawer) {
+        function displayCritFail(character, drop, rarity, drawer, secondaryDrop) {
             // Update animation to show crit fail animation
             const animationDiv = document.getElementById('animation');
             const animationPath = `animations/${selectedCoin}/${selectedCoin}-crit-fail.gif?t=${Date.now()}`;
@@ -554,6 +583,7 @@
                     document.getElementById('dropResult').textContent = drop;
                     document.getElementById('dropRarity').innerHTML = 
                         `<span class="rarity-${rarity}">${rarityText}</span> - ${rarityDescriptions[rarity]}` + critFailMessage;
+                    displaySecondaryDrop(secondaryDrop);
                     displayComicSetup(rarityText, critFailMessage);
                     setComicDropType(rarityText, critFailMessage);
                 }
@@ -562,7 +592,7 @@
             }, 6500);
         }
 
-        function displayResults(character, drop, rarity) {
+        function displayResults(character, drop, rarity, secondaryDrop) {
             // Update animation based on rarity and coin
             const animationDiv = document.getElementById('animation');
             
@@ -617,12 +647,25 @@
                     document.getElementById('dropResult').textContent = drop;
                     document.getElementById('dropRarity').innerHTML = 
                         `<span class="rarity-${rarity}">${rarityText}</span> - ${rarityDescriptions[rarity]}`;
+                    displaySecondaryDrop(secondaryDrop);
                     displayComicSetup(rarityText);
                     setComicDropType(rarityText);
                 }
                 
                 document.getElementById('results').style.display = 'block';
             }, rarity === 'special' ? 6500 : 4000);
+        }
+
+        function displaySecondaryDrop(secondaryDrop) {
+            const secondaryDropResult = document.getElementById('secondaryDropResult');
+            if (!secondaryDrop) {
+                secondaryDropResult.style.display = 'none';
+                return;
+            }
+
+            document.getElementById('secondaryDropValue').textContent = secondaryDrop.item;
+            document.getElementById('secondaryDropRarity').textContent = secondaryDrop.rarity;
+            secondaryDropResult.style.display = 'block';
         }
 
         function setComicDropType(rarityText, extraMessage = '') {
