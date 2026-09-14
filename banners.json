@@ -684,7 +684,7 @@
             "drops": [
                 {
                     "item": "Dressing",
-                    "chance": 0.15
+                    "chance": 0.05
                 },
                 {
                     "item": "Resting",
@@ -709,6 +709,10 @@
                 {
                     "item": "Comic",
                     "chance": 0.05
+                },
+                {
+                    "item": "Working",
+                    "chance": 0.15
                 }
             ]
         }
