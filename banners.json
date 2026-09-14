@@ -627,9 +627,9 @@
                         "ship",
                         "machine",
                         "streets",
-                        "holiday", 
-                        "school", 
-                        "hiding", 
+                        "holiday",
+                        "school",
+                        "hiding",
                         "darkness"
                     ]
                 },
@@ -679,7 +679,8 @@
         },
         {
             "name": "moments",
-            "status": "active",
+            "status": "upcoming",
+            "date": "09/16",
             "img": "banner_art/momentsbanner.png",
             "drops": [
                 {
@@ -713,6 +714,73 @@
                 {
                     "item": "Working",
                     "chance": 0.15
+                }
+            ]
+        },
+        {
+            "name": "crack",
+            "status": "active",
+            "img": "banner_art/crackbanner.png",
+            "drops": [
+                {
+                    "item": "crackship",
+                    "chance": 0.15
+                },
+                {
+                    "item": "mary sue version",
+                    "chance": 0.15
+                },
+                {
+                    "item": "haunted mansion exploration",
+                    "chance": 0.15
+                },
+                {
+                    "item": "2010s yaoi pose",
+                    "chance": 0.15
+                },
+                {
+                    "item": "cringe fashion",
+                    "chance": 0.15,
+                    "detailOptions": [
+                        "in mario costume",
+                        "emo 2010s",
+                        "weird halloween costume",
+                        "prison fit",
+                        "jester",
+                        "2010s anime girl outfit/pose redraw"
+                    ],
+                    "detailGroups": [
+                        {
+                            "chance": 0.40,
+                            "prefix": "as a ",
+                            "options": [
+                                "pickle",
+                                "doll",
+                                "cookie",
+                                "toilet"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "item": "romantic coffee shop au",
+                    "chance": 0.05
+                },
+                {
+                    "item": "creepin’",
+                    "chance": 0.05
+                },
+                {
+                    "item": "Retailsona",
+                    "chance": 0.05
+                },
+                {
+                    "item": "drawn with my left hand",
+                    "chance": 0.05
+                },
+                {
+                    "item": "drawn with my left hand 😉",
+                    "chance": 0.05
                 }
             ]
         }
