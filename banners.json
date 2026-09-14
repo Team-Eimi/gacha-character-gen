@@ -605,7 +605,7 @@
         },
         {
             "name": "atmospheric",
-            "status": "active",
+            "status": "past",
             "img": "banner_art/atmosphericbanner.png",
             "drops": [
                 {
