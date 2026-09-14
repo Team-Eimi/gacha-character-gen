@@ -626,7 +626,11 @@
                         "water",
                         "ship",
                         "machine",
-                        "streets"
+                        "streets",
+                        "holiday", 
+                        "school", 
+                        "hiding", 
+                        "darkness"
                     ]
                 },
                 {
