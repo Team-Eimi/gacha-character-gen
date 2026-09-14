@@ -672,6 +672,41 @@
                     "chance": 0.10
                 }
             ]
+        },
+        {
+            "name": "moments",
+            "status": "active",
+            "img": "banner_art/momentsbanner.png",
+            "drops": [
+                {
+                    "item": "Dressing",
+                    "chance": 0.15
+                },
+                {
+                    "item": "Resting",
+                    "chance": 0.15
+                },
+                {
+                    "item": "Eating",
+                    "chance": 0.15
+                },
+                {
+                    "item": "Going out",
+                    "chance": 0.15
+                },
+                {
+                    "item": "A safe place",
+                    "chance": 0.15
+                },
+                {
+                    "item": "A safe person",
+                    "chance": 0.15
+                },
+                {
+                    "item": "Comic",
+                    "chance": 0.10
+                }
+            ]
         }
     ]
 }
