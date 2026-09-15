@@ -116,6 +116,7 @@
             <div class="result-value" id="characterResult"></div>
             <div class="result-label" id="comicStoryResult" style="display:none;"></div>
             <div class="result-label" id="specialPoolBadge" style="display:none; color:#e91e63; font-weight:bold;"></div>
+            <div class="result-label" id="specialPoolMessage" style="display:none; color:#e91e63;"></div>
         </div>
         
         <div id="comicDropSelection">
@@ -173,11 +174,18 @@
         const comicRole = urlParams.get('comicRole');
         const comicMode = urlParams.get('comicMode');
         const specialPoolLabel = urlParams.get('specialPoolLabel');
+        const specialPoolMessage = urlParams.get('specialPoolMessage');
 
         if (specialPoolLabel) {
             const specialPoolBadge = document.getElementById('specialPoolBadge');
             specialPoolBadge.textContent = `✨ Special Pull: ${specialPoolLabel}!`;
             specialPoolBadge.style.display = 'block';
+        }
+
+        if (specialPoolMessage) {
+            const specialPoolMessageEl = document.getElementById('specialPoolMessage');
+            specialPoolMessageEl.textContent = specialPoolMessage;
+            specialPoolMessageEl.style.display = 'block';
         }
 
 
@@ -261,7 +269,11 @@
                         if (specialPoolLabel) {
                             params.append('specialPoolLabel', specialPoolLabel);
                         }
-                        
+
+                        if (specialPoolMessage) {
+                            params.append('specialPoolMessage', specialPoolMessage);
+                        }
+
                         // Only pick a specific daddy if it's NOT "you pick"
                         if (drop !== 'you pick' && allCharacters.length > 0) {
                             // Filter out the mommy character to prevent same character being both parents
@@ -306,6 +318,10 @@
 
                 if (specialPoolLabel) {
                     params.append('specialPoolLabel', specialPoolLabel);
+                }
+
+                if (specialPoolMessage) {
+                    params.append('specialPoolMessage', specialPoolMessage);
                 }
 
                 if (selectedBanner === 'fusion' && rolledCharacter2) {

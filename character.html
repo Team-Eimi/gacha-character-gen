@@ -507,6 +507,9 @@
 
             if (matchedSpecialPool) {
                 url += `&specialPool=${encodeURIComponent(matchedSpecialPool.id)}&specialPoolLabel=${encodeURIComponent(matchedSpecialPool.label)}`;
+                if (matchedSpecialPool.message) {
+                    url += `&specialPoolMessage=${encodeURIComponent(matchedSpecialPool.message)}`;
+                }
             }
 
             if (comicSetup) {
@@ -633,6 +636,9 @@
             let url = `results.html?banner=${selectedBanner}&pool=${poolChoice}&character=${encodeURIComponent(rolledCharacter)}`;
             if (matchedSpecialPool) {
                 url += `&specialPool=${encodeURIComponent(matchedSpecialPool.id)}&specialPoolLabel=${encodeURIComponent(matchedSpecialPool.label)}`;
+                if (matchedSpecialPool.message) {
+                    url += `&specialPoolMessage=${encodeURIComponent(matchedSpecialPool.message)}`;
+                }
             }
             if (personalPoolChoice && personalPoolChoice !== 'none') {
                 url += `&personalPool=${encodeURIComponent(personalPoolChoice)}`;

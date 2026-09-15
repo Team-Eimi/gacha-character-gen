@@ -16,7 +16,8 @@
             "id": "whim",
             "label": "Whim",
             "characters": ["Verene"],
-            "chance": 0.25
+            "chance": 0.25,
+            "message": "No token lost, no gold star pity"
         }
     ],
     "personal-pools": {
@@ -36,7 +37,8 @@
             "Demerius",
             "Sofe",
             "Nefertari",
-            "Creha"
+            "Creha",
+            "Almos"
         ],
         "Mina": [
             "Emmy Soon-Bennet",

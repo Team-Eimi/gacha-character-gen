@@ -190,6 +190,7 @@
                     <div class="result-value" id="characterResult"></div>
                     <div class="character-images" id="characterImages"></div>
                     <div class="result-label" id="specialPoolBadge" style="display:none; color:#e91e63; font-weight:bold;"></div>
+                    <div class="result-label" id="specialPoolMessage" style="display:none; color:#e91e63;"></div>
                 </div>
 
                 <div class="result-item" id="comicStoryResult" style="display: none;">
@@ -273,11 +274,18 @@
         const comicStory = urlParams.get('comicStory');
         const comicRole = urlParams.get('comicRole');
         const specialPoolLabel = urlParams.get('specialPoolLabel');
+        const specialPoolMessage = urlParams.get('specialPoolMessage');
 
         if (specialPoolLabel) {
             const specialPoolBadge = document.getElementById('specialPoolBadge');
             specialPoolBadge.textContent = `✨ Special Pull: ${specialPoolLabel}!`;
             specialPoolBadge.style.display = 'block';
+        }
+
+        if (specialPoolMessage) {
+            const specialPoolMessageEl = document.getElementById('specialPoolMessage');
+            specialPoolMessageEl.textContent = specialPoolMessage;
+            specialPoolMessageEl.style.display = 'block';
         }
 
 
