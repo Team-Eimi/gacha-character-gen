@@ -1,4 +1,24 @@
 {
+    "special-pools": [
+        {
+            "id": "mom-picks",
+            "label": "Mom Picks",
+            "characters": ["Mom Picks"],
+            "chance": 0.001
+        },
+        {
+            "id": "melpomene-almos",
+            "label": "Melpomene and Almos",
+            "characters": ["Melpomene and Almos"],
+            "chance": 0.001
+        },
+        {
+            "id": "whim",
+            "label": "Whim",
+            "characters": ["Verene"],
+            "chance": 0.25
+        }
+    ],
     "personal-pools": {
         "Sam": [
             "Lin Lanfei",

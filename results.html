@@ -115,6 +115,7 @@
             <div class="result-label" id="characterResultLabel">Your Character</div>
             <div class="result-value" id="characterResult"></div>
             <div class="result-label" id="comicStoryResult" style="display:none;"></div>
+            <div class="result-label" id="specialPoolBadge" style="display:none; color:#e91e63; font-weight:bold;"></div>
         </div>
         
         <div id="comicDropSelection">
@@ -171,6 +172,14 @@
         const comicStory = urlParams.get('comicStory');
         const comicRole = urlParams.get('comicRole');
         const comicMode = urlParams.get('comicMode');
+        const specialPoolLabel = urlParams.get('specialPoolLabel');
+
+        if (specialPoolLabel) {
+            const specialPoolBadge = document.getElementById('specialPoolBadge');
+            specialPoolBadge.textContent = `✨ Special Pull: ${specialPoolLabel}!`;
+            specialPoolBadge.style.display = 'block';
+        }
+
 
         // Display the rolled character(s)
         if (selectedBanner === 'baby') {
@@ -248,6 +257,10 @@
                         if (selectedVariant) {
                             params.append('variant', selectedVariant);
                         }
+
+                        if (specialPoolLabel) {
+                            params.append('specialPoolLabel', specialPoolLabel);
+                        }
                         
                         // Only pick a specific daddy if it's NOT "you pick"
                         if (drop !== 'you pick' && allCharacters.length > 0) {
@@ -289,6 +302,10 @@
 
                 if (selectedVariant) {
                     params.append('variant', selectedVariant);
+                }
+
+                if (specialPoolLabel) {
+                    params.append('specialPoolLabel', specialPoolLabel);
                 }
 
                 if (selectedBanner === 'fusion' && rolledCharacter2) {

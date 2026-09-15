@@ -189,6 +189,7 @@
                     <div class="result-label">Character</div>
                     <div class="result-value" id="characterResult"></div>
                     <div class="character-images" id="characterImages"></div>
+                    <div class="result-label" id="specialPoolBadge" style="display:none; color:#e91e63; font-weight:bold;"></div>
                 </div>
 
                 <div class="result-item" id="comicStoryResult" style="display: none;">
@@ -271,6 +272,14 @@
         const comicGenre = urlParams.get('comicGenre');
         const comicStory = urlParams.get('comicStory');
         const comicRole = urlParams.get('comicRole');
+        const specialPoolLabel = urlParams.get('specialPoolLabel');
+
+        if (specialPoolLabel) {
+            const specialPoolBadge = document.getElementById('specialPoolBadge');
+            specialPoolBadge.textContent = `✨ Special Pull: ${specialPoolLabel}!`;
+            specialPoolBadge.style.display = 'block';
+        }
+
 
         function getCharacterName(character) {
             return typeof character === 'string' ? character : character.name;
@@ -482,10 +491,29 @@
             );
 
             if (Array.isArray(selectedDrop.detailOptions) && selectedDrop.detailOptions.length > 0) {
-                const detail = weightedRandom(
-                    selectedDrop.detailOptions,
-                    new Array(selectedDrop.detailOptions.length).fill(1)
+                const detailGroups = Array.isArray(selectedDrop.detailGroups)
+                    ? selectedDrop.detailGroups.filter(group =>
+                        typeof group.chance === 'number' &&
+                        Array.isArray(group.options) &&
+                        group.options.length > 0
+                    )
+                    : [];
+                const groupChance = detailGroups.reduce((sum, group) => sum + group.chance, 0);
+                const baseDetailChance = Math.max(0, 1 - groupChance);
+                const detailChoices = [
+                    ...selectedDrop.detailOptions.map(detail => ({ detail, chance: baseDetailChance / selectedDrop.detailOptions.length })),
+                    ...detailGroups.map(group => ({ group, chance: group.chance }))
+                ];
+                const selectedDetail = weightedRandom(
+                    detailChoices,
+                    detailChoices.map(choice => choice.chance)
                 );
+                const detail = selectedDetail.group
+                    ? `${selectedDetail.group.prefix || ''}${weightedRandom(
+                        selectedDetail.group.options,
+                        new Array(selectedDetail.group.options.length).fill(1)
+                    )}`
+                    : selectedDetail.detail;
                 return `${selectedDrop.item}: ${detail}`;
             }
 

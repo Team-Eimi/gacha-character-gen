@@ -259,7 +259,19 @@
         let campaignData = {};
         let campaigns = [];
         let personalPools = {};
-        const specialPoolCharacters = ['Melpomene and Almos'];
+        let specialPools = [];
+
+        function getActiveSpecialPools() {
+            return specialPools.filter(pool => !pool.banner || pool.banner === selectedBanner);
+        }
+
+        function getAllSpecialCharacters() {
+            return specialPools.flatMap(pool => pool.characters);
+        }
+
+        function getSpecialPoolForPool(pool) {
+            return specialPools.find(specialPool => specialPool.characters === pool) || null;
+        }
 
         function getCharacterName(character) {
             return typeof character === 'string' ? character : character.name;
@@ -337,13 +349,18 @@
         function choosePool(campaignPool, personalPool) {
             const roll = Math.random();
 
-            if (roll < 0.01) {
-                return specialPoolCharacters;
+            let cumulativeChance = 0;
+            for (const specialPool of getActiveSpecialPools()) {
+                cumulativeChance += specialPool.chance;
+                if (roll < cumulativeChance) {
+                    return specialPool.characters;
+                }
             }
+
             if (!personalPool || personalPool.length === 0) {
                 return campaignPool;
             }
-            if (roll < 0.10) {
+            if (roll < cumulativeChance + 0.09) {
                 return personalPool;
             }
             return campaignPool;
@@ -376,8 +393,8 @@
 
         // Load character data from JSON files
         Promise.all([
-            fetch('characters.json').then(response => response.json()),
-            fetch('personal.json').then(response => response.json())
+            fetch('characters.json', { cache: 'no-store' }).then(response => response.json()),
+            fetch('personal.json', { cache: 'no-store' }).then(response => response.json())
         ])
             .then(([characterData, personalData]) => {
                 const normalizedCampaigns = normalizeCampaigns(characterData);
@@ -391,6 +408,7 @@
                 luminantCharacters = byId.luminant || [];
                 evangelineCharacters = byId.evangeline || [];
                 personalPools = personalData['personal-pools'] || {};
+                specialPools = personalData['special-pools'] || [];
                 populateCampaignOptions(characterData);
 
                 const personalSelect = document.getElementById('personalPoolSelect');
@@ -432,7 +450,9 @@
                     html += '<br><br><em>Personal pool (9%)</em><br>' + personal.map(char => `• ${char}`).join('<br>');
                 }
 
-                html += '<br><br><em>Special pool (1%)</em><br>' + specialPoolCharacters.map(char => `• ${char}`).join('<br>');
+                getActiveSpecialPools().forEach(specialPool => {
+                    html += `<br><br><em>${specialPool.label} (${specialPool.chance * 100}%)</em><br>` + specialPool.characters.map(char => `• ${char}`).join('<br>');
+                });
 
                 listDiv.innerHTML = html;
                 listDiv.style.display = 'block';
@@ -469,7 +489,7 @@
             document.getElementById('flavorError').textContent = '';
 
             // Validate gold star character
-            if (goldStarEnabled && goldStarChar && !(campaignPool.includes(goldStarChar) || personalPool.includes(goldStarChar) || specialPoolCharacters.includes(goldStarChar))) {
+            if (goldStarEnabled && goldStarChar && !(campaignPool.includes(goldStarChar) || personalPool.includes(goldStarChar) || getAllSpecialCharacters().includes(goldStarChar))) {
                 document.getElementById('charError').textContent =
                     `'${goldStarChar}' not found in campaign or personal pool!`;
                 document.getElementById('buttonGroup').style.display = 'flex';
@@ -478,11 +498,16 @@
 
             // Roll for character now
             const rolledCharacter = rollCharacter(pool, goldStarEnabled, goldStarChar, goldStarPercent);
+            const matchedSpecialPool = getSpecialPoolForPool(pool);
 
             const comicSetup = startingNewComic ? rollComicSetup() : null;
 
             // Build URL with rolled character and all parameters
             let url = `results.html?banner=${selectedBanner}&pool=${poolChoice}&character=${encodeURIComponent(rolledCharacter)}`;
+
+            if (matchedSpecialPool) {
+                url += `&specialPool=${encodeURIComponent(matchedSpecialPool.id)}&specialPoolLabel=${encodeURIComponent(matchedSpecialPool.label)}`;
+            }
 
             if (comicSetup) {
                 url += `&comicMode=new&comicGenre=${encodeURIComponent(comicSetup.genre)}&comicStory=${encodeURIComponent(comicSetup.story)}&comicRole=protagonist`;
@@ -524,8 +549,8 @@
         }
 
         function rollCharacter(pool, goldStarEnabled, goldStarChar, goldStarPercent) {
-            if (Array.isArray(pool) && pool.length === specialPoolCharacters.length && pool.every((char, index) => char === specialPoolCharacters[index])) {
-                return specialPoolCharacters[0];
+            if (specialPools.some(specialPool => specialPool.characters === pool)) {
+                return pool[0];
             }
 
             let characters = [...pool];
@@ -602,9 +627,13 @@
 
             // Roll for character with gold star boost for custom character
             const rolledCharacter = rollCharacter(pool, true, goldStarChar, goldStarPercent);
+            const matchedSpecialPool = getSpecialPoolForPool(pool);
 
             // Build URL with rolled character and all parameters, including the custom character
             let url = `results.html?banner=${selectedBanner}&pool=${poolChoice}&character=${encodeURIComponent(rolledCharacter)}`;
+            if (matchedSpecialPool) {
+                url += `&specialPool=${encodeURIComponent(matchedSpecialPool.id)}&specialPoolLabel=${encodeURIComponent(matchedSpecialPool.label)}`;
+            }
             if (personalPoolChoice && personalPoolChoice !== 'none') {
                 url += `&personalPool=${encodeURIComponent(personalPoolChoice)}`;
             }
