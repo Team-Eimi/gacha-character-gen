@@ -555,7 +555,8 @@
         },
         {
             "name": "flip",
-            "status": "past",
+            "status": "upcoming",
+            "date": "9/16",
             "img": "banner_art/bannerflip.png",
             "drops": [
                 {
@@ -680,7 +681,7 @@
         {
             "name": "moments",
             "status": "upcoming",
-            "date": "09/16",
+            "date": "09/17",
             "img": "banner_art/momentsbanner.png",
             "drops": [
                 {
