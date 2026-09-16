@@ -4,6 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Select Character - Gacha Generator</title>
     <style>
         body {
@@ -617,6 +620,7 @@
             const pityEnabled = document.getElementById('pityToggle').checked;
             const pityRarity = document.getElementById('pityRarity').value;
             const selectedFlavors = getSelectedWhimsyFlavors();
+            const startingNewComic = selectedBanner === 'comic' && document.getElementById('newComicToggle').checked;
 
             const campaignPool = getPool(poolChoice);
             const personalPool = getPersonalPool(personalPoolChoice);
@@ -631,6 +635,7 @@
             // Roll for character with gold star boost for custom character
             const rolledCharacter = rollCharacter(pool, true, goldStarChar, goldStarPercent);
             const matchedSpecialPool = getSpecialPoolForPool(pool);
+            const comicSetup = startingNewComic ? rollComicSetup() : null;
 
             // Build URL with rolled character and all parameters, including the custom character
             let url = `results.html?banner=${selectedBanner}&pool=${poolChoice}&character=${encodeURIComponent(rolledCharacter)}`;
@@ -639,6 +644,9 @@
                 if (matchedSpecialPool.message) {
                     url += `&specialPoolMessage=${encodeURIComponent(matchedSpecialPool.message)}`;
                 }
+            }
+            if (comicSetup) {
+                url += `&comicMode=new&comicGenre=${encodeURIComponent(comicSetup.genre)}&comicStory=${encodeURIComponent(comicSetup.story)}&comicRole=protagonist`;
             }
             if (personalPoolChoice && personalPoolChoice !== 'none') {
                 url += `&personalPool=${encodeURIComponent(personalPoolChoice)}`;
