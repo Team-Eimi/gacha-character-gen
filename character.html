@@ -265,7 +265,15 @@
         let specialPools = [];
 
         function getActiveSpecialPools() {
-            return specialPools.filter(pool => !pool.banner || pool.banner === selectedBanner);
+            return specialPools.filter(pool => {
+                if (pool.banner && pool.banner !== selectedBanner) {
+                    return false;
+                }
+                if (Array.isArray(pool.excludeBanners) && pool.excludeBanners.includes(selectedBanner)) {
+                    return false;
+                }
+                return true;
+            });
         }
 
         function getAllSpecialCharacters() {

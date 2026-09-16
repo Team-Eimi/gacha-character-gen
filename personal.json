@@ -17,7 +17,8 @@
             "label": "Whim",
             "characters": ["Verene"],
             "chance": 0.25,
-            "message": "No token lost, no gold star pity"
+            "message": "No token lost, no gold star pity",
+            "excludeBanners": ["comic"]
         }
     ],
     "personal-pools": {
