@@ -555,20 +555,23 @@
         },
         {
             "name": "flip",
-            "status": "upcoming",
-            "date": "9/16",
+            "status": "active",
             "img": "banner_art/bannerflip.png",
             "drops": [
                 {
                     "item": "Redesign in a new genre",
-                    "chance": 0.30
+                    "chance": 0.20
                 },
                 {
                     "item": "In their new circumstance",
-                    "chance": 0.30
+                    "chance": 0.20
                 },
                 {
                     "item": "Behold! My power",
+                    "chance": 0.20
+                },
+                {
+                    "item": "Wait, that's not right...",
                     "chance": 0.20
                 },
                 {
@@ -577,7 +580,10 @@
                 },
                 {
                     "item": "This isn't what I signed up for...",
-                    "chance": 0.10
+                    "chance": 0.10,
+                    "detailOptions": [
+                        "steampunk", "Y2K flip phone era", "cowboy", "anime high school", "psychological horror spiral core", "witch"
+                    ]
                 }
             ]
         },
@@ -720,7 +726,7 @@
         },
         {
             "name": "crack",
-            "status": "active",
+            "status": "past",
             "img": "banner_art/crackbanner.png",
             "drops": [
                 {
