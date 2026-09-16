@@ -243,13 +243,32 @@
       "id": "cermonte",
       "display": "The Metropolis of Cermonte",
       "characters": [
-        "The Rose",
-        "Prince of Darkness/Amon Renata",
-        "Morana Renata",
-        "Theon",
-        "Calix Rose",
-        "Nyx",
-        "Laurien"
+        {
+          "name": "The Rose",
+          "img": "characters/cermonte/therose.jpg"
+        },
+        {
+          "name": "Prince of Darkness/Amon Renata",
+          "img": "characters/cermonte/amon.png"
+        },
+        {
+          "name": "Morana Renata"
+        },
+        {
+          "name": "Theon",
+          "img": "characters/cermonte/theon.png"
+        },
+        {
+          "name": "Calix Rose",
+          "img": "characters/cermonte/calix.png"
+        },
+        {
+          "name": "Nyx"
+        },
+        {
+          "name": "Laurien",
+          "img": "characters/cermonte/laurien.png"
+        }
       ]
     },
     {
@@ -262,7 +281,7 @@
         },
         {
           "name": "Luelle",
-          "img":"characters/evangeline/luelle.png"
+          "img": "characters/evangeline/luelle.png"
         },
         {
           "name": "Mariela",
@@ -291,7 +310,8 @@
           "name": "Liana"
         },
         {
-          "name": "Beria"
+          "name": "Beria",
+          "img": "characters/evangeline/beria.png"
         },
         {
           "name": "Maia",
@@ -307,77 +327,205 @@
       "id": "esemreha",
       "display": "Esemreha",
       "characters": [
-        "Banyou", 
-        "Fenin", 
-        "Alu", 
-        "Verene", 
-        "Nesryn", 
-        "Denyro", 
-        "Marisol", 
-        "Malek", 
-        "Esmeray", 
-        "Creha"
-        ]
-      },
+        "Banyou",
+        "Fenin",
+        "Alu",
+        {
+          "name": "Verene",
+          "img": "characters/esemreha/verene.jpg"
+        },
+        "Nesryn",
+        "Denyro",
+        "Marisol",
+        "Malek",
+        {
+          "name": "Esmeray",
+          "img": "characters/evangeline/esmeray.png"
+        },
+        {
+          "name": "Creha",
+          "img": "characters/esemreha/creha.jpg"
+        }
+      ]
+    },
     {
       "id": "somnus",
       "display": "Somnus",
       "characters": [
-        "Solara",
-        "Samara",
-        "Lukene",
-        "Cassius",
-        "Kida Kaan",
-        "Cenn",
-        "Marik",
-        "General Cordova",
-        "Anore"
+        {
+          "name": "Solara",
+          "img": "characters/somnus/solara.jpg"
+        },
+        {
+          "name": "Samara"
+        },
+        {
+          "name": "Lukene",
+          "img": "characters/somnus/lukene.png"
+        },
+        {
+          "name": "Cassius",
+          "img": "characters/somnus/cassius.png"
+        },
+        {
+          "name": "Kida Kaan",
+          "img": "characters/somnus/kida_kaan.jpg"
+        },
+        {
+          "name": "Cenn"
+        },
+        {
+          "name": "Marik"
+        },
+        {
+          "name": "General Cordova"
+        },
+        {
+          "name": "Anore"
+        }
       ]
     },
     {
       "id": "wuxia",
       "display": "Wuxia",
       "characters": [
-        "Lin Lanfei",
-        "Yi Aoxin",
-        "Wu Zhijian",
-        "Lan Bingren",
-        "Ming Yuzhai",
-        "Da Deming",
-        "Angjian",
-        "Jie Hedian",
-        "Jie Aibing",
-        "Wu Xiongxin",
-        "Lan Anying",
-        "Qing Shi",
-        "Yong Jie",
-        "Baiye Yuyan",
-        "Zhao Renshu",
-        "Yin Ying",
-        "Cui Yinhai",
-        "Lin Xingqin"
+        {
+          "name": "Lin Lanfei",
+          "img": "characters/wuxia/lanfei.png"
+        },
+        {
+          "name": "Yi Aoxin",
+          "img": "characters/wuxia/aoxin.png"
+        },
+        {
+          "name": "Wu Zhijian",
+          "img": "characters/wuxia/zhijian.png"
+        },
+        {
+          "name": "Lan Bingren",
+          "img": "characters/wuxia/bingren.png"
+        },
+        {
+          "name": "Ming Yuzhai",
+          "img": "characters/wuxia/yuzhai.png"
+        },
+        {
+          "name": "Da Deming",
+          "img": "characters/wuxia/deming.png"
+        },
+        {
+          "name": "Anjiang",
+          "img": "characters/wuxia/anjiang.png"
+        },
+        {
+          "name": "Jie Hedian",
+          "img": "characters/wuxia/hedian.png"
+        },
+        {
+          "name": "Jie Aibing",
+          "img": "characters/wuxia/aibing.png"
+        },
+        {
+          "name": "Wu Xiongxin",
+          "img": "characters/wuxia/xiongxin.png"
+        },
+        {
+          "name": "Lan Anying",
+          "img": "characters/wuxia/anying.png"
+        },
+        {
+          "name": "Qing Shi",
+          "img": "characters/wuxia/qingshi.png"
+        },
+        {
+          "name": "Yong Jie",
+          "img": "characters/wuxia/yong.png"
+        },
+        {
+          "name": "Baiye Yuyan",
+          "img": "characters/wuxia/yuyan.png"
+        },
+        {
+          "name": "Zhao Renshu",
+          "img": "characters/wuxia/renshu.png"
+        },
+        {
+          "name": "Yin Ying"
+        },
+        {
+          "name": "Cui Yinhai",
+          "img": "characters/wuxia/yinhai.png"
+        },
+        {
+          "name": "Lin Xingqin",
+          "img": "characters/wuxia/xingqin.png"
+        }
       ]
     },
     {
       "id": "luminant",
       "display": "Luminant",
       "characters": [
-        "Ilex Wren",
-        "Ami Sadus",
-        "Astra Arlendis",
-        "Alazne Evanor",
-        "Julian Kaian",
-        "Raze Kerr",
-        "Nerian Highcastel",
-        "Emrys Sablemire",
-        "Sabine Holloway",
-        "Milios Hartwell",
-        "Red",
-        "Talye",
-        "Obi",
-        "August Rutherford",
-        "Eli",
-        "Valentine"
+        {
+          "name": "Ilex Wren",
+          "img": "characters/luminant/ilex.png"
+        },
+        {
+          "name": "Ami Sadus",
+          "img": "characters/luminant/ami.png"
+        },
+        {
+          "name": "Astra Arlendis",
+          "img": "characters/luminant/astra.png"
+        },
+        {
+          "name": "Alazne Evanor",
+          "img": "characters/luminant/alazne.png"
+        },
+        {
+          "name": "Julian Kaian",
+          "img": "characters/luminant/julian.png"
+        },
+        {
+          "name": "Raze Kerr"
+        },
+        {
+          "name": "Nerian Highcastel",
+          "img": "characters/luminant/nerian.png"
+        },
+        {
+          "name": "Emrys Sablemire",
+          "img": "characters/luminant/emrys.png"
+        },
+        {
+          "name": "Sabine Holloway",
+          "img": "characters/luminant/sabine.png"
+        },
+        {
+          "name": "Milios Hartwell"
+        },
+        {
+          "name": "Red",
+          "img": "characters/luminant/red.png"
+        },
+        {
+          "name": "Talye",
+          "img": "characters/luminant/talye.png"
+        },
+        {
+          "name": "Obi",
+          "img": "characters/luminant/obi.png"
+        },
+        {
+          "name": "August Rutherford"
+        },
+        {
+          "name": "Eli"
+        },
+        {
+          "name": "Valentine",
+          "img": "characters/luminant/valentine.png"
+        }
       ]
     }
   ]
