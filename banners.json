@@ -572,7 +572,10 @@
                 },
                 {
                     "item": "Wait, that's not right...",
-                    "chance": 0.20
+                    "chance": 0.20,
+                    "detailOptions": [
+                        "steampunk", "Y2K flip phone era", "cowboy", "anime high school", "psychological horror spiral core", "witch"
+                    ]
                 },
                 {
                     "item": "A new partnership",
@@ -580,10 +583,7 @@
                 },
                 {
                     "item": "This isn't what I signed up for...",
-                    "chance": 0.10,
-                    "detailOptions": [
-                        "steampunk", "Y2K flip phone era", "cowboy", "anime high school", "psychological horror spiral core", "witch"
-                    ]
+                    "chance": 0.10
                 }
             ]
         },
