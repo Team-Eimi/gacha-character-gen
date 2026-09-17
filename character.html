@@ -263,6 +263,7 @@
         let campaigns = [];
         let personalPools = {};
         let specialPools = [];
+        let rolledSpecialPool = null;
 
         function getActiveSpecialPools() {
             return specialPools.filter(pool => {
@@ -359,11 +360,16 @@
 
         function choosePool(campaignPool, personalPool) {
             const roll = Math.random();
+            rolledSpecialPool = null;
 
             let cumulativeChance = 0;
             for (const specialPool of getActiveSpecialPools()) {
                 cumulativeChance += specialPool.chance;
                 if (roll < cumulativeChance) {
+                    rolledSpecialPool = specialPool;
+                    if (specialPool.revealOnDropResults) {
+                        return campaignPool;
+                    }
                     return specialPool.characters;
                 }
             }
@@ -509,7 +515,7 @@
 
             // Roll for character now
             const rolledCharacter = rollCharacter(pool, goldStarEnabled, goldStarChar, goldStarPercent);
-            const matchedSpecialPool = getSpecialPoolForPool(pool);
+            const matchedSpecialPool = rolledSpecialPool || getSpecialPoolForPool(pool);
 
             const comicSetup = startingNewComic ? rollComicSetup() : null;
 
@@ -520,6 +526,9 @@
                 url += `&specialPool=${encodeURIComponent(matchedSpecialPool.id)}&specialPoolLabel=${encodeURIComponent(matchedSpecialPool.label)}`;
                 if (matchedSpecialPool.message) {
                     url += `&specialPoolMessage=${encodeURIComponent(matchedSpecialPool.message)}`;
+                }
+                if (matchedSpecialPool.revealOnDropResults) {
+                    url += `&specialPoolCharacter=${encodeURIComponent(matchedSpecialPool.characters[0])}`;
                 }
             }
 
@@ -642,7 +651,7 @@
 
             // Roll for character with gold star boost for custom character
             const rolledCharacter = rollCharacter(pool, true, goldStarChar, goldStarPercent);
-            const matchedSpecialPool = getSpecialPoolForPool(pool);
+            const matchedSpecialPool = rolledSpecialPool || getSpecialPoolForPool(pool);
             const comicSetup = startingNewComic ? rollComicSetup() : null;
 
             // Build URL with rolled character and all parameters, including the custom character
@@ -651,6 +660,9 @@
                 url += `&specialPool=${encodeURIComponent(matchedSpecialPool.id)}&specialPoolLabel=${encodeURIComponent(matchedSpecialPool.label)}`;
                 if (matchedSpecialPool.message) {
                     url += `&specialPoolMessage=${encodeURIComponent(matchedSpecialPool.message)}`;
+                }
+                if (matchedSpecialPool.revealOnDropResults) {
+                    url += `&specialPoolCharacter=${encodeURIComponent(matchedSpecialPool.characters[0])}`;
                 }
             }
             if (comicSetup) {

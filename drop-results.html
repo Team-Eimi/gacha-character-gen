@@ -49,6 +49,26 @@
             color: #666;
             font-weight: bold;
         }
+        .confetti-layer {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 10;
+        }
+        .confetti-piece {
+            position: absolute;
+            top: -24px;
+            width: 10px;
+            height: 18px;
+            animation: confetti-fall 2.8s ease-in forwards;
+        }
+        @keyframes confetti-fall {
+            to {
+                transform: translate(var(--drift), 110vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
         .rarity-special {
             background: linear-gradient(135deg, #ff00ff, #ff69b4);
             color: white;
@@ -177,6 +197,7 @@
     </style>
 </head>
 <body>
+    <div class="confetti-layer" id="confettiLayer"></div>
     <div class="container">
         <h1>🎉 Your Results!</h1>
         
@@ -278,6 +299,7 @@
         const comicRole = urlParams.get('comicRole');
         const specialPoolLabel = urlParams.get('specialPoolLabel');
         const specialPoolMessage = urlParams.get('specialPoolMessage');
+        const specialPoolCharacter = urlParams.get('specialPoolCharacter');
 
         if (specialPoolLabel) {
             const specialPoolBadge = document.getElementById('specialPoolBadge');
@@ -335,6 +357,26 @@
             characterImages.style.display = imageMarkup ? 'flex' : 'none';
         }
 
+        function launchWhimConfetti() {
+            if (!specialPoolCharacter) {
+                return;
+            }
+
+            const confettiLayer = document.getElementById('confettiLayer');
+            const colors = ['#f6dd4e', '#ef8fba', '#72c6d5', '#8ccf75', '#f29c53'];
+            for (let index = 0; index < 90; index++) {
+                const piece = document.createElement('div');
+                piece.className = 'confetti-piece';
+                piece.style.left = `${Math.random() * 100}%`;
+                piece.style.backgroundColor = colors[index % colors.length];
+                piece.style.setProperty('--drift', `${(Math.random() - 0.5) * 280}px`);
+                piece.style.animationDelay = `${Math.random() * 0.45}s`;
+                confettiLayer.appendChild(piece);
+            }
+
+            setTimeout(() => confettiLayer.replaceChildren(), 3500);
+        }
+
         function displayComicSetup(rarityText, extraMessage = '') {
             if (selectedBanner !== 'comic' || comicMode !== 'new' || !comicGenre || !comicStory || !comicRole) {
                 return;
@@ -386,14 +428,15 @@
 
             // 3) Crit fail check (2% chance) happens after rolls, but before display.
             const critFailChance = 0.02;
+            const resultCharacter = specialPoolCharacter || rolledCharacter;
             if (Math.random() < critFailChance) {
                 const drawer = rollDrawer();
-                displayCritFail(rolledCharacter, drop, rarity, drawer, secondaryDrop);
+                displayCritFail(resultCharacter, drop, rarity, drawer, secondaryDrop);
                 return;
             }
             
             // 4) Display results + animation.
-            displayResults(rolledCharacter, drop, rarity, secondaryDrop);
+            displayResults(resultCharacter, drop, rarity, secondaryDrop);
         }
 
         function rollRarity() {
@@ -628,6 +671,7 @@
                 }
                 
                 document.getElementById('results').style.display = 'block';
+                launchWhimConfetti();
             }, 6500);
         }
 
@@ -692,6 +736,7 @@
                 }
                 
                 document.getElementById('results').style.display = 'block';
+                launchWhimConfetti();
             }, rarity === 'special' ? 6500 : 4000);
         }
 

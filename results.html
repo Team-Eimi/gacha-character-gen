@@ -178,14 +178,15 @@
         const comicMode = urlParams.get('comicMode');
         const specialPoolLabel = urlParams.get('specialPoolLabel');
         const specialPoolMessage = urlParams.get('specialPoolMessage');
+        const specialPoolCharacter = urlParams.get('specialPoolCharacter');
 
-        if (specialPoolLabel) {
+        if (specialPoolLabel && !specialPoolCharacter) {
             const specialPoolBadge = document.getElementById('specialPoolBadge');
             specialPoolBadge.textContent = `✨ Special Pull: ${specialPoolLabel}!`;
             specialPoolBadge.style.display = 'block';
         }
 
-        if (specialPoolMessage) {
+        if (specialPoolMessage && !specialPoolCharacter) {
             const specialPoolMessageEl = document.getElementById('specialPoolMessage');
             specialPoolMessageEl.textContent = specialPoolMessage;
             specialPoolMessageEl.style.display = 'block';
@@ -277,6 +278,10 @@
                             params.append('specialPoolMessage', specialPoolMessage);
                         }
 
+                        if (specialPoolCharacter) {
+                            params.append('specialPoolCharacter', specialPoolCharacter);
+                        }
+
                         // Only pick a specific daddy if it's NOT "you pick"
                         if (drop !== 'you pick' && allCharacters.length > 0) {
                             // Filter out the mommy character to prevent same character being both parents
@@ -325,6 +330,10 @@
 
                 if (specialPoolMessage) {
                     params.append('specialPoolMessage', specialPoolMessage);
+                }
+
+                if (specialPoolCharacter) {
+                    params.append('specialPoolCharacter', specialPoolCharacter);
                 }
 
                 if (selectedBanner === 'fusion' && rolledCharacter2) {
