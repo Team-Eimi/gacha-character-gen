@@ -16,7 +16,7 @@
             "id": "whim",
             "label": "Whim",
             "characters": ["Verene"],
-            "chance": 0.25,
+            "chance": 0.05,
             "message": "🖕No token lost, no gold star pity🖕",
             "revealOnDropResults": true,
             "excludeBanners": ["comic"]
