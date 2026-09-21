@@ -179,6 +179,11 @@
         const specialPoolLabel = urlParams.get('specialPoolLabel');
         const specialPoolMessage = urlParams.get('specialPoolMessage');
         const specialPoolCharacter = urlParams.get('specialPoolCharacter');
+        const dndMode = urlParams.get('dndMode');
+        const dndRace = urlParams.get('dndRace');
+        const dndClass = urlParams.get('dndClass');
+        const dndQuest = urlParams.get('dndQuest');
+        const dndOutcome = urlParams.get('dndOutcome');
 
         if (specialPoolLabel && !specialPoolCharacter) {
             const specialPoolBadge = document.getElementById('specialPoolBadge');
@@ -347,8 +352,25 @@
                     params.append('comicStory', comicStory);
                     params.append('comicRole', comicRole);
                 }
+
+                appendDndParameters(params);
                 
                 window.location.href = `drop-results.html?${params.toString()}`;
+            }
+        }
+
+        function appendDndParameters(params) {
+            if (!dndMode) {
+                return;
+            }
+
+            params.append('dndMode', dndMode);
+            if (dndMode === 'character') {
+                params.append('dndRace', dndRace || '');
+                params.append('dndClass', dndClass || '');
+            } else {
+                params.append('dndQuest', dndQuest || '');
+                params.append('dndOutcome', dndOutcome || '');
             }
         }
         

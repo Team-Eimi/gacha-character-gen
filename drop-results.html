@@ -300,6 +300,11 @@
         const specialPoolLabel = urlParams.get('specialPoolLabel');
         const specialPoolMessage = urlParams.get('specialPoolMessage');
         const specialPoolCharacter = urlParams.get('specialPoolCharacter');
+        const dndMode = urlParams.get('dndMode');
+        const dndRace = urlParams.get('dndRace');
+        const dndClass = urlParams.get('dndClass');
+        const dndQuest = urlParams.get('dndQuest');
+        const dndOutcome = urlParams.get('dndOutcome');
 
         if (specialPoolLabel) {
             const specialPoolBadge = document.getElementById('specialPoolBadge');
@@ -662,7 +667,7 @@
                         document.getElementById('characterResult').textContent = character;
                         renderCharacterImages([character]);
                     }
-                    document.getElementById('dropResult').textContent = drop;
+                    setDndDropResult(drop);
                     document.getElementById('dropRarity').innerHTML = 
                         `<span class="rarity-${rarity}">${rarityText}</span> - ${rarityDescriptions[rarity]}` + critFailMessage;
                     displaySecondaryDrop(secondaryDrop);
@@ -727,7 +732,7 @@
                         document.getElementById('characterResult').textContent = character;
                         renderCharacterImages([character]);
                     }
-                    document.getElementById('dropResult').textContent = drop;
+                    setDndDropResult(drop);
                     document.getElementById('dropRarity').innerHTML = 
                         `<span class="rarity-${rarity}">${rarityText}</span> - ${rarityDescriptions[rarity]}`;
                     displaySecondaryDrop(secondaryDrop);
@@ -738,6 +743,31 @@
                 document.getElementById('results').style.display = 'block';
                 launchWhimConfetti();
             }, rarity === 'special' ? 6500 : 4000);
+        }
+
+        function setDndDropResult(drop) {
+            const dropResult = document.getElementById('dropResult');
+            if (selectedBanner !== 'dnd' || !dndMode) {
+                dropResult.textContent = drop;
+                return;
+            }
+
+            if (dndMode === 'character') {
+                dropResult.innerHTML = `Race: ${escapeHtml(dndRace)}<br>Class: ${escapeHtml(dndClass)}`;
+                return;
+            }
+
+            dropResult.textContent = `Part 1: The party takes ${dndQuest}. Part 2: The quest goes ${dndOutcome}.`;
+        }
+
+        function escapeHtml(value) {
+            return String(value || '').replace(/[&<>"']/g, character => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            }[character]));
         }
 
         function displaySecondaryDrop(secondaryDrop) {

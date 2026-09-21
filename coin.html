@@ -107,6 +107,11 @@
         const goldStarPercent = urlParams.get('goldStarPercent');
         const pity = urlParams.get('pity');
         const pityRarity = urlParams.get('pityRarity');
+        const dndMode = urlParams.get('dndMode');
+        const dndRace = urlParams.get('dndRace');
+        const dndClass = urlParams.get('dndClass');
+        const dndQuest = urlParams.get('dndQuest');
+        const dndOutcome = urlParams.get('dndOutcome');
 
         // Update back link to preserve banner selection
         document.getElementById('backLink').href = `character.html?banner=${selectedBanner}`;
@@ -145,6 +150,15 @@
             
             if (pity) {
                 url += `&pity=${pity}&pityRarity=${pityRarity}`;
+            }
+
+            if (dndMode) {
+                url += `&dndMode=${encodeURIComponent(dndMode)}`;
+                if (dndMode === 'character') {
+                    url += `&dndRace=${encodeURIComponent(dndRace || '')}&dndClass=${encodeURIComponent(dndClass || '')}`;
+                } else {
+                    url += `&dndQuest=${encodeURIComponent(dndQuest || '')}&dndOutcome=${encodeURIComponent(dndOutcome || '')}`;
+                }
             }
             
             window.location.href = url;

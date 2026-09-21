@@ -153,6 +153,14 @@
             <option value="none">None</option>
         </select>
 
+        <div id="dndOptions" style="display: none;">
+            <label for="dndMode">D&D AU Roll:</label>
+            <select id="dndMode">
+                <option value="character">Roll a new party member</option>
+                <option value="scenario">Roll a scenario (omit character selection)</option>
+            </select>
+        </div>
+
         <div id="fusionPool2Container" style="display: none;">
             <label for="poolSelect2">Choose Character Pool (Character 2):</label>
             <select id="poolSelect2"></select>
@@ -264,6 +272,7 @@
         let personalPools = {};
         let specialPools = [];
         let rolledSpecialPool = null;
+        let dndRules = null;
 
         function getActiveSpecialPools() {
             return specialPools.filter(pool => {
@@ -414,12 +423,18 @@
             poolSelect.insertBefore(anyOpt, poolSelect.firstChild);
         }
 
+        if (selectedBanner === 'dnd') {
+            document.getElementById('dndOptions').style.display = 'block';
+            document.getElementById('poolSelectLabel').textContent = 'Choose Campaign Pool:';
+        }
+
         // Load character data from JSON files
         Promise.all([
             fetch('characters.json', { cache: 'no-store' }).then(response => response.json()),
-            fetch('personal.json', { cache: 'no-store' }).then(response => response.json())
+            fetch('personal.json', { cache: 'no-store' }).then(response => response.json()),
+            fetch('banners.json', { cache: 'no-store' }).then(response => response.json())
         ])
-            .then(([characterData, personalData]) => {
+            .then(([characterData, personalData, bannerData]) => {
                 const normalizedCampaigns = normalizeCampaigns(characterData);
                 const byId = Object.fromEntries(normalizedCampaigns.map(campaign => [campaign.id, campaign.characters]));
 
@@ -432,6 +447,7 @@
                 evangelineCharacters = byId.evangeline || [];
                 personalPools = personalData['personal-pools'] || {};
                 specialPools = personalData['special-pools'] || [];
+                dndRules = (bannerData.banners.find(banner => banner.name === selectedBanner) || {}).dndRules || null;
                 populateCampaignOptions(characterData);
 
                 const personalSelect = document.getElementById('personalPoolSelect');
@@ -439,6 +455,8 @@
                     Object.keys(personalPools)
                         .map(name => `<option value="${name}">${name}</option>`)
                         .join('');
+
+                    populateDndOptions();
             })
             .catch(error => {
                 console.error('Error loading characters:', error);
@@ -484,6 +502,45 @@
             }
         }
 
+        function weightedDndRandom(options) {
+            const totalChance = options.reduce((sum, option) => sum + option.chance, 0);
+            let roll = Math.random() * totalChance;
+            for (const option of options) {
+                roll -= option.chance;
+                if (roll < 0) {
+                    return option;
+                }
+            }
+            return options[options.length - 1];
+        }
+
+        function populateDndOptions() {
+            if (!dndRules) {
+                return;
+            }
+        }
+
+        function rollDndCharacter() {
+            const race = weightedDndRandom(dndRules.races);
+            const raceName = race.detailOptions
+                ? `${race.detailOptions[Math.floor(Math.random() * race.detailOptions.length)]} ${race.item}`
+                : race.item;
+            const classRoll = weightedDndRandom(dndRules.classes);
+            const className = classRoll.detailOptions
+                ? classRoll.detailOptions[Math.floor(Math.random() * classRoll.detailOptions.length)]
+                : classRoll.item;
+
+            return { race: raceName, className };
+        }
+
+        function rollDndScenario() {
+            const scenario = dndRules.scenarios;
+            return {
+                quest: weightedDndRandom(scenario.quests).item,
+                outcome: weightedDndRandom(scenario.outcomes).item
+            };
+        }
+
         function goToCoinSelection() {
             const poolChoice = document.getElementById('poolSelect').value;
             const personalPoolChoice = document.getElementById('personalPoolSelect').value;
@@ -494,6 +551,7 @@
             const pityRarity = document.getElementById('pityRarity').value;
             const selectedFlavors = getSelectedWhimsyFlavors();
             const startingNewComic = selectedBanner === 'comic' && document.getElementById('newComicToggle').checked;
+            const dndMode = selectedBanner === 'dnd' ? document.getElementById('dndMode').value : '';
 
             const campaignPool = getPool(poolChoice);
             const personalPool = getPersonalPool(personalPoolChoice);
@@ -519,8 +577,23 @@
                 return;
             }
 
-            // Roll for character now
-            const rolledCharacter = rollCharacter(pool, goldStarEnabled, goldStarChar, goldStarPercent);
+            // Roll the normal gacha character, or the D&D result, before coin selection.
+            let rolledCharacter = 'The party';
+            let dndResult = null;
+            if (selectedBanner === 'dnd') {
+                if (!dndRules) {
+                    alert('D&D banner rules are still loading. Please wait a moment and try again.');
+                    return;
+                }
+                if (dndMode === 'character') {
+                    rolledCharacter = rollCharacter(pool, goldStarEnabled, goldStarChar, goldStarPercent);
+                    dndResult = rollDndCharacter();
+                } else {
+                    dndResult = rollDndScenario();
+                }
+            } else {
+                rolledCharacter = rollCharacter(pool, goldStarEnabled, goldStarChar, goldStarPercent);
+            }
             const matchedSpecialPool = rolledSpecialPool || getSpecialPoolForPool(pool);
 
             const comicSetup = startingNewComic ? rollComicSetup() : null;
@@ -556,6 +629,15 @@
 
             if (selectedBanner === 'whimsy' && selectedFlavors.length > 0) {
                 url += `&whimsyFlavors=${encodeURIComponent(selectedFlavors.join(','))}`;
+            }
+
+            if (selectedBanner === 'dnd') {
+                url += `&dndMode=${encodeURIComponent(dndMode)}`;
+                if (dndMode === 'character') {
+                    url += `&dndRace=${encodeURIComponent(dndResult.race)}&dndClass=${encodeURIComponent(dndResult.className)}`;
+                } else {
+                    url += `&dndQuest=${encodeURIComponent(dndResult.quest)}&dndOutcome=${encodeURIComponent(dndResult.outcome)}`;
+                }
             }
 
             // For fusion banner, roll a second character from pool 2

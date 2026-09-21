@@ -1,6 +1,189 @@
 {
     "banners": [
         {
+            "name": "dnd",
+            "displayName": "D&D AU",
+            "status": "active",
+            "img": "banner_art/bannerdnd.png",
+            "drops": [
+                {
+                    "item": "D&D AU party illustration",
+                    "chance": 1
+                }
+            ],
+            "dndRules": {
+                "races": [
+                    {
+                        "item": "human",
+                        "chance": 0.2
+                    },
+                    {
+                        "item": "half-elf",
+                        "chance": 0.1
+                    },
+                    {
+                        "item": "elf",
+                        "chance": 0.1,
+                        "detailOptions": [
+                            "high",
+                            "wood",
+                            "sea",
+                            "dark",
+                            "shader-kai",
+                            "eladrin"
+                        ]
+                    },
+                    {
+                        "item": "halfling",
+                        "chance": 0.1
+                    },
+                    {
+                        "item": "beastman",
+                        "chance": 0.1,
+                        "detailOptions": [
+                            "lizardfolk",
+                            "tabaxi",
+                            "tortle",
+                            "yuan-ti",
+                            "triton",
+                            "kobold",
+                            "arakocra",
+                            "kenku"
+                        ]
+                    },
+                    {
+                        "item": "tiefling",
+                        "chance": 0.1
+                    },
+                    {
+                        "item": "genasi",
+                        "chance": 0.05,
+                        "detailOptions": [
+                            "air",
+                            "fire",
+                            "water",
+                            "earth"
+                        ]
+                    },
+                    {
+                        "item": "aasimar",
+                        "chance": 0.05
+                    },
+                    {
+                        "item": "goblin",
+                        "chance": 0.05
+                    },
+                    {
+                        "item": "githyanki",
+                        "chance": 0.05
+                    },
+                    {
+                        "item": "goliath",
+                        "chance": 0.05
+                    },
+                    {
+                        "item": "dragonborn",
+                        "chance": 0.05
+                    },
+                    {
+                        "item": "dwarf",
+                        "chance": 0.05,
+                        "detailOptions": [
+                            "hill",
+                            "mountain",
+                            "grey"
+                        ]
+                    },
+                    {
+                        "item": "gnome",
+                        "chance": 0.05,
+                        "detailOptions": [
+                            "rock",
+                            "forest",
+                            "deep"
+                        ]
+                    }
+                ],
+                "classes": [
+                    {
+                        "item": "what they would pick",
+                        "chance": 0.5
+                    },
+                    {
+                        "item": "they pick randomly",
+                        "chance": 0.45,
+                        "detailOptions": [
+                            "barbarian",
+                            "bard",
+                            "cleric",
+                            "druid",
+                            "fighter",
+                            "monk",
+                            "paladin",
+                            "ranger",
+                            "rogue",
+                            "sorcerer",
+                            "warlock",
+                            "wizard",
+                            "artificer",
+                            "gunslinger",
+                            "kindred (vampire)"
+                        ]
+                    },
+                    {
+                        "item": "niche homebrew class",
+                        "chance": 0.05
+                    }
+                ],
+                "scenarios": {
+                    "quests": [
+                        {
+                            "item": "an gathering quest",
+                            "chance": 0.25
+                        },
+                        {
+                            "item": "a dungeon-crawling quest",
+                            "chance": 0.25
+                        },
+                        {
+                            "item": "an investigation quest",
+                            "chance": 0.25
+                        },
+                        {
+                            "item": "a protection quest",
+                            "chance": 0.25
+                        }
+                    ],
+                    "outcomes": [
+                        {
+                            "item": "just fine",
+                            "chance": 0.2
+                        },
+                        {
+                            "item": "amazing!",
+                            "chance": 0.2
+                        },
+                        {
+                            "item": "terribly",
+                            "chance": 0.2
+                        },
+                        {
+                            "item": "well, but at a cost",
+                            "chance": 0.2
+                        },
+                        {
+                            "item": "something unexpected happened!",
+                            "chance": 0.15
+                        },
+                        {
+                            "item": "TPK",
+                            "chance": 0.05
+                        }
+                    ]
+                }
+            }
+        },
+        {
             "name": "cutesy",
             "status": "active",
             "img": "banner_art/bannercutesy.png",
@@ -555,7 +738,7 @@
         },
         {
             "name": "flip",
-            "status": "active",
+            "status": "past",
             "img": "banner_art/bannerflip.png",
             "drops": [
                 {
@@ -574,7 +757,12 @@
                     "item": "Wait, that's not right...",
                     "chance": 0.20,
                     "detailOptions": [
-                        "steampunk", "Y2K flip phone era", "cowboy", "anime high school", "psychological horror spiral core", "witch"
+                        "steampunk",
+                        "Y2K flip phone era",
+                        "cowboy",
+                        "anime high school",
+                        "psychological horror spiral core",
+                        "witch"
                     ]
                 },
                 {
@@ -686,7 +874,7 @@
         },
         {
             "name": "moments",
-            "status": "active",
+            "status": "past",
             "img": "banner_art/momentsbanner.png",
             "drops": [
                 {
