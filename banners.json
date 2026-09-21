@@ -136,25 +136,90 @@
                     }
                 ],
                 "scenarios": {
-                    "quests": [
+                    "part1": [
                         {
-                            "item": "an gathering quest",
-                            "chance": 0.25
+                            "item": "all of the water in town has turned a murky brown!"
                         },
                         {
-                            "item": "a dungeon-crawling quest",
-                            "chance": 0.25
+                            "item": "a list of names that everybody is on-- and the first has just been killed!"
                         },
                         {
-                            "item": "an investigation quest",
-                            "chance": 0.25
+                            "item": "[party member] and [party member] have swapped bodies!"
                         },
                         {
-                            "item": "a protection quest",
-                            "chance": 0.25
+                            "item": "a new constellation has appeared, and the party has been requested to name it!"
+                        },
+                        {
+                            "item": "the party has been told a dragon's lair is near, with riches abound!"
+                        },
+                        {
+                            "item": "the dead have begun to rise! [party member] has turned against the party!"
+                        },
+                        {
+                            "item": "a goblin comes, shouting, he's coming! and dies at your feet!"
+                        },
+                        {
+                            "item": "singing has been heard at night in a nearby cornfield, and every morning, the maze is different!"
+                        },
+                        {
+                            "item": "an assassin is following [party member]!"
+                        },
+                        {
+                            "item": "[party member] and [party member] wake up in bed after a drunken night!"
+                        },
+                        {
+                            "item": "[party member] has turned into an animal!"
+                        },
+                        {
+                            "item": "everything you own has just been stolen, the only hint a lock of fire-red hair left behind!"
+                        },
+                        {
+                            "item": "escort the noble princess across the haunted forest!"
+                        },
+                        {
+                            "item": "a senile old man reports the shadows on his wall move at night!"
+                        },
+                        {
+                            "item": "a vampire has bitten [party member]!"
+                        },
+                        {
+                            "item": "a piece of paper in the wind slaps [party member] in the face. It reads..."
+                        },
+                        {
+                            "item": "Come one, come all! Extra pay for real adventurers to act in a play!"
+                        },
+                        {
+                            "item": "a wealthy merchant pays great to find a piece of legendary armor!"
+                        },
+                        {
+                            "item": "[party member] has accidentally drank a love potion, and has fallen in love with [name from all]!"
+                        },
+                        {
+                            "item": "the moon has disappeared, and the world is cast into eternal darkness."
+                        },
+                        {
+                            "item": "a civil militia is paying mercs for their revolution!"
+                        },
+                        {
+                            "item": "a really busy restaurant needs help!"
+                        },
+                        {
+                            "item": "the party finds a corpse at their doorstep."
+                        },
+                        {
+                            "item": "[party member] is dead! Who did it?"
+                        },
+                        {
+                            "item": "[party member] made a deal with a devil, and the party must save them from it!"
+                        },
+                        {
+                            "item": "an apothecary can't find the herb they need!"
+                        },
+                        {
+                            "item": "the bakery has no cake. They say it is because of a shortage of milk."
                         }
                     ],
-                    "outcomes": [
+                    "part2": [
                         {
                             "item": "just fine",
                             "chance": 0.2
@@ -173,10 +238,44 @@
                         },
                         {
                             "item": "something unexpected happened!",
-                            "chance": 0.15
+                            "chance": 1.54,
+                            "detailOptions": [
+                                "gabu-chan",
+                                "a horrible villain",
+                                "an item with mysterious effects",
+                                "another monster!",
+                                "[name from all] appears!",
+                                "[party member] has betrayed another"
+                            ]
                         },
                         {
                             "item": "TPK",
+                            "chance": 0.05
+                        }
+                    ],
+                    "part3": [
+                        {
+                            "item": "tavern hijinks",
+                            "chance": 0.25
+                        },
+                        {
+                            "item": "time for sleep!",
+                            "chance": 0.25
+                        },
+                        {
+                            "item": "the quest is never over!",
+                            "chance": 0.25
+                        },
+                        {
+                            "item": "l-love?!?",
+                            "chance": 0.15
+                        },
+                        {
+                            "item": "the world suddenly ends!",
+                            "chance": 0.05
+                        },
+                        {
+                            "item": "isekai!",
                             "chance": 0.05
                         }
                     ]

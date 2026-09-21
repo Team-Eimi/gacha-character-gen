@@ -303,8 +303,11 @@
         const dndMode = urlParams.get('dndMode');
         const dndRace = urlParams.get('dndRace');
         const dndClass = urlParams.get('dndClass');
-        const dndQuest = urlParams.get('dndQuest');
-        const dndOutcome = urlParams.get('dndOutcome');
+        const dndPart = urlParams.get('dndPart');
+        const dndScenario = urlParams.get('dndScenario');
+        const dndPartyMember = urlParams.get('dndPartyMember');
+        const dndScenarioCharacter = urlParams.get('dndScenarioCharacter');
+        const dndScenarioCharacterImage = urlParams.get('dndScenarioCharacterImage');
 
         if (specialPoolLabel) {
             const specialPoolBadge = document.getElementById('specialPoolBadge');
@@ -664,8 +667,9 @@
                         document.getElementById('characterResult').textContent = character + ' & ' + rolledCharacter2;
                         renderCharacterImages([character, rolledCharacter2]);
                     } else {
-                        document.getElementById('characterResult').textContent = character;
-                        renderCharacterImages([character]);
+                        const displayedCharacter = getDisplayedCharacter(character);
+                        document.getElementById('characterResult').textContent = displayedCharacter;
+                        renderCharacterImages([displayedCharacter]);
                     }
                     setDndDropResult(drop);
                     document.getElementById('dropRarity').innerHTML = 
@@ -729,8 +733,9 @@
                         document.getElementById('characterResult').textContent = character + ' & ' + rolledCharacter2;
                         renderCharacterImages([character, rolledCharacter2]);
                     } else {
-                        document.getElementById('characterResult').textContent = character;
-                        renderCharacterImages([character]);
+                        const displayedCharacter = getDisplayedCharacter(character);
+                        document.getElementById('characterResult').textContent = displayedCharacter;
+                        renderCharacterImages([displayedCharacter]);
                     }
                     setDndDropResult(drop);
                     document.getElementById('dropRarity').innerHTML = 
@@ -757,7 +762,15 @@
                 return;
             }
 
-            dropResult.textContent = `Part 1: The party takes ${dndQuest}. Part 2: The quest goes ${dndOutcome}.`;
+            const scenarioImage = characterImageMap.get(dndScenarioCharacter) || dndScenarioCharacterImage;
+            dropResult.innerHTML = `${escapeHtml(dndScenario)}${scenarioImage ? `<br><img class="character-image" src="${escapeHtml(scenarioImage)}" alt="${escapeHtml(dndScenarioCharacter || 'Character appearing in scenario')}">` : ''}`;
+        }
+
+        function getDisplayedCharacter(character) {
+            if (selectedBanner === 'dnd' && dndMode === 'scenario') {
+                return specialPoolCharacter || dndPartyMember || character;
+            }
+            return character;
         }
 
         function escapeHtml(value) {

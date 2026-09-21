@@ -32,6 +32,7 @@
 
         select,
         input,
+        textarea,
         button {
             width: 100%;
             padding: 10px;
@@ -138,6 +139,31 @@
             width: auto;
             margin: 0;
         }
+
+        #dndPartSelector {
+            display: flex;
+            gap: 8px;
+            margin-top: 5px;
+        }
+
+        .dnd-part-button {
+            flex: 1;
+            margin-top: 0;
+            background-color: #ddd;
+            color: #333;
+        }
+
+        .dnd-part-button.selected {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        @media (max-width: 600px) {
+            #dndPartSelector {
+                flex-direction: column;
+            }
+        }
+
     </style>
 </head>
 
@@ -157,8 +183,18 @@
             <label for="dndMode">D&D AU Roll:</label>
             <select id="dndMode">
                 <option value="character">Roll a new party member</option>
-                <option value="scenario">Roll a scenario (omit character selection)</option>
+                <option value="scenario">Roll a scenario</option>
             </select>
+            <div id="dndScenarioOptions" style="display: none;">
+                <label>Scenario Part:</label>
+                <div id="dndPartSelector" role="group" aria-label="Scenario part">
+                    <button type="button" class="dnd-part-button" data-part="part1">Pick a Quest</button>
+                    <button type="button" class="dnd-part-button" data-part="part2">Go on Quest</button>
+                    <button type="button" class="dnd-part-button" data-part="part3">After Quest</button>
+                </div>
+                <label for="dndPartyMembers">Party members:</label>
+                <textarea id="dndPartyMembers" rows="4" placeholder="Enter names separated by commas or new lines"></textarea>
+            </div>
         </div>
 
         <div id="fusionPool2Container" style="display: none;">
@@ -273,6 +309,8 @@
         let specialPools = [];
         let rolledSpecialPool = null;
         let dndRules = null;
+        let selectedDndPart = 'part1';
+        let allCharacterRecords = [];
 
         function getActiveSpecialPools() {
             return specialPools.filter(pool => {
@@ -436,6 +474,9 @@
         ])
             .then(([characterData, personalData, bannerData]) => {
                 const normalizedCampaigns = normalizeCampaigns(characterData);
+                allCharacterRecords = characterData.campaigns.flatMap(campaign =>
+                    campaign.characters || []
+                ).map(character => typeof character === 'string' ? { name: character } : character);
                 const byId = Object.fromEntries(normalizedCampaigns.map(campaign => [campaign.id, campaign.characters]));
 
                 wuxiaCharacters = byId.wuxia || [];
@@ -476,6 +517,11 @@
                 this.checked ? 'block' : 'none';
         });
 
+        document.getElementById('dndMode').addEventListener('change', function () {
+            document.getElementById('dndScenarioOptions').style.display =
+                this.value === 'scenario' ? 'block' : 'none';
+        });
+
         function toggleCharacterList() {
             const listDiv = document.getElementById('characterList');
             const poolChoice = document.getElementById('poolSelect').value;
@@ -503,12 +549,13 @@
         }
 
         function weightedDndRandom(options) {
-            const totalChance = options.reduce((sum, option) => sum + option.chance, 0);
+            const weights = options.map(option => typeof option.chance === 'number' ? option.chance : 1);
+            const totalChance = weights.reduce((sum, weight) => sum + weight, 0);
             let roll = Math.random() * totalChance;
-            for (const option of options) {
-                roll -= option.chance;
+            for (let index = 0; index < options.length; index++) {
+                roll -= weights[index];
                 if (roll < 0) {
-                    return option;
+                    return options[index];
                 }
             }
             return options[options.length - 1];
@@ -519,6 +566,16 @@
                 return;
             }
         }
+
+        document.querySelectorAll('.dnd-part-button').forEach(button => {
+            button.addEventListener('click', function () {
+                selectedDndPart = this.dataset.part;
+                document.querySelectorAll('.dnd-part-button').forEach(partButton => {
+                    partButton.classList.toggle('selected', partButton === this);
+                });
+            });
+        });
+        document.querySelector('.dnd-part-button[data-part="part1"]').classList.add('selected');
 
         function rollDndCharacter() {
             const race = weightedDndRandom(dndRules.races);
@@ -533,11 +590,48 @@
             return { race: raceName, className };
         }
 
-        function rollDndScenario() {
-            const scenario = dndRules.scenarios;
+        function rollDndScenario(partyMembers) {
+            const selectedOption = weightedDndRandom(dndRules.scenarios[selectedDndPart]);
+            let result = selectedOption.item;
+            let randomCharacterName = '';
+            let randomCharacterImage = '';
+
+            if (Array.isArray(selectedOption.detailOptions) && selectedOption.detailOptions.length > 0) {
+                const detail = selectedOption.detailOptions[Math.floor(Math.random() * selectedOption.detailOptions.length)];
+                result = `${selectedOption.item}: ${detail}`;
+            }
+
+            const randomRecord = allCharacterRecords[Math.floor(Math.random() * allCharacterRecords.length)] || {};
+            if (result.includes('[name from all]')) {
+                randomCharacterName = randomRecord.name || 'a random character';
+                randomCharacterImage = randomRecord.img || '';
+                result = result.replaceAll('[name from all]', randomCharacterName);
+            }
+
+            if (result.includes('___')) {
+                randomCharacterName = randomRecord.name || 'a random character';
+                randomCharacterImage = randomRecord.img || '';
+                result = result.replaceAll('___', randomCharacterName);
+            }
+
+            if (result.includes('[party member]')) {
+                result = result.replaceAll('[party member]', () =>
+                    partyMembers[Math.floor(Math.random() * partyMembers.length)] || 'a party member'
+                );
+            }
+
+            if (result.includes('[party]')) {
+                result = result.replaceAll('[party]', () =>
+                    partyMembers[Math.floor(Math.random() * partyMembers.length)] || 'a party member'
+                );
+            }
+
             return {
-                quest: weightedDndRandom(scenario.quests).item,
-                outcome: weightedDndRandom(scenario.outcomes).item
+                part: selectedDndPart,
+                result,
+                randomCharacterName,
+                randomCharacterImage,
+                partyMember: partyMembers[Math.floor(Math.random() * partyMembers.length)]
             };
         }
 
@@ -589,7 +683,15 @@
                     rolledCharacter = rollCharacter(pool, goldStarEnabled, goldStarChar, goldStarPercent);
                     dndResult = rollDndCharacter();
                 } else {
-                    dndResult = rollDndScenario();
+                    const partyMembers = document.getElementById('dndPartyMembers').value
+                        .split(/[\n,]+/)
+                        .map(member => member.trim())
+                        .filter(Boolean);
+                    if (partyMembers.length === 0) {
+                        alert('Enter at least one party member for the scenario.');
+                        return;
+                    }
+                    dndResult = rollDndScenario(partyMembers);
                 }
             } else {
                 rolledCharacter = rollCharacter(pool, goldStarEnabled, goldStarChar, goldStarPercent);
@@ -636,7 +738,7 @@
                 if (dndMode === 'character') {
                     url += `&dndRace=${encodeURIComponent(dndResult.race)}&dndClass=${encodeURIComponent(dndResult.className)}`;
                 } else {
-                    url += `&dndQuest=${encodeURIComponent(dndResult.quest)}&dndOutcome=${encodeURIComponent(dndResult.outcome)}`;
+                    url += `&dndPart=${encodeURIComponent(dndResult.part)}&dndScenario=${encodeURIComponent(dndResult.result)}&dndPartyMember=${encodeURIComponent(dndResult.partyMember)}&dndScenarioCharacter=${encodeURIComponent(dndResult.randomCharacterName)}&dndScenarioCharacterImage=${encodeURIComponent(dndResult.randomCharacterImage)}`;
                 }
             }
 

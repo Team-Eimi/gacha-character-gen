@@ -112,7 +112,7 @@
     <div class="container">
         <a href="character.html" class="back-link" id="backLink">← Back to Character Selection</a>
         
-        <h1>🎉 Character Rolled!</h1>
+        <h1 id="resultsHeading">🎉 Character Rolled!</h1>
         
         <div class="character-result">
             <div class="result-label" id="characterResultLabel">Your Character</div>
@@ -182,8 +182,11 @@
         const dndMode = urlParams.get('dndMode');
         const dndRace = urlParams.get('dndRace');
         const dndClass = urlParams.get('dndClass');
-        const dndQuest = urlParams.get('dndQuest');
-        const dndOutcome = urlParams.get('dndOutcome');
+        const dndPart = urlParams.get('dndPart');
+        const dndScenario = urlParams.get('dndScenario');
+        const dndPartyMember = urlParams.get('dndPartyMember');
+        const dndScenarioCharacter = urlParams.get('dndScenarioCharacter');
+        const dndScenarioCharacterImage = urlParams.get('dndScenarioCharacterImage');
 
         if (specialPoolLabel && !specialPoolCharacter) {
             const specialPoolBadge = document.getElementById('specialPoolBadge');
@@ -206,6 +209,11 @@
             document.getElementById('characterResult').textContent = rolledCharacter + ' & ' + rolledCharacter2;
         } else {
             document.getElementById('characterResult').textContent = rolledCharacter;
+        }
+
+        if (selectedBanner === 'dnd' && dndMode === 'scenario') {
+            document.getElementById('characterResultLabel').textContent = 'Selected Party Member';
+            document.getElementById('characterResult').textContent = specialPoolCharacter || dndPartyMember || '';
         }
 
         // Update back link to preserve banner selection
@@ -369,8 +377,11 @@
                 params.append('dndRace', dndRace || '');
                 params.append('dndClass', dndClass || '');
             } else {
-                params.append('dndQuest', dndQuest || '');
-                params.append('dndOutcome', dndOutcome || '');
+                params.append('dndPart', dndPart || 'part1');
+                params.append('dndScenario', dndScenario || '');
+                params.append('dndPartyMember', dndPartyMember || '');
+                params.append('dndScenarioCharacter', dndScenarioCharacter || '');
+                params.append('dndScenarioCharacterImage', dndScenarioCharacterImage || '');
             }
         }
         

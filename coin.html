@@ -110,8 +110,11 @@
         const dndMode = urlParams.get('dndMode');
         const dndRace = urlParams.get('dndRace');
         const dndClass = urlParams.get('dndClass');
-        const dndQuest = urlParams.get('dndQuest');
-        const dndOutcome = urlParams.get('dndOutcome');
+        const dndPart = urlParams.get('dndPart');
+        const dndScenario = urlParams.get('dndScenario');
+        const dndPartyMember = urlParams.get('dndPartyMember');
+        const dndScenarioCharacter = urlParams.get('dndScenarioCharacter');
+        const dndScenarioCharacterImage = urlParams.get('dndScenarioCharacterImage');
 
         // Update back link to preserve banner selection
         document.getElementById('backLink').href = `character.html?banner=${selectedBanner}`;
@@ -157,7 +160,7 @@
                 if (dndMode === 'character') {
                     url += `&dndRace=${encodeURIComponent(dndRace || '')}&dndClass=${encodeURIComponent(dndClass || '')}`;
                 } else {
-                    url += `&dndQuest=${encodeURIComponent(dndQuest || '')}&dndOutcome=${encodeURIComponent(dndOutcome || '')}`;
+                    url += `&dndPart=${encodeURIComponent(dndPart || 'part1')}&dndScenario=${encodeURIComponent(dndScenario || '')}&dndPartyMember=${encodeURIComponent(dndPartyMember || '')}&dndScenarioCharacter=${encodeURIComponent(dndScenarioCharacter || '')}&dndScenarioCharacterImage=${encodeURIComponent(dndScenarioCharacterImage || '')}`;
                 }
             }
             
