@@ -297,11 +297,17 @@
 
         function normalizeCampaigns(characterData) {
             if (Array.isArray(characterData.campaigns)) {
-                return characterData.campaigns.map(campaign => ({
+                const campaigns = characterData.campaigns.map(campaign => ({
                     id: campaign.id || campaign.name || 'unknown',
                     display: campaign.display || campaign.label || campaign.name || formatPoolLabel(campaign.id || campaign.name || 'Unknown'),
                     characters: Array.isArray(campaign.characters) ? campaign.characters.map(getCharacterName) : []
                 }));
+                const campaignOrder = Array.isArray(characterData.campaignOrder) ? characterData.campaignOrder : [];
+                return campaigns.sort((a, b) => {
+                    const orderA = campaignOrder.indexOf(a.id);
+                    const orderB = campaignOrder.indexOf(b.id);
+                    return (orderA === -1 ? campaignOrder.length : orderA) - (orderB === -1 ? campaignOrder.length : orderB);
+                });
             }
 
             return Object.entries(characterData)

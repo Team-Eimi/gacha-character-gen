@@ -1,4 +1,16 @@
 {
+  "campaignOrder": [
+    "seal",
+    "chromyr",
+    "cruise",
+    "cermonte",
+    "somnus",
+    "ivory",
+    "esemreha",
+    "evangeline",
+    "wuxia",
+    "luminant"
+  ],
   "campaigns": [
     {
       "id": "seal",
@@ -383,6 +395,78 @@
         {
           "name": "Anore"
         }
+      ]
+    },
+    {
+      "id": "cruise",
+      "display": "The Cruise to Vili",
+      "characters": [
+        {
+          "name": "Ashirae",
+          "img": "characters/cruise/ashirae.jpg"
+        },
+        {
+          "name": "Cory Gold",
+          "img": "characters/cruise/cory.jpg"
+        },
+        {
+          "name": "Dashiell Lune",
+          "img": "characters/cruise/dashiell.jpg"
+        },
+        {
+          "name": "Gweneth Divina",
+          "img": "characters/cruise/gweneth.jpg"
+        },
+        {
+          "name": "Holly Morrison",
+          "img": "characters/cruise/holly.jpg"
+        },
+        {
+          "name": "Jalene Aoena",
+          "img": "characters/cruise/jalene.jpg"
+        },
+        {
+          "name": "Julius Ryker",
+          "img": "characters/cruise/julius.jpg"
+        },
+        {
+          "name": "Jun Osa",
+          "img": "characters/cruise/jun.jpg"
+        },
+        {
+          "name": "Kaira Reefe",
+          "img": "characters/cruise/kaira.jpg"
+        },
+        {
+          "name": "Kile Melbour",
+          "img": "characters/cruise/kile.jpg"
+        },
+        {
+          "name": "Koda Kingston",
+          "img": "characters/cruise/koda.jpg"
+        },
+        {
+          "name": "Maelyn Tul",
+          "img": "characters/cruise/maelyn.jpg"
+        },
+        {
+          "name": "Melrose St. Rosenthal",
+          "img": "characters/cruise/melrose.jpg"
+        },
+        {
+          "name": "Micah Thorn",
+          "img": "characters/cruise/micah.jpg"
+        },
+        {
+          "name": "Pearline Ebberon",
+          "img": "characters/cruise/pearline.jpg"
+        },
+        {
+          "name": "Saorise Fern",
+          "img": "characters/cruise/saorise.jpg"
+        }
+        
+        
       ]
     },
     {
