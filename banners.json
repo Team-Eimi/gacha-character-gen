@@ -107,7 +107,11 @@
                 "classes": [
                     {
                         "item": "what they would pick",
-                        "chance": 0.5
+                        "chance": 0.25
+                    },
+                    {
+                        "item": "you pick",
+                        "chance": 0.25
                     },
                     {
                         "item": "they pick randomly",
