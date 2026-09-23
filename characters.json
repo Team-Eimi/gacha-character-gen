@@ -357,6 +357,10 @@
         {
           "name": "Creha",
           "img": "characters/esemreha/creha.jpg"
+        },
+        {
+          "name": "Jai On",
+          "img": "characters/esemreha/jai.png"
         }
       ]
     },
@@ -369,7 +373,7 @@
           "img": "characters/somnus/solara.jpg"
         },
         {
-          "name": "Samara"
+          "name": "Ara"
         },
         {
           "name": "Lukene",
