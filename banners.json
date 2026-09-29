@@ -828,7 +828,8 @@
         },
         {
             "name": "mafia",
-            "status": "past",
+            "status": "upcoming",
+            "date": "10/02",
             "img": "banner_art/mafiabanner.png",
             "drops": [
                 {
