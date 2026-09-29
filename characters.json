@@ -2,14 +2,16 @@
   "campaignOrder": [
     "seal",
     "chromyr",
+    "velem",
     "cruise",
-    "cermonte",
     "somnus",
-    "ivory",
     "esemreha",
     "evangeline",
+    "ivory",
     "wuxia",
-    "luminant"
+    "luminant",
+    "cermonte"
+
   ],
   "campaigns": [
     {
@@ -363,6 +365,20 @@
         {
           "name": "Jai On",
           "img": "characters/esemreha/jai.png"
+        },
+        {
+          "name": "Leucos"
+        },
+        {
+          "name": "Diana",
+          "img": "characters/esemreha/diana.png"
+        },
+        {
+          "name": "Jiyu",
+          "img": "characters/esemreha/jiyu.png"
+        },
+        {
+          "name": "Corven"
         }
       ]
     },
@@ -618,6 +634,35 @@
         {
           "name": "Valentine",
           "img": "characters/luminant/valentine.png"
+        }
+      ]
+    },
+    {
+      "id": "velem",
+      "display": "Velem",
+      "characters": [
+        {
+          "name": "Quinn",
+          "img": "characters/velem/quinn.png"
+        },
+        {
+          "name": "Lenor",
+          "img": "characters/velem/lenor.png"
+        },
+        {
+          "name": "Farix"
+        },
+        {
+          "name": "Kaian"
+        },
+        {
+          "name": "Ura"
+        },
+        {
+          "name": "Junia"
+        },
+        {
+          "name": "Yesper"
         }
       ]
     }

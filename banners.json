@@ -1,9 +1,48 @@
 {
     "banners": [
         {
+            "name": "actor",
+            "displayName": "Actor AU",
+            "status": "active",
+            "img": "banner_art/banneractor.png",
+            "drops": [
+                {
+                    "item": "Get to know the actor!",
+                    "chance": 0.25
+                },
+                {
+                    "item": "Their celebrity persona",
+                    "chance": 0.25
+                },
+                {
+                    "item": "Who are they dating?",
+                    "chance": 0.15
+                },
+                {
+                    "item": "Who are they friends with?",
+                    "chance": 0.15
+                },
+                {
+                    "item": "Who is their rival?",
+                    "chance": 0.15
+                },
+                {
+                    "item": "Comic",
+                    "chance": 0.05,
+                    "detailOptions": [
+                        "on set drama",
+                        "romance",
+                        "family life",
+                        "personal life",
+                        "cafe banner"
+                    ]
+                }
+            ]
+        },
+        {
             "name": "dnd",
             "displayName": "D&D AU",
-            "status": "active",
+            "status": "past",
             "img": "banner_art/bannerdnd.png",
             "drops": [
                 {
@@ -796,7 +835,7 @@
             "drops": [
                 {
                     "item": "mafia outfit",
-                    "chance": 0.25
+                    "chance": 0.0
                 },
                 {
                     "item": "covered in blood",
@@ -812,7 +851,15 @@
                 },
                 {
                     "item": "Mini comic",
-                    "chance": 0.15
+                    "chance": 0.10
+                },
+                {
+                    "item": "a part of the mob, or a victim?",
+                    "chance": 0.20
+                },
+                {
+                    "item": "dangerous love",
+                    "chance": 0.20
                 }
             ]
         },
