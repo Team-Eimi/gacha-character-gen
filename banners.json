@@ -545,15 +545,45 @@
             "drops": [
                 {
                     "item": "cursed outfit",
-                    "chance": 0.20
+                    "chance": 0.20,
+                    "imageOptions": "cursed/cursed-outfit"
                 },
                 {
                     "item": "cursed duo pose",
-                    "chance": 0.15
+                    "chance": 0.15,
+                    "imageOptions": "cursed/duo-poses"
+                },
+                {
+                    "item": "draw your character like this",
+                    "chance": 0.15,
+                    "imageChance": 0.9,
+                    "imageOptions": "cursed/draw-character-like-this",
+                    "detailOptions": [
+                        "as a child",
+                        "as opposite aesthetic",
+                        "in your aesthetic",
+                        "drunk",
+                        "horny",
+                        "flustered",
+                        "with you",
+                        "doing their least favorite thing",
+                        "with their dream partner",
+                        "with extra trauma",
+                        "without trauma",
+                        "in pjs",
+                        "in winter clothes",
+                        "in summer clothes",
+                        "with opposite gender roles",
+                        "in bathing suit",
+                        "as a pokemon",
+                        "taking a selfie",
+                        "with their starbucks order",
+                        "as a mermaid"
+                    ]
                 },
                 {
                     "item": "meme redraw",
-                    "chance": 0.15
+                    "chance": 0.5
                 },
                 {
                     "item": "mplsona",
@@ -565,7 +595,7 @@
                 },
                 {
                     "item": "vocaloid sona",
-                    "chance": 0.20
+                    "chance": 0.15
                 }
             ]
         },

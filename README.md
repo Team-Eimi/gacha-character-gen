@@ -67,6 +67,15 @@ The gacha generator follows a 4-step process:
         {
           "item": "single chibi",
           "chance": 0.5
+        },
+        {
+          "item": "Mult option drop",
+          "chance": 0.5,
+          "detailOptions": [
+            "opt 1",
+            "opt 2",
+            "opt 3"
+          ]
         }
       ]
     },
@@ -79,6 +88,11 @@ The gacha generator follows a 4-step process:
         {
           "item": "mafia",
           "chance": 0.5
+        },
+        {
+          "item": "cursed outfit",
+          "chance": 0.20,
+          "imageOptions": "cursed/cursed-outfit"
         }
       ]
     }
@@ -108,9 +122,34 @@ The gacha generator follows a 4-step process:
 ### `characters.json`
 ```json
 {
-  "wuxia": ["Character 1", "Character 2"],
-  "academy": ["Character 3", "Character 4"],
-  "keys": ["Character 5", "Character 6"]
+  "campaignOrder":[
+    "Campaign Id 1",
+    "Campaign Id 2"
+  ],
+  "campaigns": [
+    {
+      "id": "seal",
+      "display": "The Seal",
+      "characters": [
+        {
+          "name": "Neris Dionte",
+          "img": "characters/seal/neris.png"
+        },
+        {
+          "name": "Beiei"
+        }
+      ],
+    },
+    {
+      "id": "wuxia",
+      "display": "Wuxia",
+      "characters": [
+        {
+          "name": "Lin Lanfei",
+          "img": "characters/wuxia/lanfei.png"
+        },
+    }
+  ]
 }
 ```
 
@@ -162,8 +201,11 @@ Visit: `http://localhost:8000`
 - **Add new banners**: Edit `banners.json` and add new banner objects
 - **Add new coins**: Edit `coins.json` to create new token types
 - **Add characters**: Edit `characters.json` to add characters to pools
+- **Add drop images**: Add images under `drops/<banner>/<drop-folder>/`, set the drop's `imageOptions` to that folder path relative to `drops/` (for example, `cursed/cursed-outfit`), then run `npm run generate:drop-images`
 - **Modify odds**: Adjust `chance` values in banners or `rarityOdds` in coins
 - **Change styling**: Edit the `<style>` sections in each HTML file
+
+The command generates `drops/image-options.json`. Each image folder is keyed by its path relative to `drops/`, so the same drop-folder name can be reused under different banners without collisions.
 
 ## 📝 Notes
 

@@ -133,6 +133,7 @@
     <script>
         let coinsData = null;
         let allCharacters = [];
+        let charactersByCampaign = {};
 
         function getCharacterName(character) {
             return typeof character === 'string' ? character : character.name;
@@ -154,6 +155,10 @@
 
         function loadCharacters(characterData) {
             const campaigns = normalizeCampaigns(characterData);
+            charactersByCampaign = Object.fromEntries(campaigns.map(campaign => [
+                campaign.id,
+                (campaign.characters || []).map(getCharacterName)
+            ]));
             allCharacters = campaigns.flatMap(campaign =>
                 (campaign.characters || []).map(getCharacterName)
             );
@@ -296,9 +301,12 @@
                         }
 
                         // Only pick a specific daddy if it's NOT "you pick"
-                        if (drop !== 'you pick' && allCharacters.length > 0) {
+                        const parentPool = selectedPool === 'all'
+                            ? allCharacters
+                            : (charactersByCampaign[selectedPool] || []);
+                        if (drop !== 'you pick' && parentPool.length > 0) {
                             // Filter out the mommy character to prevent same character being both parents
-                            const availableDaddies = allCharacters.filter(char => char !== rolledCharacter);
+                            const availableDaddies = parentPool.filter(char => char !== rolledCharacter);
                             
                             if (availableDaddies.length > 0) {
                                 const randomIndex = Math.floor(Math.random() * availableDaddies.length);

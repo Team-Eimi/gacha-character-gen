@@ -122,6 +122,14 @@
             background-color: #fff;
             box-shadow: 0 2px 8px rgba(0,0,0,0.12);
         }
+        .drop-image {
+            display: block;
+            max-width: min(100%, 420px);
+            max-height: 420px;
+            margin: 16px auto 0;
+            object-fit: contain;
+            border-radius: 8px;
+        }
         .drop-rarity {
             font-size: 16px;
             margin-top: 5px;
@@ -276,6 +284,7 @@
     <script>
         let bannersData = null;
         let coinsData = null;
+        let dropImageCatalog = {};
         let characterImageMap = new Map();
 
         // Get parameters from URL
@@ -408,11 +417,13 @@
         Promise.all([
             fetch('banners.json').then(r => r.json()),
             fetch('coins.json').then(r => r.json()),
-            fetch('characters.json').then(r => r.json())
+            fetch('characters.json').then(r => r.json()),
+            fetch('drops/image-options.json').then(r => r.json())
         ])
-        .then(([banners, coins, characters]) => {
+        .then(([banners, coins, characters, imageCatalog]) => {
             bannersData = banners;
             coinsData = coins;
+            dropImageCatalog = imageCatalog;
             loadCharacterImages(characters);
             
             // Perform the roll after a short delay for animation
@@ -553,6 +564,10 @@
             );
 
             if (Array.isArray(selectedDrop.detailOptions) && selectedDrop.detailOptions.length > 0) {
+                if (selectedDrop.imageOptions && Math.random() < (selectedDrop.imageChance ?? 1)) {
+                    return selectedDrop.item;
+                }
+
                 const detailGroups = Array.isArray(selectedDrop.detailGroups)
                     ? selectedDrop.detailGroups.filter(group =>
                         typeof group.chance === 'number' &&
@@ -654,7 +669,7 @@
                     displayBabySex(babyTraits.Sex);
                     
                     // Display drop info for baby with crit fail
-                    document.getElementById('dropResultBaby').textContent = drop;
+                    displayDropResult(drop, document.getElementById('dropResultBaby'));
                     document.getElementById('dropRarityBaby').innerHTML = 
                         `<span class="rarity-${rarity}">${rarityText}</span> - ${rarityDescriptions[rarity]}` + critFailMessage;
                 } else {
@@ -720,7 +735,7 @@
                     displayBabySex(babyTraits.Sex);
                     
                     // Display drop info for baby
-                    document.getElementById('dropResultBaby').textContent = drop;
+                    displayDropResult(drop, document.getElementById('dropResultBaby'));
                     document.getElementById('dropRarityBaby').innerHTML = 
                         `<span class="rarity-${rarity}">${rarityText}</span> - ${rarityDescriptions[rarity]}`;
                 } else {
@@ -753,7 +768,7 @@
         function setDndDropResult(drop) {
             const dropResult = document.getElementById('dropResult');
             if (selectedBanner !== 'dnd' || !dndMode) {
-                dropResult.textContent = drop;
+                displayDropResult(drop, dropResult);
                 return;
             }
 
@@ -764,6 +779,25 @@
 
             const scenarioImage = characterImageMap.get(dndScenarioCharacter) || dndScenarioCharacterImage;
             dropResult.innerHTML = `${escapeHtml(dndScenario)}${scenarioImage ? `<br><img class="character-image" src="${escapeHtml(scenarioImage)}" alt="${escapeHtml(dndScenarioCharacter || 'Character appearing in scenario')}">` : ''}`;
+        }
+
+        function displayDropResult(drop, element) {
+            element.replaceChildren(document.createTextNode(drop));
+
+            const banner = bannersData.banners.find(item => item.name === selectedBanner);
+            const matchingDrop = banner?.drops?.find(item => drop === item.item);
+            const imageOptions = typeof matchingDrop?.imageOptions === 'string'
+                ? dropImageCatalog[matchingDrop.imageOptions]?.images
+                : matchingDrop?.imageOptions;
+            if (!Array.isArray(imageOptions) || imageOptions.length === 0) {
+                return;
+            }
+
+            const image = document.createElement('img');
+            image.className = 'drop-image';
+            image.src = imageOptions[Math.floor(Math.random() * imageOptions.length)];
+            image.alt = `${matchingDrop.item} example`;
+            element.appendChild(image);
         }
 
         function getDisplayedCharacter(character) {

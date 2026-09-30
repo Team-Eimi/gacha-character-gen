@@ -1,0 +1,6 @@
+{
+  "private": true,
+  "scripts": {
+    "generate:drop-images": "node scripts/generate-drop-images.js"
+  }
+}
