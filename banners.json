@@ -7,7 +7,6 @@
 
         "actor",
         "dnd",
-
         "easteregg",
         "whump",
         "vampire",
@@ -34,7 +33,7 @@
     "banners": [
         {
             "name": "dragon",
-            "hidden": false,
+            "hidden": true,
             "displayName": "Dragon",
             "status": "active",
             "drops": [
@@ -60,7 +59,9 @@
             "name": "gothic",
             "hidden": false,
             "displayName": "Gothic",
-            "status": "active",
+            "img": "banner_art/bannergothic.png",
+            "status": "upcoming",
+            "date": "10/08",
             "drops": [
                 {
                     "item": "gothic outfit",
@@ -95,7 +96,7 @@
         },
         {
             "name": "art-meme",
-            "hidden": false,
+            "hidden": true,
             "displayName": "Art Meme",
             "status": "active",
             "drops": [
@@ -436,7 +437,9 @@
             "name": "childhood",
             "hidden": false,
             "displayName": "Childhood Fantasy",
-            "status": "active",
+            "img": "banner_art/bannerchildhood.png",
+            "status": "upcoming",
+            "date": "10/14",
             "childhoodFantasyRules": {
                 "steps": {
                     "step1": {
@@ -641,7 +644,8 @@
             "name": "easteregg",
             "hidden": false,
             "displayName": "Easter Egg Banner",
-            "status": "past",
+            "status": "upcoming",
+            "date": "10/19 & 26",
             "img": "banner_art/ednabanner_morning.png",
             "imgVariants": [
                 "banner_art/ednabanner_morning.png",
@@ -715,7 +719,8 @@
         {
             "name": "whump",
             "hidden": false,
-            "status": "past",
+            "status": "upcoming",
+            "date": "10/12",
             "img": "banner_art/bannerwhump.png",
             "drops": [
                 {
@@ -763,7 +768,7 @@
         {
             "name": "cursed",
             "hidden": false,
-            "status": "past",
+            "status": "active",
             "img": "banner_art/cursedbanner.png",
             "drops": [
                 {
@@ -1018,7 +1023,8 @@
         {
             "name": "emoji",
             "hidden": false,
-            "status": "past",
+            "status": "upcoming",
+            "date": "10/05",
             "img": "banner_art/emojibanner.png",
             "drops": [
                 {
