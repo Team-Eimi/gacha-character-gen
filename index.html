@@ -36,6 +36,68 @@
             border-bottom-color: #aaa;
             color: #666;
         }
+        .upcoming-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        .upcoming-header .section-title {
+            flex: 1;
+            margin: 0;
+        }
+        .upcoming-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 10px;
+        }
+        .upcoming-controls[hidden] {
+            display: none;
+        }
+        .upcoming-section,
+        .upcoming-carousel {
+            min-width: 0;
+            max-width: 100%;
+        }
+        .upcoming-control {
+            width: 40px;
+            height: 40px;
+            border: 1px solid #c9c9c9;
+            border-radius: 4px;
+            background: #fff;
+            color: #333;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .upcoming-control:hover:not(:disabled) {
+            background: #f0f0f0;
+        }
+        .upcoming-control:disabled {
+            opacity: 0.45;
+            cursor: default;
+        }
+        .upcoming-carousel {
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+            touch-action: pan-y;
+            user-select: none;
+        }
+        .upcoming-track {
+            display: flex;
+            align-items: flex-start;
+            transition: transform 200ms ease;
+            will-change: transform;
+        }
+        .upcoming-position {
+            min-width: 42px;
+            color: #555;
+            font-size: 13px;
+            text-align: center;
+        }
         .banner-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -74,6 +136,9 @@
         }
         .banner-card.upcoming {
             cursor: not-allowed;
+            box-sizing: border-box;
+            flex: 0 0 100%;
+            width: 100%;
         }
         .banner-card.upcoming:hover {
             border-color: #ddd;
@@ -90,6 +155,11 @@
             border-radius: 5px;
             font-size: 16px;
             font-weight: bold;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .upcoming-track {
+                transition: none;
+            }
         }
     </style>
 </head>
@@ -161,25 +231,169 @@
                 
                 // Display upcoming banners FIRST
                 if (upcomingBanners.length > 0) {
+                    const upcomingSection = document.createElement('div');
+                    upcomingSection.className = 'upcoming-section';
+                    const upcomingHeader = document.createElement('div');
+                    upcomingHeader.className = 'upcoming-header';
                     const upcomingTitle = document.createElement('div');
                     upcomingTitle.className = 'section-title upcoming';
                     upcomingTitle.textContent = 'Upcoming Banners';
-                    bannerGrid.appendChild(upcomingTitle);
+                    const upcomingControls = document.createElement('div');
+                    upcomingControls.className = 'upcoming-controls';
+                    upcomingControls.innerHTML = `
+                        <button type="button" class="upcoming-control" data-direction="-1" aria-label="Previous upcoming banners" title="Previous">&larr;</button>
+                        <span class="upcoming-position" aria-live="polite"></span>
+                        <button type="button" class="upcoming-control" data-direction="1" aria-label="Next upcoming banners" title="Next">&rarr;</button>
+                        <button type="button" class="upcoming-control" data-rotation-toggle aria-label="Pause automatic rotation" title="Pause automatic rotation">&#x23F8;</button>
+                    `;
+                    upcomingHeader.append(upcomingTitle);
+                    const upcomingCarousel = document.createElement('div');
+                    upcomingCarousel.className = 'upcoming-carousel';
+                    upcomingCarousel.id = 'upcomingCarousel';
+                    upcomingCarousel.setAttribute('aria-label', 'Upcoming banners');
+                    upcomingCarousel.tabIndex = 0;
+                    const upcomingTrack = document.createElement('div');
+                    upcomingTrack.className = 'upcoming-track';
                     
                     upcomingBanners.forEach(banner => {
                         const bannerCard = document.createElement('div');
                         bannerCard.className = 'banner-card upcoming';
+                        bannerCard.dataset.banner = banner.name;
                         bannerCard.style.position = 'relative';
                         
                         const selectedVariant = getBannerVariant(banner);
                         const bannerImage = selectedVariant.image;
                         bannerCard.innerHTML = `
-                            <img src="${bannerImage}" alt="${banner.displayName || banner.name} Banner">
+                            <img src="${bannerImage}" alt="${banner.displayName || banner.name} Banner" draggable="false">
                             <div class="upcoming-badge">COMING ${banner.date || 'SOON'}</div>
                         `;
                         
-                        bannerGrid.appendChild(bannerCard);
+                        upcomingTrack.appendChild(bannerCard);
                     });
+                    upcomingCarousel.appendChild(upcomingTrack);
+
+                    const previousButton = upcomingControls.querySelector('[data-direction="-1"]');
+                    const nextButton = upcomingControls.querySelector('[data-direction="1"]');
+                    const upcomingPosition = upcomingControls.querySelector('.upcoming-position');
+                    const rotationToggle = upcomingControls.querySelector('[data-rotation-toggle]');
+                    let activeUpcomingIndex = 0;
+                    let swipeStartX = null;
+                    let autoAdvanceTimer = null;
+                    let interactionPaused = false;
+                    let rotationPaused = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                    const updateUpcomingCarouselHeight = () => {
+                        const activeSlide = upcomingTrack.children[activeUpcomingIndex];
+                        if (!activeSlide) return;
+                        const activeHeight = activeSlide.getBoundingClientRect().height;
+                        upcomingCarousel.style.height = `${activeHeight}px`;
+                        upcomingTrack.style.height = `${activeHeight}px`;
+                    };
+                    const showUpcomingSlide = index => {
+                        activeUpcomingIndex = ((index % upcomingBanners.length) + upcomingBanners.length) % upcomingBanners.length;
+                        upcomingTrack.style.transform = `translateX(-${activeUpcomingIndex * 100}%)`;
+                        previousButton.disabled = upcomingBanners.length < 2;
+                        nextButton.disabled = upcomingBanners.length < 2;
+                        upcomingPosition.textContent = `${activeUpcomingIndex + 1} / ${upcomingBanners.length}`;
+                        updateUpcomingCarouselHeight();
+                    };
+                    const stopAutoAdvance = () => {
+                        window.clearTimeout(autoAdvanceTimer);
+                        autoAdvanceTimer = null;
+                    };
+                    const scheduleAutoAdvance = () => {
+                        stopAutoAdvance();
+                        if (rotationPaused || interactionPaused || document.hidden || upcomingBanners.length < 2) return;
+                        autoAdvanceTimer = window.setTimeout(() => {
+                            showUpcomingSlide((activeUpcomingIndex + 1) % upcomingBanners.length);
+                            scheduleAutoAdvance();
+                        }, 2500);
+                    };
+                    const goToUpcomingSlide = index => {
+                        showUpcomingSlide(index);
+                        scheduleAutoAdvance();
+                    };
+                    const updateRotationToggle = () => {
+                        rotationToggle.innerHTML = rotationPaused ? '&#x25B6;' : '&#x23F8;';
+                        rotationToggle.setAttribute('aria-label', rotationPaused ? 'Play automatic rotation' : 'Pause automatic rotation');
+                        rotationToggle.title = rotationPaused ? 'Play automatic rotation' : 'Pause automatic rotation';
+                    };
+
+                    upcomingControls.querySelectorAll('[data-direction]').forEach(button => {
+                        button.addEventListener('click', () => {
+                            goToUpcomingSlide(activeUpcomingIndex + Number(button.dataset.direction));
+                        });
+                    });
+                    rotationToggle.addEventListener('click', () => {
+                        rotationPaused = !rotationPaused;
+                        updateRotationToggle();
+                        scheduleAutoAdvance();
+                    });
+                    upcomingCarousel.addEventListener('pointerdown', event => {
+                        if (event.pointerType === 'mouse') event.preventDefault();
+                        swipeStartX = event.clientX;
+                        upcomingCarousel.setPointerCapture(event.pointerId);
+                    });
+                    upcomingCarousel.addEventListener('pointerup', event => {
+                        if (swipeStartX === null) return;
+                        const swipeDistance = event.clientX - swipeStartX;
+                        if (Math.abs(swipeDistance) > 40) {
+                            goToUpcomingSlide(activeUpcomingIndex + (swipeDistance < 0 ? 1 : -1));
+                        }
+                        swipeStartX = null;
+                    });
+                    upcomingCarousel.addEventListener('pointercancel', () => {
+                        swipeStartX = null;
+                    });
+                    upcomingCarousel.addEventListener('keydown', event => {
+                        if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+                            event.preventDefault();
+                            goToUpcomingSlide(activeUpcomingIndex + (event.key === 'ArrowRight' ? 1 : -1));
+                        }
+                    });
+                    upcomingSection.addEventListener('pointerenter', () => {
+                        interactionPaused = true;
+                        stopAutoAdvance();
+                    });
+                    upcomingSection.addEventListener('pointerleave', () => {
+                        interactionPaused = false;
+                        scheduleAutoAdvance();
+                    });
+                    upcomingCarousel.addEventListener('focusin', () => {
+                        interactionPaused = true;
+                        stopAutoAdvance();
+                    });
+                    upcomingCarousel.addEventListener('focusout', event => {
+                        if (!upcomingCarousel.contains(event.relatedTarget)) {
+                            interactionPaused = false;
+                            scheduleAutoAdvance();
+                        }
+                    });
+                    document.addEventListener('visibilitychange', () => {
+                        if (document.hidden) {
+                            stopAutoAdvance();
+                        } else {
+                            scheduleAutoAdvance();
+                        }
+                    });
+                    window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', event => {
+                        if (event.matches) {
+                            rotationPaused = true;
+                            stopAutoAdvance();
+                        }
+                        updateRotationToggle();
+                        scheduleAutoAdvance();
+                    });
+                    upcomingTrack.querySelectorAll('img').forEach((image, index) => {
+                        image.addEventListener('load', () => {
+                            if (index === activeUpcomingIndex) updateUpcomingCarouselHeight();
+                        });
+                    });
+                    upcomingSection.append(upcomingHeader, upcomingCarousel, upcomingControls);
+                    bannerGrid.appendChild(upcomingSection);
+                    showUpcomingSlide(0);
+                    window.addEventListener('resize', updateUpcomingCarouselHeight);
+                    updateRotationToggle();
+                    scheduleAutoAdvance();
                 }
                 
                 // Display active banners
