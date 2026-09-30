@@ -1,7 +1,114 @@
 {
+    "bannerOrder": [
+        "art-meme",
+        "gothic",
+        "childhood",
+        "dragon",
+
+        "actor",
+        "dnd",
+
+        "easteregg",
+        "whump",
+        "vampire",
+        "cursed",
+        "spicy",
+        "shopping",
+        "baby",
+        "duo",
+        "redesign",
+        "emoji",
+        "fusion",
+        "mafia",
+        "romance",
+        "flip",
+        "animal",
+        "atmospheric",
+        "moments",
+
+        "crack",
+        "cutesy",
+        "whimsy",
+        "comic"
+    ],
     "banners": [
         {
+            "name": "dragon",
+            "hidden": false,
+            "displayName": "Dragon",
+            "status": "active",
+            "drops": [
+                {
+                    "item": "as a dragon",
+                    "chance": 0.3
+                },
+                {
+                    "item": "look at my cool powers!",
+                    "chance": 0.3
+                },
+                {
+                    "item": "all dragons have a horde…",
+                    "chance": 0.3
+                },
+                {
+                    "item": "all dragons have a… rider?!",
+                    "chance": 0.1
+                }
+            ]
+        },
+        {
+            "name": "gothic",
+            "hidden": false,
+            "displayName": "Gothic",
+            "status": "active",
+            "drops": [
+                {
+                    "item": "gothic outfit",
+                    "chance": 0.2
+                },
+                {
+                    "item": "scene outfit",
+                    "chance": 0.2
+                },
+                {
+                    "item": "something is wrong redesign (uncanny, too many limbs, too long hair, etc)",
+                    "chance": 0.2
+                },
+                {
+                    "item": "themed romance",
+                    "chance": 0.2,
+                    "detailOptions": [
+                        "romeo and juliet",
+                        "frankenstein and monster",
+                        "the dance macabre",
+                        "angel and demon",
+                        "vampire and spawn",
+                        "witch and familiar",
+                        "big titty goth and jock"
+                    ]
+                },
+                {
+                    "item": "gothic manor room",
+                    "chance": 0.2
+                }
+            ]
+        },
+        {
+            "name": "art-meme",
+            "hidden": false,
+            "displayName": "Art Meme",
+            "status": "active",
+            "drops": [
+                {
+                    "item": "",
+                    "chance": 1,
+                    "imageOptions": "art-meme"
+                }
+            ]
+        },
+        {
             "name": "actor",
+            "hidden": false,
             "displayName": "Actor AU",
             "status": "active",
             "img": "banner_art/banneractor.png",
@@ -33,12 +140,14 @@
                         "on set drama",
                         "romance",
                         "family life",
-                        "personal life"                    ]
+                        "personal life"
+                    ]
                 }
             ]
         },
         {
             "name": "dnd",
+            "hidden": false,
             "displayName": "D&D AU",
             "status": "past",
             "img": "banner_art/bannerdnd.png",
@@ -233,7 +342,7 @@
                             "item": "a wealthy merchant pays great to find a piece of legendary armor!"
                         },
                         {
-                            "item": "[party member] has accidentally drank a love potion, and has fallen in love with [name from all]!"
+                            "item": "[party member] has accidentally drank a love potion, and has fallen in love with [party member]!"
                         },
                         {
                             "item": "the moon has disappeared, and the world is cast into eternal darkness."
@@ -324,7 +433,116 @@
             }
         },
         {
+            "name": "childhood",
+            "hidden": false,
+            "displayName": "Childhood Fantasy",
+            "status": "active",
+            "childhoodFantasyRules": {
+                "steps": {
+                    "step1": {
+                        "label": "Who's dreaming?",
+                        "drops": [
+                            {
+                                "item": "[character] as a child",
+                                "chance": 0.5
+                            },
+                            {
+                                "item": "[character] and [pull character from campaign + personal list] as siblings",
+                                "chance": 0.25
+                            },
+                            {
+                                "item": "[character] and [pull character from campaign + personal list] as parent and child",
+                                "chance": 0.25
+                            }
+                        ],
+                        "secondaryDrops": [
+                            {
+                                "item": "Young child",
+                                "chance": 0.25
+                            },
+                            {
+                                "item": "Older child",
+                                "chance": 0.5
+                            },
+                            {
+                                "item": "Young teenager",
+                                "chance": 0.25
+                            }
+                        ]
+                    },
+                    "step2": {
+                        "label": "What's playtime?",
+                        "drops": [
+                            {
+                                "item": "play",
+                                "chance": 0.5,
+                                "detailOptions": [
+                                    "mud cafe!",
+                                    "bathtime fun",
+                                    "temper tantrum",
+                                    "baking cookies",
+                                    "clean-up :( ",
+                                    "pet time!",
+                                    "storytime!",
+                                    "at a park!",
+                                    "going on an adventure!",
+                                    "video games",
+                                    "science experiment",
+                                    "no time for play. child labor.",
+                                    "no time for play. child soldier.",
+                                    "no time for play. child death."
+                                ]
+                            },
+                            {
+                                "item": "play pretend",
+                                "chance": 0.5,
+                                "detailOptions": [
+                                    "[pull character from campaign + personal list] and [pull character from campaign + personal list] are getting married after having a child together out of wedlock!",
+                                    "[pull character from campaign + personal list] and [pull character from campaign + personal list] are having a horrible fight and getting divorced!",
+                                    "[pull character from campaign + personal list] is fighting, alone and wounded, in a brutal war...",
+                                    "[pull character from campaign + personal list] is a horrible monster being executed for killing thousands!",
+                                    "[pull character from campaign + personal list] cheated on [pull character from campaign + personal list] and is pregnant with another's child!",
+                                    "[pull character from campaign + personal list] is the head of a very, very bad group of villains",
+                                    "fire! fire! fire for [pull character from campaign + personal list]!",
+                                    "me and [pull character from campaign + personal list] are getting married when I grow up",
+                                    "I'm the princess, and [pull character from campaign + personal list] will come save me!",
+                                    "I'm a hero, and my mortal enemy is [pull character from campaign + personal list]!",
+                                    "[pull character from campaign + personal list] is killing me! But I actually kill them!"
+                                ]
+                            }
+                        ]
+                    },
+                    "step3": {
+                        "label": "How does playtime resolve?",
+                        "drops": [
+                            {
+                                "item": "with a nap",
+                                "chance": 0.2
+                            },
+                            {
+                                "item": "with someone getting involved",
+                                "chance": 0.2
+                            },
+                            {
+                                "item": "with a plot twist!",
+                                "chance": 0.2
+                            },
+                            {
+                                "item": "with a distraction",
+                                "chance": 0.2
+                            },
+                            {
+                                "item": "with mealtime",
+                                "chance": 0.2
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        {
             "name": "cutesy",
+            "hidden": false,
             "status": "active",
             "img": "banner_art/bannercutesy.png",
             "drops": [
@@ -348,6 +566,7 @@
         },
         {
             "name": "whimsy",
+            "hidden": false,
             "status": "active",
             "img": "banner_art/whimsybanner.jpg",
             "drops": [
@@ -420,6 +639,7 @@
         },
         {
             "name": "easteregg",
+            "hidden": false,
             "displayName": "Easter Egg Banner",
             "status": "past",
             "img": "banner_art/ednabanner_morning.png",
@@ -494,6 +714,7 @@
         },
         {
             "name": "whump",
+            "hidden": false,
             "status": "past",
             "img": "banner_art/bannerwhump.png",
             "drops": [
@@ -517,6 +738,7 @@
         },
         {
             "name": "vampire",
+            "hidden": false,
             "status": "past",
             "img": "banner_art/bannervamp.png",
             "drops": [
@@ -540,6 +762,7 @@
         },
         {
             "name": "cursed",
+            "hidden": false,
             "status": "past",
             "img": "banner_art/cursedbanner.png",
             "drops": [
@@ -601,6 +824,7 @@
         },
         {
             "name": "spicy",
+            "hidden": false,
             "status": "past",
             "img": "banner_art/nsfwbanner.png",
             "drops": [
@@ -636,6 +860,7 @@
         },
         {
             "name": "shopping",
+            "hidden": false,
             "status": "past",
             "img": "banner_art/shoppingbanner.png",
             "drops": [
@@ -739,6 +964,7 @@
         },
         {
             "name": "baby",
+            "hidden": false,
             "status": "past",
             "img": "banner_art/babybanner.png",
             "drops": [
@@ -754,6 +980,7 @@
         },
         {
             "name": "duo",
+            "hidden": false,
             "status": "past",
             "img": "banner_art/duobanner.png",
             "miniComicChance": 0.10,
@@ -778,6 +1005,7 @@
         },
         {
             "name": "redesign",
+            "hidden": false,
             "status": "past",
             "img": "banner_art/redesignbanner.png",
             "drops": [
@@ -789,6 +1017,7 @@
         },
         {
             "name": "emoji",
+            "hidden": false,
             "status": "past",
             "img": "banner_art/emojibanner.png",
             "drops": [
@@ -800,6 +1029,7 @@
         },
         {
             "name": "fusion",
+            "hidden": false,
             "status": "past",
             "img": "banner_art/fusionbanner.png",
             "drops": [
@@ -819,6 +1049,7 @@
         },
         {
             "name": "comic",
+            "hidden": false,
             "img": "banner_art/bannercomic.png",
             "status": "active",
             "drops": [
@@ -858,6 +1089,7 @@
         },
         {
             "name": "mafia",
+            "hidden": false,
             "status": "upcoming",
             "date": "10/02",
             "img": "banner_art/mafiabanner.png",
@@ -894,6 +1126,7 @@
         },
         {
             "name": "romance",
+            "hidden": false,
             "status": "past",
             "img": "banner_art/romancebanner.png",
             "drops": [
@@ -917,6 +1150,7 @@
         },
         {
             "name": "flip",
+            "hidden": false,
             "status": "past",
             "img": "banner_art/bannerflip.png",
             "drops": [
@@ -956,6 +1190,7 @@
         },
         {
             "name": "animal",
+            "hidden": false,
             "status": "past",
             "img": "banner_art/banneranimal.png",
             "drops": [
@@ -979,6 +1214,7 @@
         },
         {
             "name": "atmospheric",
+            "hidden": false,
             "status": "past",
             "img": "banner_art/atmosphericbanner.png",
             "drops": [
@@ -1053,6 +1289,7 @@
         },
         {
             "name": "moments",
+            "hidden": false,
             "status": "past",
             "img": "banner_art/momentsbanner.png",
             "drops": [
@@ -1092,6 +1329,7 @@
         },
         {
             "name": "crack",
+            "hidden": false,
             "status": "past",
             "img": "banner_art/crackbanner.png",
             "drops": [

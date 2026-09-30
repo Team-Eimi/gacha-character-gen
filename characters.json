@@ -650,19 +650,24 @@
           "img": "characters/velem/lenor.png"
         },
         {
-          "name": "Farix"
+          "name": "Farix",
+          "img": "characters/velem/farix.png"
         },
         {
-          "name": "Kaian"
+          "name": "Kaian",
+          "img": "characters/velem/kaian.png"
         },
         {
-          "name": "Ura"
+          "name": "Ura",
+          "img": "characters/velem/ura.png"
         },
         {
-          "name": "Junia"
+          "name": "Junia",
+          "img": "characters/velem/junia.png"
         },
         {
-          "name": "Yesper"
+          "name": "Yesper",
+          "img": "characters/velem/yesper.png"
         }
       ]
     }

@@ -130,6 +130,10 @@
             object-fit: contain;
             border-radius: 8px;
         }
+        .drop-image--large {
+            max-width: min(100%, 850px);
+            max-height: none;
+        }
         .drop-rarity {
             font-size: 16px;
             margin-top: 5px;
@@ -317,6 +321,8 @@
         const dndPartyMember = urlParams.get('dndPartyMember');
         const dndScenarioCharacter = urlParams.get('dndScenarioCharacter');
         const dndScenarioCharacterImage = urlParams.get('dndScenarioCharacterImage');
+        const childhoodStep = urlParams.get('childhoodStep');
+        const childhoodSecondaryDrop = urlParams.get('childhoodSecondaryDrop');
 
         if (specialPoolLabel) {
             const specialPoolBadge = document.getElementById('specialPoolBadge');
@@ -443,7 +449,9 @@
             // 2) Roll the specific banner item using its own chance weights.
             // If prerolledDrop exists (from baby banner), use that instead
             const drop = prerolledDrop || rollDrop(rarity);
-            const secondaryDrop = rollSecondaryDrop();
+            const secondaryDrop = selectedBanner === 'childhood' && childhoodSecondaryDrop
+                ? { item: childhoodSecondaryDrop, rarity: '' }
+                : rollSecondaryDrop();
 
             // 3) Crit fail check (2% chance) happens after rolls, but before display.
             const critFailChance = 0.02;
@@ -677,8 +685,8 @@
                     document.getElementById('regularResults').style.display = 'block';
                     document.getElementById('babyResults').style.display = 'none';
                     
-                    if (selectedBanner === 'fusion' && rolledCharacter2) {
-                        document.querySelector('#regularResults .result-label').textContent = 'Characters';
+                    if ((selectedBanner === 'fusion' || (selectedBanner === 'childhood' && childhoodStep === 'step1')) && rolledCharacter2) {
+                        document.querySelector('#regularResults .result-label').textContent = selectedBanner === 'childhood' ? 'Dreaming Characters' : 'Characters';
                         document.getElementById('characterResult').textContent = character + ' & ' + rolledCharacter2;
                         renderCharacterImages([character, rolledCharacter2]);
                     } else {
@@ -743,8 +751,8 @@
                     document.getElementById('regularResults').style.display = 'block';
                     document.getElementById('babyResults').style.display = 'none';
                     
-                    if (selectedBanner === 'fusion' && rolledCharacter2) {
-                        document.querySelector('#regularResults .result-label').textContent = 'Characters';
+                    if ((selectedBanner === 'fusion' || (selectedBanner === 'childhood' && childhoodStep === 'step1')) && rolledCharacter2) {
+                        document.querySelector('#regularResults .result-label').textContent = selectedBanner === 'childhood' ? 'Dreaming Characters' : 'Characters';
                         document.getElementById('characterResult').textContent = character + ' & ' + rolledCharacter2;
                         renderCharacterImages([character, rolledCharacter2]);
                     } else {
@@ -795,9 +803,17 @@
 
             const image = document.createElement('img');
             image.className = 'drop-image';
+            if (selectedBanner === 'art-meme') {
+                image.classList.add('drop-image--large');
+            }
             image.src = imageOptions[Math.floor(Math.random() * imageOptions.length)];
             image.alt = `${matchingDrop.item} example`;
-            element.appendChild(image);
+            const rarityElement = element.nextElementSibling;
+            if (rarityElement?.classList.contains('drop-rarity')) {
+                rarityElement.after(image);
+            } else {
+                element.after(image);
+            }
         }
 
         function getDisplayedCharacter(character) {

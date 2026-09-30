@@ -137,10 +137,17 @@
             .then(response => response.json())
             .then(data => {
                 const bannerGrid = document.getElementById('bannerGrid');
+                const bannerOrder = new Map((data.bannerOrder || []).map((name, index) => [name, index]));
+                const compareBannerOrder = (first, second) =>
+                    (bannerOrder.get(first.name) ?? Number.MAX_SAFE_INTEGER) -
+                    (bannerOrder.get(second.name) ?? Number.MAX_SAFE_INTEGER);
+                const visibleBanners = data.banners.filter(banner => banner.hidden !== true);
                 
                 // Separate banners by status
-                const activeBanners = data.banners.filter(banner => banner.status === 'active');
-                const upcomingBanners = data.banners.filter(banner => banner.status === 'upcoming')
+                const activeBanners = visibleBanners
+                    .filter(banner => banner.status === 'active')
+                    .sort(compareBannerOrder);
+                const upcomingBanners = visibleBanners.filter(banner => banner.status === 'upcoming')
                     .sort((a, b) => {
                         // Sort by date (earliest first)
                         if (!a.date || !b.date) return 0;
@@ -148,7 +155,9 @@
                         const dateB = new Date(b.date + '/2026');
                         return dateA - dateB;
                     });
-                const pastBanners = data.banners.filter(banner => banner.status === 'past');
+                const pastBanners = visibleBanners
+                    .filter(banner => banner.status === 'past')
+                    .sort(compareBannerOrder);
                 
                 // Display upcoming banners FIRST
                 if (upcomingBanners.length > 0) {

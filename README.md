@@ -61,6 +61,7 @@ The gacha generator follows a 4-step process:
   "banners": [
     {
       "name": "cutesy",
+      "hidden": false,
       "status": "active",
       "img": "banner_art/bannercutesy.png",
       "drops": [

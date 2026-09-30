@@ -1,4 +1,19 @@
 {
+  "art-meme": {
+    "folder": "drops/art-meme",
+    "images": [
+      "drops/art-meme/0f905585b383934ccbb65d4562ce2b5e.png",
+      "drops/art-meme/4fcd750c91b97c91be2bb29cbc45345a.png",
+      "drops/art-meme/666c835da7257a0ba4d775499180fa87.png",
+      "drops/art-meme/775d94581a8aebc45cfb98f0410d7a67.png",
+      "drops/art-meme/8fa64730de2c6cf54ee6f7c51d1c7355.png",
+      "drops/art-meme/a859b02d5e7f26a93fd535a79e3e5ea8.png",
+      "drops/art-meme/c6da09189b50f5fc2b39227f52a3f0ba.png",
+      "drops/art-meme/d1478a3a0027fa642b6c1bfe9d619c85.png",
+      "drops/art-meme/eac02d57bb87bd1a92da3570955e132b.png",
+      "drops/art-meme/f5b0db89525fed4ba256eb659ff313cd.png"
+    ]
+  },
   "cursed/cursed-outfit": {
     "folder": "drops/cursed/cursed-outfit",
     "images": [

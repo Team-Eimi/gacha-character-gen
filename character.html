@@ -146,6 +146,12 @@
             margin-top: 5px;
         }
 
+        #childhoodStepSelector {
+            display: flex;
+            gap: 8px;
+            margin-top: 5px;
+        }
+
         .dnd-part-button {
             flex: 1;
             margin-top: 0;
@@ -159,7 +165,8 @@
         }
 
         @media (max-width: 600px) {
-            #dndPartSelector {
+            #dndPartSelector,
+            #childhoodStepSelector {
                 flex-direction: column;
             }
         }
@@ -174,7 +181,7 @@
         <label for="poolSelect" id="poolSelectLabel">Choose Campaign Pool:</label>
         <select id="poolSelect"></select>
 
-        <label for="personalPoolSelect">Choose Personal Pool:</label>
+        <label for="personalPoolSelect" id="personalPoolLabel">Choose Personal Pool:</label>
         <select id="personalPoolSelect">
             <option value="none">None</option>
         </select>
@@ -195,6 +202,20 @@
                 <label for="dndPartyMembers">Party members:</label>
                 <textarea id="dndPartyMembers" rows="4" placeholder="Enter names separated by commas or new lines"></textarea>
             </div>
+        </div>
+
+        <div id="childhoodOptions" style="display: none;">
+            <p>Choose a step to roll. Select a campaign and optional personal pool for all steps.</p>
+            <div id="childhoodStepSelector" role="group" aria-label="Childhood Fantasy step">
+                <button type="button" class="dnd-part-button selected" data-childhood-step="step1">1. Who's dreaming?</button>
+                <button type="button" class="dnd-part-button" data-childhood-step="step2">2. What's playtime?</button>
+                <button type="button" class="dnd-part-button" data-childhood-step="step3">3. How does playtime resolve?</button>
+            </div>
+            <div id="childhoodInitialCharacterContainer" style="display: none;">
+                <label for="childhoodInitialCharacter">Initial character:</label>
+                <input type="text" id="childhoodInitialCharacter" placeholder="Enter the character you rolled initially">
+            </div>
+            <div id="childhoodCharacterError" class="error"></div>
         </div>
 
         <div id="fusionPool2Container" style="display: none;">
@@ -310,6 +331,8 @@
         let rolledSpecialPool = null;
         let dndRules = null;
         let selectedDndPart = 'part1';
+        let childhoodFantasyRules = null;
+        let selectedChildhoodStep = 'step1';
         let allCharacterRecords = [];
 
         function getActiveSpecialPools() {
@@ -466,6 +489,12 @@
             document.getElementById('poolSelectLabel').textContent = 'Choose Campaign Pool:';
         }
 
+        if (selectedBanner === 'childhood') {
+            document.getElementById('childhoodOptions').style.display = 'block';
+            document.getElementById('poolSelectLabel').textContent = 'Campaign pool for random pulls:';
+            document.getElementById('personalPoolLabel').textContent = 'Personal pool for random pulls:';
+        }
+
         // Load character data from JSON files
         Promise.all([
             fetch('characters.json', { cache: 'no-store' }).then(response => response.json()),
@@ -489,6 +518,7 @@
                 personalPools = personalData['personal-pools'] || {};
                 specialPools = personalData['special-pools'] || [];
                 dndRules = (bannerData.banners.find(banner => banner.name === selectedBanner) || {}).dndRules || null;
+                childhoodFantasyRules = (bannerData.banners.find(banner => banner.name === selectedBanner) || {}).childhoodFantasyRules || null;
                 populateCampaignOptions(characterData);
 
                 const personalSelect = document.getElementById('personalPoolSelect');
@@ -577,6 +607,18 @@
         });
         document.querySelector('.dnd-part-button[data-part="part1"]').classList.add('selected');
 
+        document.querySelectorAll('[data-childhood-step]').forEach(button => {
+            button.addEventListener('click', function () {
+                selectedChildhoodStep = this.dataset.childhoodStep;
+                document.querySelectorAll('[data-childhood-step]').forEach(stepButton => {
+                    stepButton.classList.toggle('selected', stepButton === this);
+                });
+                document.getElementById('childhoodInitialCharacterContainer').style.display =
+                    selectedChildhoodStep === 'step1' ? 'none' : 'block';
+                document.getElementById('childhoodCharacterError').textContent = '';
+            });
+        });
+
         function rollDndCharacter() {
             const race = weightedDndRandom(dndRules.races);
             const raceName = race.detailOptions
@@ -635,6 +677,33 @@
             };
         }
 
+        function rollChildhoodFantasyStep(step, initialCharacter, campaignPool, personalPool) {
+            const stepRules = childhoodFantasyRules.steps[step];
+            const selectedDrop = weightedDndRandom(stepRules.drops);
+            const detail = Array.isArray(selectedDrop.detailOptions) && selectedDrop.detailOptions.length > 0
+                ? selectedDrop.detailOptions[Math.floor(Math.random() * selectedDrop.detailOptions.length)]
+                : '';
+            let result = detail ? `${selectedDrop.item}: ${detail}` : selectedDrop.item;
+            const availableCharacters = [...new Set([...campaignPool, ...personalPool])];
+            const pulledCharacters = [];
+            const pullMarker = '[pull character from campaign + personal list]';
+
+            result = result.replaceAll('[character]', initialCharacter);
+            result = result.replaceAll(pullMarker, () => {
+                const alternatives = availableCharacters.filter(character => character !== initialCharacter);
+                const pullPool = alternatives.length > 0 ? alternatives : availableCharacters;
+                const pulledCharacter = pullPool[Math.floor(Math.random() * pullPool.length)] || 'a random character';
+                pulledCharacters.push(pulledCharacter);
+                return pulledCharacter;
+            });
+
+            const secondaryDrop = Array.isArray(stepRules.secondaryDrops)
+                ? weightedDndRandom(stepRules.secondaryDrops).item
+                : '';
+
+            return { result, secondaryDrop, pulledCharacters };
+        }
+
         function goToCoinSelection() {
             const poolChoice = document.getElementById('poolSelect').value;
             const personalPoolChoice = document.getElementById('personalPoolSelect').value;
@@ -646,10 +715,11 @@
             const selectedFlavors = getSelectedWhimsyFlavors();
             const startingNewComic = selectedBanner === 'comic' && document.getElementById('newComicToggle').checked;
             const dndMode = selectedBanner === 'dnd' ? document.getElementById('dndMode').value : '';
+            const isChildhoodManualStep = selectedBanner === 'childhood' && selectedChildhoodStep !== 'step1';
 
             const campaignPool = getPool(poolChoice);
             const personalPool = getPersonalPool(personalPoolChoice);
-            const pool = choosePool(campaignPool, personalPool);
+            const pool = isChildhoodManualStep ? campaignPool : choosePool(campaignPool, personalPool);
 
             // Check if characters are loaded
             if (pool.length === 0) {
@@ -674,6 +744,7 @@
             // Roll the normal gacha character, or the D&D result, before coin selection.
             let rolledCharacter = 'The party';
             let dndResult = null;
+            let childhoodResult = null;
             if (selectedBanner === 'dnd') {
                 if (!dndRules) {
                     alert('D&D banner rules are still loading. Please wait a moment and try again.');
@@ -693,6 +764,28 @@
                     }
                     dndResult = rollDndScenario(partyMembers);
                 }
+            } else if (selectedBanner === 'childhood') {
+                if (!childhoodFantasyRules) {
+                    alert('Childhood Fantasy rules are still loading. Please wait a moment and try again.');
+                    return;
+                }
+
+                if (isChildhoodManualStep) {
+                    rolledCharacter = document.getElementById('childhoodInitialCharacter').value.trim();
+                    if (!rolledCharacter) {
+                        document.getElementById('childhoodCharacterError').textContent = 'Enter the character you rolled initially.';
+                        return;
+                    }
+                } else {
+                    rolledCharacter = rollCharacter(pool, goldStarEnabled, goldStarChar, goldStarPercent);
+                }
+
+                childhoodResult = rollChildhoodFantasyStep(
+                    selectedChildhoodStep,
+                    rolledCharacter,
+                    campaignPool,
+                    personalPool
+                );
             } else {
                 rolledCharacter = rollCharacter(pool, goldStarEnabled, goldStarChar, goldStarPercent);
             }
@@ -702,6 +795,16 @@
 
             // Build URL with rolled character and all parameters
             let url = `results.html?banner=${selectedBanner}&pool=${poolChoice}&character=${encodeURIComponent(rolledCharacter)}`;
+
+            if (selectedBanner === 'childhood') {
+                url += `&childhoodStep=${encodeURIComponent(selectedChildhoodStep)}&prerolledDrop=${encodeURIComponent(childhoodResult.result)}`;
+                if (childhoodResult.secondaryDrop) {
+                    url += `&childhoodSecondaryDrop=${encodeURIComponent(childhoodResult.secondaryDrop)}`;
+                }
+                if (selectedChildhoodStep === 'step1' && childhoodResult.pulledCharacters.length > 0) {
+                    url += `&character2=${encodeURIComponent(childhoodResult.pulledCharacters[0])}`;
+                }
+            }
 
             if (matchedSpecialPool) {
                 url += `&specialPool=${encodeURIComponent(matchedSpecialPool.id)}&specialPoolLabel=${encodeURIComponent(matchedSpecialPool.label)}`;

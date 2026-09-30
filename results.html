@@ -192,6 +192,9 @@
         const dndPartyMember = urlParams.get('dndPartyMember');
         const dndScenarioCharacter = urlParams.get('dndScenarioCharacter');
         const dndScenarioCharacterImage = urlParams.get('dndScenarioCharacterImage');
+        const childhoodStep = urlParams.get('childhoodStep');
+        const childhoodSecondaryDrop = urlParams.get('childhoodSecondaryDrop');
+        const prerolledDrop = urlParams.get('prerolledDrop');
 
         if (specialPoolLabel && !specialPoolCharacter) {
             const specialPoolBadge = document.getElementById('specialPoolBadge');
@@ -357,9 +360,15 @@
                     params.append('specialPoolCharacter', specialPoolCharacter);
                 }
 
-                if (selectedBanner === 'fusion' && rolledCharacter2) {
+                if ((selectedBanner === 'fusion' || (selectedBanner === 'childhood' && childhoodStep === 'step1')) && rolledCharacter2) {
                     params.append('character2', rolledCharacter2);
                     if (selectedPool2) params.append('pool2', selectedPool2);
+                }
+
+                if (selectedBanner === 'childhood') {
+                    if (prerolledDrop) params.append('prerolledDrop', prerolledDrop);
+                    if (childhoodStep) params.append('childhoodStep', childhoodStep);
+                    if (childhoodSecondaryDrop) params.append('childhoodSecondaryDrop', childhoodSecondaryDrop);
                 }
 
                 if (comicMode === 'new') {
