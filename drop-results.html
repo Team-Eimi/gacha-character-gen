@@ -323,6 +323,7 @@
         const dndScenarioCharacterImage = urlParams.get('dndScenarioCharacterImage');
         const childhoodStep = urlParams.get('childhoodStep');
         const childhoodSecondaryDrop = urlParams.get('childhoodSecondaryDrop');
+        const bracketStep = urlParams.get('bracketStep');
 
         if (specialPoolLabel) {
             const specialPoolBadge = document.getElementById('specialPoolBadge');
@@ -685,16 +686,24 @@
                     document.getElementById('regularResults').style.display = 'block';
                     document.getElementById('babyResults').style.display = 'none';
                     
-                    if ((selectedBanner === 'fusion' || (selectedBanner === 'childhood' && childhoodStep === 'step1')) && rolledCharacter2) {
-                        document.querySelector('#regularResults .result-label').textContent = selectedBanner === 'childhood' ? 'Dreaming Characters' : 'Characters';
-                        document.getElementById('characterResult').textContent = character + ' & ' + rolledCharacter2;
+                    const characterResultItem = document.getElementById('characterResult').closest('.result-item');
+                    if (selectedBanner === 'bracket' && bracketStep === 'step2') {
+                        characterResultItem.style.display = 'none';
+                    } else if ((selectedBanner === 'fusion' || (selectedBanner === 'childhood' && childhoodStep === 'step1') || (selectedBanner === 'bracket' && bracketStep === 'step1')) && rolledCharacter2) {
+                        characterResultItem.style.display = 'block';
+                        document.querySelector('#regularResults .result-label').textContent = selectedBanner === 'bracket' ? 'Fighters' : selectedBanner === 'childhood' ? 'Dreaming Characters' : 'Characters';
+                        document.getElementById('characterResult').textContent = selectedBanner === 'bracket' ? `${character} vs ${rolledCharacter2}` : character + ' & ' + rolledCharacter2;
                         renderCharacterImages([character, rolledCharacter2]);
                     } else {
+                        characterResultItem.style.display = 'block';
                         const displayedCharacter = getDisplayedCharacter(character);
                         document.getElementById('characterResult').textContent = displayedCharacter;
                         renderCharacterImages([displayedCharacter]);
                     }
                     setDndDropResult(drop);
+                    if (selectedBanner === 'bracket' && bracketStep === 'step1') {
+                        showBracketRarityOnly();
+                    }
                     document.getElementById('dropRarity').innerHTML = 
                         `<span class="rarity-${rarity}">${rarityText}</span> - ${rarityDescriptions[rarity]}` + critFailMessage;
                     displaySecondaryDrop(secondaryDrop);
@@ -751,16 +760,24 @@
                     document.getElementById('regularResults').style.display = 'block';
                     document.getElementById('babyResults').style.display = 'none';
                     
-                    if ((selectedBanner === 'fusion' || (selectedBanner === 'childhood' && childhoodStep === 'step1')) && rolledCharacter2) {
-                        document.querySelector('#regularResults .result-label').textContent = selectedBanner === 'childhood' ? 'Dreaming Characters' : 'Characters';
-                        document.getElementById('characterResult').textContent = character + ' & ' + rolledCharacter2;
+                    const characterResultItem = document.getElementById('characterResult').closest('.result-item');
+                    if (selectedBanner === 'bracket' && bracketStep === 'step2') {
+                        characterResultItem.style.display = 'none';
+                    } else if ((selectedBanner === 'fusion' || (selectedBanner === 'childhood' && childhoodStep === 'step1') || (selectedBanner === 'bracket' && bracketStep === 'step1')) && rolledCharacter2) {
+                        characterResultItem.style.display = 'block';
+                        document.querySelector('#regularResults .result-label').textContent = selectedBanner === 'bracket' ? 'Fighters' : selectedBanner === 'childhood' ? 'Dreaming Characters' : 'Characters';
+                        document.getElementById('characterResult').textContent = selectedBanner === 'bracket' ? `${character} vs ${rolledCharacter2}` : character + ' & ' + rolledCharacter2;
                         renderCharacterImages([character, rolledCharacter2]);
                     } else {
+                        characterResultItem.style.display = 'block';
                         const displayedCharacter = getDisplayedCharacter(character);
                         document.getElementById('characterResult').textContent = displayedCharacter;
                         renderCharacterImages([displayedCharacter]);
                     }
                     setDndDropResult(drop);
+                    if (selectedBanner === 'bracket' && bracketStep === 'step1') {
+                        showBracketRarityOnly();
+                    }
                     document.getElementById('dropRarity').innerHTML = 
                         `<span class="rarity-${rarity}">${rarityText}</span> - ${rarityDescriptions[rarity]}`;
                     displaySecondaryDrop(secondaryDrop);
@@ -787,6 +804,13 @@
 
             const scenarioImage = characterImageMap.get(dndScenarioCharacter) || dndScenarioCharacterImage;
             dropResult.innerHTML = `${escapeHtml(dndScenario)}${scenarioImage ? `<br><img class="character-image" src="${escapeHtml(scenarioImage)}" alt="${escapeHtml(dndScenarioCharacter || 'Character appearing in scenario')}">` : ''}`;
+        }
+
+        function showBracketRarityOnly() {
+            const dropTypeResult = document.getElementById('dropTypeResult');
+            dropTypeResult.style.display = 'block';
+            dropTypeResult.querySelector('.result-label').style.display = 'none';
+            document.getElementById('dropResult').style.display = 'none';
         }
 
         function displayDropResult(drop, element) {

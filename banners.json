@@ -4,6 +4,7 @@
         "gothic",
         "childhood",
         "dragon",
+        "bracket",
 
         "actor",
         "dnd",
@@ -24,7 +25,6 @@
         "animal",
         "atmospheric",
         "moments",
-
         "crack",
         "cutesy",
         "whimsy",
@@ -32,10 +32,76 @@
     ],
     "banners": [
         {
-            "name": "dragon",
+            "name": "bracket",
+            "displayName": "Brackets Banner",
             "hidden": true,
+            "status": "upcoming",
+            "date": "10/28",
+            "drops": [
+                {
+                    "item": "Biggest dick",
+                    "chance": 1
+                },
+                {
+                    "item": "Largest balls",
+                    "chance": 1
+                },
+                {
+                    "item": "Best at running in heels",
+                    "chance": 1
+                },
+                {
+                    "item": "Read most books this year",
+                    "chance": 1
+                },
+                {
+                    "item": "Drinking competition",
+                    "chance": 1
+                },
+                {
+                    "item": "Stone skipping",
+                    "chance": 1
+                },
+                {
+                    "item": "Suturing a wound",
+                    "chance": 1
+                },
+                {
+                    "item": "Sexist when dressed in a trashbag",
+                    "chance": 1
+                },
+                {
+                    "item": "Most able to fit inside a suitcase",
+                    "chance": 1
+                },
+                {
+                    "item": "best in a haunted house",
+                    "chance": 1
+                },
+                {
+                    "item": "best kisser",
+                    "chance": 1
+                },
+                {
+                    "item": "creepiest",
+                    "chance": 1
+                },
+                {
+                    "item": "Best stalker",
+                    "chance": 1
+                },
+                {
+                    "item": "Most devoted",
+                    "chance": 1
+                }
+            ]
+        },
+        {
+            "name": "dragon",
+            "hidden": false,
             "displayName": "Dragon",
-            "status": "active",
+            "status": "upcoming",
+            "date": "10/22",
             "drops": [
                 {
                     "item": "as a dragon",

@@ -195,6 +195,7 @@
         const childhoodStep = urlParams.get('childhoodStep');
         const childhoodSecondaryDrop = urlParams.get('childhoodSecondaryDrop');
         const prerolledDrop = urlParams.get('prerolledDrop');
+        const bracketStep = urlParams.get('bracketStep');
 
         if (specialPoolLabel && !specialPoolCharacter) {
             const specialPoolBadge = document.getElementById('specialPoolBadge');
@@ -210,7 +211,13 @@
 
 
         // Display the rolled character(s)
-        if (selectedBanner === 'baby') {
+        if (selectedBanner === 'bracket' && bracketStep === 'step2') {
+            document.querySelector('.character-result').style.display = 'none';
+        } else if (selectedBanner === 'bracket' && bracketStep === 'step1' && rolledCharacter2) {
+            document.getElementById('resultsHeading').textContent = 'Fighters Selected';
+            document.getElementById('characterResultLabel').textContent = 'Fighters';
+            document.getElementById('characterResult').textContent = `${rolledCharacter} vs ${rolledCharacter2}`;
+        } else if (selectedBanner === 'baby') {
             document.getElementById('characterResult').textContent = rolledCharacter + ' (Mommy)';
         } else if (selectedBanner === 'fusion' && rolledCharacter2) {
             document.getElementById('characterResultLabel').textContent = 'Your Characters';
@@ -360,7 +367,7 @@
                     params.append('specialPoolCharacter', specialPoolCharacter);
                 }
 
-                if ((selectedBanner === 'fusion' || (selectedBanner === 'childhood' && childhoodStep === 'step1')) && rolledCharacter2) {
+                if ((selectedBanner === 'fusion' || (selectedBanner === 'childhood' && childhoodStep === 'step1') || (selectedBanner === 'bracket' && bracketStep === 'step1')) && rolledCharacter2) {
                     params.append('character2', rolledCharacter2);
                     if (selectedPool2) params.append('pool2', selectedPool2);
                 }
@@ -369,6 +376,11 @@
                     if (prerolledDrop) params.append('prerolledDrop', prerolledDrop);
                     if (childhoodStep) params.append('childhoodStep', childhoodStep);
                     if (childhoodSecondaryDrop) params.append('childhoodSecondaryDrop', childhoodSecondaryDrop);
+                }
+
+                if (selectedBanner === 'bracket') {
+                    if (bracketStep) params.append('bracketStep', bracketStep);
+                    if (prerolledDrop) params.append('prerolledDrop', prerolledDrop);
                 }
 
                 if (comicMode === 'new') {

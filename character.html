@@ -152,6 +152,12 @@
             margin-top: 5px;
         }
 
+        #bracketStepSelector {
+            display: flex;
+            gap: 8px;
+            margin-top: 5px;
+        }
+
         .dnd-part-button {
             flex: 1;
             margin-top: 0;
@@ -216,6 +222,14 @@
                 <input type="text" id="childhoodInitialCharacter" placeholder="Enter the character you rolled initially">
             </div>
             <div id="childhoodCharacterError" class="error"></div>
+        </div>
+
+        <div id="bracketOptions" style="display: none;">
+            <div id="bracketStepSelector" role="group" aria-label="Bracket step">
+                <button type="button" class="dnd-part-button selected" data-bracket-step="step1">Choose your fighter!</button>
+                <button type="button" class="dnd-part-button" data-bracket-step="step2">Begin!</button>
+            </div>
+            <div id="bracketError" class="error"></div>
         </div>
 
         <div id="fusionPool2Container" style="display: none;">
@@ -333,6 +347,8 @@
         let selectedDndPart = 'part1';
         let childhoodFantasyRules = null;
         let selectedChildhoodStep = 'step1';
+        let selectedBracketStep = 'step1';
+        let bracketDrops = [];
         let allCharacterRecords = [];
 
         function getActiveSpecialPools() {
@@ -495,6 +511,12 @@
             document.getElementById('personalPoolLabel').textContent = 'Personal pool for random pulls:';
         }
 
+        if (selectedBanner === 'bracket') {
+            document.getElementById('bracketOptions').style.display = 'block';
+            document.getElementById('poolSelectLabel').textContent = 'Campaign pool for fighters:';
+            document.getElementById('personalPoolLabel').textContent = 'Personal pool for fighters:';
+        }
+
         // Load character data from JSON files
         Promise.all([
             fetch('characters.json', { cache: 'no-store' }).then(response => response.json()),
@@ -517,8 +539,10 @@
                 evangelineCharacters = byId.evangeline || [];
                 personalPools = personalData['personal-pools'] || {};
                 specialPools = personalData['special-pools'] || [];
-                dndRules = (bannerData.banners.find(banner => banner.name === selectedBanner) || {}).dndRules || null;
-                childhoodFantasyRules = (bannerData.banners.find(banner => banner.name === selectedBanner) || {}).childhoodFantasyRules || null;
+                const selectedBannerData = bannerData.banners.find(banner => banner.name === selectedBanner) || {};
+                dndRules = selectedBannerData.dndRules || null;
+                childhoodFantasyRules = selectedBannerData.childhoodFantasyRules || null;
+                bracketDrops = Array.isArray(selectedBannerData.drops) ? selectedBannerData.drops : [];
                 populateCampaignOptions(characterData);
 
                 const personalSelect = document.getElementById('personalPoolSelect');
@@ -619,6 +643,16 @@
             });
         });
 
+        document.querySelectorAll('[data-bracket-step]').forEach(button => {
+            button.addEventListener('click', function () {
+                selectedBracketStep = this.dataset.bracketStep;
+                document.querySelectorAll('[data-bracket-step]').forEach(stepButton => {
+                    stepButton.classList.toggle('selected', stepButton === this);
+                });
+                document.getElementById('bracketError').textContent = '';
+            });
+        });
+
         function rollDndCharacter() {
             const race = weightedDndRandom(dndRules.races);
             const raceName = race.detailOptions
@@ -716,13 +750,16 @@
             const startingNewComic = selectedBanner === 'comic' && document.getElementById('newComicToggle').checked;
             const dndMode = selectedBanner === 'dnd' ? document.getElementById('dndMode').value : '';
             const isChildhoodManualStep = selectedBanner === 'childhood' && selectedChildhoodStep !== 'step1';
+            const isBracket = selectedBanner === 'bracket';
+            const isBracketStep2 = isBracket && selectedBracketStep === 'step2';
 
             const campaignPool = getPool(poolChoice);
             const personalPool = getPersonalPool(personalPoolChoice);
-            const pool = isChildhoodManualStep ? campaignPool : choosePool(campaignPool, personalPool);
+            const bracketPool = [...new Set([...campaignPool, ...personalPool])];
+            const pool = isChildhoodManualStep || isBracket ? campaignPool : choosePool(campaignPool, personalPool);
 
             // Check if characters are loaded
-            if (pool.length === 0) {
+            if (!isBracketStep2 && !isBracket && pool.length === 0) {
                 alert('Characters are still loading. Please wait a moment and try again.');
                 return;
             }
@@ -743,8 +780,10 @@
 
             // Roll the normal gacha character, or the D&D result, before coin selection.
             let rolledCharacter = 'The party';
+            let rolledCharacter2 = '';
             let dndResult = null;
             let childhoodResult = null;
+            let bracketDrop = '';
             if (selectedBanner === 'dnd') {
                 if (!dndRules) {
                     alert('D&D banner rules are still loading. Please wait a moment and try again.');
@@ -786,6 +825,27 @@
                     campaignPool,
                     personalPool
                 );
+            } else if (isBracket) {
+                document.getElementById('bracketError').textContent = '';
+                if (selectedBracketStep === 'step1') {
+                    if (bracketPool.length < 2) {
+                        document.getElementById('bracketError').textContent = 'Choose pools containing at least two distinct characters.';
+                        return;
+                    }
+                    const firstIndex = Math.floor(Math.random() * bracketPool.length);
+                    rolledCharacter = bracketPool[firstIndex];
+                    const remainingCharacters = bracketPool.filter((character, index) => index !== firstIndex);
+                    rolledCharacter2 = remainingCharacters[Math.floor(Math.random() * remainingCharacters.length)];
+                    bracketDrop = 'Fighters chosen';
+                } else {
+                    if (bracketDrops.length === 0) {
+                        document.getElementById('bracketError').textContent = 'Add Step 2 drop options to the Bracket banner drops list in banners.json.';
+                        return;
+                    }
+                    const selectedDrop = weightedDndRandom(bracketDrops);
+                    rolledCharacter = '';
+                    bracketDrop = selectedDrop.item;
+                }
             } else {
                 rolledCharacter = rollCharacter(pool, goldStarEnabled, goldStarChar, goldStarPercent);
             }
@@ -803,6 +863,13 @@
                 }
                 if (selectedChildhoodStep === 'step1' && childhoodResult.pulledCharacters.length > 0) {
                     url += `&character2=${encodeURIComponent(childhoodResult.pulledCharacters[0])}`;
+                }
+            }
+
+            if (isBracket) {
+                url += `&bracketStep=${encodeURIComponent(selectedBracketStep)}&prerolledDrop=${encodeURIComponent(bracketDrop)}`;
+                if (selectedBracketStep === 'step1') {
+                    url += `&character2=${encodeURIComponent(rolledCharacter2)}`;
                 }
             }
 
