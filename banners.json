@@ -34,7 +34,7 @@
         {
             "name": "bracket",
             "displayName": "Brackets Banner",
-            "hidden": true,
+            "hidden": false,
             "status": "upcoming",
             "date": "10/28",
             "img": "banner_art/bannerbrackrts.png",
