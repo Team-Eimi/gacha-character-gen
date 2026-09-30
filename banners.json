@@ -102,6 +102,7 @@
             "displayName": "Dragon",
             "status": "upcoming",
             "date": "10/22",
+            "img": "banner_art/bannerdragon.png",
             "drops": [
                 {
                     "item": "as a dragon",
