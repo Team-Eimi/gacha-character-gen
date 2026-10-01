@@ -1164,8 +1164,7 @@
         {
             "name": "mafia",
             "hidden": false,
-            "status": "upcoming",
-            "date": "10/02",
+            "status": "active",
             "img": "banner_art/mafiabanner.png",
             "drops": [
                 {
