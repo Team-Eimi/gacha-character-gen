@@ -289,6 +289,7 @@
         let bannersData = null;
         let coinsData = null;
         let dropImageCatalog = {};
+        let specialDropOverrides = [];
         let characterImageMap = new Map();
 
         // Get parameters from URL
@@ -425,11 +426,13 @@
             fetch('banners.json').then(r => r.json()),
             fetch('coins.json').then(r => r.json()),
             fetch('characters.json').then(r => r.json()),
+            fetch('personal.json').then(r => r.json()),
             fetch('drops/image-options.json').then(r => r.json())
         ])
-        .then(([banners, coins, characters, imageCatalog]) => {
+        .then(([banners, coins, characters, personalData, imageCatalog]) => {
             bannersData = banners;
             coinsData = coins;
+            specialDropOverrides = Array.isArray(personalData['special-drops']) ? personalData['special-drops'] : [];
             dropImageCatalog = imageCatalog;
             loadCharacterImages(characters);
             
@@ -449,7 +452,7 @@
             
             // 2) Roll the specific banner item using its own chance weights.
             // If prerolledDrop exists (from baby banner), use that instead
-            const drop = prerolledDrop || rollDrop(rarity);
+            const drop = applySpecialDropOverrides(prerolledDrop || rollDrop(rarity));
             const secondaryDrop = selectedBanner === 'childhood' && childhoodSecondaryDrop
                 ? { item: childhoodSecondaryDrop, rarity: '' }
                 : rollSecondaryDrop();
@@ -616,6 +619,15 @@
                 banner.secondaryDrops,
                 banner.secondaryDrops.map(drop => drop.chance)
             );
+        }
+
+        function applySpecialDropOverrides(drop) {
+            for (const override of specialDropOverrides) {
+                if (typeof override.chance === 'number' && Math.random() < override.chance) {
+                    return override.item;
+                }
+            }
+            return drop;
         }
 
         function weightedRandom(items, weights) {
