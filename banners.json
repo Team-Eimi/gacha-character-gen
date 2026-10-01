@@ -179,7 +179,7 @@
             "name": "actor",
             "hidden": false,
             "displayName": "Actor AU",
-            "status": "active",
+            "status": "past",
             "img": "banner_art/banneractor.png",
             "drops": [
                 {
@@ -836,7 +836,7 @@
         {
             "name": "cursed",
             "hidden": false,
-            "status": "active",
+            "status": "past",
             "img": "banner_art/cursedbanner.png",
             "drops": [
                 {
