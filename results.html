@@ -117,6 +117,7 @@
         <div class="character-result">
             <div class="result-label" id="characterResultLabel">Your Character</div>
             <div class="result-value" id="characterResult"></div>
+            <div class="result-label" id="characterCampaign" style="display:none; text-transform:none; margin-top:6px;"></div>
             <div class="result-label" id="comicStoryResult" style="display:none;"></div>
             <div class="result-label" id="specialPoolBadge" style="display:none; color:#e91e63; font-weight:bold;"></div>
             <div class="result-label" id="specialPoolMessage" style="display:none; color:#e91e63;"></div>
@@ -239,10 +240,42 @@
 
         fetch('characters.json')
             .then(response => response.json())
-            .then(loadCharacters)
+            .then(characterData => {
+                loadCharacters(characterData);
+                if (selectedBanner === 'any' || selectedPool === 'all') {
+                    renderCharacterCampaigns(characterData, getShownCharacterNames());
+                }
+            })
             .catch(error => {
                 console.error('Error loading characters:', error);
             });
+
+        function getShownCharacterNames() {
+            if (selectedBanner === 'bracket' && bracketStep === 'step2') return [];
+            if (selectedBanner === 'dnd' && dndMode === 'scenario') return [specialPoolCharacter || dndPartyMember];
+            if ((selectedBanner === 'fusion' || (selectedBanner === 'bracket' && bracketStep === 'step1')) && rolledCharacter2) {
+                return [rolledCharacter, rolledCharacter2];
+            }
+            return [rolledCharacter];
+        }
+
+        function renderCharacterCampaigns(characterData, names) {
+            const campaignByName = new Map(
+                normalizeCampaigns(characterData).flatMap(campaign =>
+                    (campaign.characters || []).map(character => [getCharacterName(character), campaign.display])
+                )
+            );
+            const shownNames = names.filter(Boolean);
+            const known = shownNames
+                .map(name => ({ name, campaign: campaignByName.get(name) }))
+                .filter(character => character.campaign);
+            const campaignElement = document.getElementById('characterCampaign');
+
+            campaignElement.textContent = known.length === 1 && shownNames.length === 1
+                ? `${known[0].campaign}`
+                : known.map(character => `${character.name}: ${character.campaign}`).join(' | ');
+            campaignElement.style.display = known.length > 0 ? 'block' : 'none';
+        }
 
         // Load coins from JSON file
         fetch('coins.json')

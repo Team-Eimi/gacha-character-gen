@@ -224,6 +224,7 @@
                 <div class="result-item">
                     <div class="result-label">Character</div>
                     <div class="result-value" id="characterResult"></div>
+                    <div class="result-label" id="characterCampaign" style="display:none; text-transform:none; margin-top:6px;"></div>
                     <div class="character-images" id="characterImages"></div>
                     <div class="result-label" id="specialPoolBadge" style="display:none; color:#e91e63; font-weight:bold;"></div>
                     <div class="result-label" id="specialPoolMessage" style="display:none; color:#e91e63;"></div>
@@ -296,6 +297,7 @@
         let dropImageCatalog = {};
         let specialDropOverrides = [];
         let characterImageMap = new Map();
+        let characterCampaignMap = new Map();
         let dropBannerName = null;
 
         // Get parameters from URL
@@ -357,25 +359,50 @@
             if (Array.isArray(characterData.campaigns)) {
                 return characterData.campaigns.map((campaign, index) => ({
                     id: campaign.id || campaign.name || `campaign-${index}`,
+                    display: campaign.display || campaign.label || campaign.name || campaign.id || `campaign-${index}`,
                     characters: Array.isArray(campaign.characters) ? campaign.characters : []
                 }));
             }
 
             return Object.entries(characterData)
                 .filter(([key, value]) => Array.isArray(value))
-                .map(([key, value]) => ({ id: key, characters: value }));
+                .map(([key, value]) => ({ id: key, display: key, characters: value }));
         }
 
         function loadCharacterImages(characterData) {
+            const campaigns = normalizeCampaigns(characterData);
             characterImageMap = new Map(
-                normalizeCampaigns(characterData)
+                campaigns
                     .flatMap(campaign => campaign.characters || [])
                     .map(character => [getCharacterName(character), getCharacterImage(character)])
                     .filter(([name, img]) => name && img)
             );
+            characterCampaignMap = new Map(
+                campaigns.flatMap(campaign =>
+                    (campaign.characters || []).map(character => [getCharacterName(character), campaign.display])
+                )
+            );
+        }
+
+        function renderCharacterCampaigns(names) {
+            const campaignElement = document.getElementById('characterCampaign');
+            if (selectedBanner !== 'any' && selectedPool !== 'all') {
+                campaignElement.style.display = 'none';
+                return;
+            }
+            const known = names
+                .filter(Boolean)
+                .map(name => ({ name, campaign: characterCampaignMap.get(name) }))
+                .filter(character => character.campaign);
+
+            campaignElement.textContent = known.length === 1 && names.filter(Boolean).length === 1
+                ? known[0].campaign
+                : known.map(character => `${character.name}: ${character.campaign}`).join(' | ');
+            campaignElement.style.display = known.length > 0 ? 'block' : 'none';
         }
 
         function renderCharacterImages(names) {
+            renderCharacterCampaigns(names);
             const characterImages = document.getElementById('characterImages');
             const imageMarkup = names
                 .filter(Boolean)
