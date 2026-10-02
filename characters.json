@@ -3,6 +3,7 @@
     "seal",
     "chromyr",
     "velem",
+    "tourmaline",
     "cruise",
     "somnus",
     "esemreha",
@@ -11,9 +12,23 @@
     "wuxia",
     "luminant",
     "cermonte"
-
   ],
   "campaigns": [
+    {
+      "id": "tourmaline",
+      "display": "Tourmaline Falls",
+      "characters": [
+        "Kennedy",
+        "Ulyssa",
+        "London",
+        "Barry",
+        "Yana",
+        "Thomas",
+        "Francis",
+        "Xenia",
+        "Alex"
+      ]
+    },
     {
       "id": "seal",
       "display": "The Seal",
@@ -490,8 +505,6 @@
           "name": "Saorise Fern",
           "img": "characters/cruise/saorise.jpg"
         }
-        
-        
       ]
     },
     {
