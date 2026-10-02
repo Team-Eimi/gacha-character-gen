@@ -562,9 +562,9 @@
 
         function pickAnyBanner() {
             // Baby needs a second parent rolled earlier in the flow, so it can't be picked here.
+            const excludedBanners = ['any', 'baby', 'comic', 'dnd'];
             const eligibleBanners = bannersData.banners.filter(banner =>
-                banner.name !== 'any' &&
-                banner.name !== 'baby' &&
+                !excludedBanners.includes(banner.name) &&
                 banner.hidden !== true &&
                 (banner.status === 'active' || banner.status === 'past') &&
                 Array.isArray(banner.drops) &&

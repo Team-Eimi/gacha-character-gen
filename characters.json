@@ -18,15 +18,38 @@
       "id": "tourmaline",
       "display": "Tourmaline Falls",
       "characters": [
-        "Kennedy",
-        "Ulyssa",
-        "London",
-        "Barry",
-        "Yana",
-        "Thomas",
-        "Francis",
-        "Xenia",
-        "Alex"
+        {
+          "name": "Kennedy",
+          "img": "characters/tourmaline/kennedy.png"
+        },
+        {
+          "name": "Ulyssa"
+        },
+        {
+          "name": "London"
+        },
+        {
+          "name": "Barry",
+          "img": "characters/tourmaline/barry.png"
+        },
+        {
+          "name": "Yana"
+        },
+        {
+          "name": "Thomas"
+        },
+        {
+          "name": "Francis",
+          "img": "characters/tourmaline/francis.png"
+        },
+        {
+          "name": "Xenia",
+          "img": "characters/tourmaline/xenia.png"
+        },
+        {
+          "name": "Alex",
+          "img": "characters/tourmaline/alex.png"
+        }
       ]
     },
     {
@@ -365,7 +388,10 @@
           "name": "Verene",
           "img": "characters/esemreha/verene.png"
         },
-        "Nesryn",
+        {
+          "name": "Nesryn",
+          "img": "characters/esemreha/nesryn.png"
+        },
         "Denyro",
         "Marisol",
         "Malek",
