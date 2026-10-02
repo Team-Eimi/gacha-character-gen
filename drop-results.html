@@ -240,6 +240,11 @@
                     <div class="result-value" id="comicRoleValue"></div>
                 </div>
                 
+                <div class="result-item" id="anyBannerResult" style="display: none;">
+                    <div class="result-label">Banner</div>
+                    <div class="result-value" id="anyBannerValue"></div>
+                </div>
+
                 <div class="result-item" id="dropTypeResult">
                     <div class="result-label">Drop Type</div>
                     <div class="result-value" id="dropResult"></div>
@@ -291,6 +296,7 @@
         let dropImageCatalog = {};
         let specialDropOverrides = [];
         let characterImageMap = new Map();
+        let dropBannerName = null;
 
         // Get parameters from URL
         const urlParams = new URLSearchParams(window.location.search);
@@ -435,6 +441,7 @@
             specialDropOverrides = Array.isArray(personalData['special-drops']) ? personalData['special-drops'] : [];
             dropImageCatalog = imageCatalog;
             loadCharacterImages(characters);
+            dropBannerName = selectedBanner === 'any' ? pickAnyBanner() : selectedBanner;
             
             // Perform the roll after a short delay for animation
             setTimeout(() => {
@@ -526,8 +533,24 @@
             return 'common';
         }
 
+        function pickAnyBanner() {
+            // Baby needs a second parent rolled earlier in the flow, so it can't be picked here.
+            const eligibleBanners = bannersData.banners.filter(banner =>
+                banner.name !== 'any' &&
+                banner.name !== 'baby' &&
+                banner.hidden !== true &&
+                (banner.status === 'active' || banner.status === 'past') &&
+                Array.isArray(banner.drops) &&
+                banner.drops.some(drop => drop && drop.item)
+            );
+            const banner = eligibleBanners[Math.floor(Math.random() * eligibleBanners.length)];
+            document.getElementById('anyBannerValue').textContent = banner.displayName || banner.name;
+            document.getElementById('anyBannerResult').style.display = 'block';
+            return banner.name;
+        }
+
         function rollDrop(rarity) {
-            const banner = bannersData.banners.find(b => b.name === selectedBanner);
+            const banner = bannersData.banners.find(b => b.name === dropBannerName);
 
             // Duo banner has an independent mini comic roll.
             if (selectedBanner === 'duo') {
@@ -610,7 +633,7 @@
         }
 
         function rollSecondaryDrop() {
-            const banner = bannersData.banners.find(bannerData => bannerData.name === selectedBanner);
+            const banner = bannersData.banners.find(bannerData => bannerData.name === dropBannerName);
             if (!banner || !Array.isArray(banner.secondaryDrops) || banner.secondaryDrops.length === 0) {
                 return null;
             }
@@ -828,7 +851,7 @@
         function displayDropResult(drop, element) {
             element.replaceChildren(document.createTextNode(drop));
 
-            const banner = bannersData.banners.find(item => item.name === selectedBanner);
+            const banner = bannersData.banners.find(item => item.name === dropBannerName);
             const matchingDrop = banner?.drops?.find(item => drop === item.item);
             const imageOptions = typeof matchingDrop?.imageOptions === 'string'
                 ? dropImageCatalog[matchingDrop.imageOptions]?.images

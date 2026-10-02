@@ -1,5 +1,6 @@
 {
     "bannerOrder": [
+        "any",
         "art-meme",
         "gothic",
         "childhood",
@@ -31,6 +32,14 @@
         "comic"
     ],
     "banners": [
+        {
+            "name": "any",
+            "displayName": "Any Banner",
+            "hidden": false,
+            "status": "active",
+            "img": "banner_art/anybannerbanner.png",
+            "drops": []
+        },
         {
             "name": "bracket",
             "displayName": "Brackets Banner",
