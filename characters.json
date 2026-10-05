@@ -49,6 +49,12 @@
         {
           "name": "Alex",
           "img": "characters/tourmaline/alex.png"
+        },
+        {
+          "name": "Rhodes OC"
+        },
+        {
+          "name": "Mina OC"
         }
       ]
     },
@@ -530,6 +536,12 @@
         {
           "name": "Saorise Fern",
           "img": "characters/cruise/saorise.jpg"
+        },
+        {
+          "name": "Rhodes OC"
+        },
+        {
+          "name": "Mina OC"
         }
       ]
     },
