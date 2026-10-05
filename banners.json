@@ -1100,8 +1100,7 @@
         {
             "name": "emoji",
             "hidden": false,
-            "status": "upcoming",
-            "date": "10/05",
+            "status": "active",
             "img": "banner_art/emojibanner.png",
             "drops": [
                 {
